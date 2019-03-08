@@ -1,12 +1,16 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## How to run the code
 
-In the project directory, you can run:
+You need to have [Node.js](https://nodejs.org/en/) installed. With Node you will get npm package manager. After cloning the source code, go to the project directory. In the directory you can run:
+
+### `npm install`
+
+After the installation, you can start the program
 
 ### `npm start`
 
-Runs the app in the development mode.<br>
+This runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
