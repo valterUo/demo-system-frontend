@@ -4,10 +4,12 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 import { Navbar } from 'react-bootstrap'
 import githubimage from './GitHub-Mark-64px.png'
 import RelationalComponent from './dataComponents/relationalComponent'
-import GraphComponent from './dataComponents/graphComponent'
+import Graph from './dataComponents/graphComponents/Graph'
 
 class App extends Component {
 
@@ -30,14 +32,24 @@ class App extends Component {
 
 				<Container fluid='true'>
 					<Row>
-						<Col>Input of the query</Col>
+						<Col> 
+						<Form>
+  							<Form.Group controlId="formBasicEmail">
+    						<Form.Label>Query Input</Form.Label>
+    						<Form.Control type="text" placeholder="Enter query or choose defined query" />
+  							</Form.Group>
+  						<Button variant="dark" type="submit">
+    						Execute
+  						</Button>
+						</Form>
+ 					</Col>
 						<Col>
 							<Row>
 		Schema
 														  
 	    </Row>
 							<Row>
-								Another Schema
+							Another Schema
 	    </Row>
 						</Col>
 						<Col>Output result
@@ -49,8 +61,8 @@ class App extends Component {
 									Document Data
 	    </Tab>
 								<Tab eventKey="graph" title="Graph output">
-								<GraphComponent data = {{"nodes": [{"name": "wqerty", "id": 0, "r": 5}, {"name": "fdsa", "id": 1, "r":5}, {"name": "werweqerty", "id": 2, "r": 5}, {"name": "gfgf", "id": 3, "r":5}], 
-								"edges": [{"source": 3,"target":1 }, {"source": 3,"target": 1}, {"source": 2,"target": 0}, {"source": 2,"target": 1}, {"source": 0,"target": 3}]}} />
+								<Graph data = {{"nodes": [{"name": "wqerty", "id": 0}, {"name": "fdsa", "id": 1}, {"name": "werweqerty", "id": 2}, {"name": "gfgf", "id": 3}], 
+								"links": [{"source": 3,"target":1 }, {"source": 2,"target": 0}, {"source": 2,"target": 1}, {"source": 0,"target": 3}]}} width = {300} height = {300} />
 	    </Tab>
 							</Tabs>
 						</Col>
