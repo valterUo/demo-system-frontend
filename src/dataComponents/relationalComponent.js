@@ -50,12 +50,13 @@ class RelationalComponent extends Component {
     }
 
     render() {
-        return <svg width={500} height={500}>
+        return <div> <svg width={500} height={500}>
             <foreignObject width={500} height={500}>
                 <div ref={table => this.table = table}>
                 </div>
             </foreignObject>
         </svg>
+        </div>
     }
 }
 

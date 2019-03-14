@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import { select } from 'd3-selection'
 
 const enterLink = (selection) => {
@@ -17,9 +16,13 @@ const updateLink = (selection) => {
 }
 
 class Edge extends Component {
+    constructor(props) {
+        super(props);
+        this.edgeRef = React.createRef()
+      }
 
     componentDidMount() {
-        this.d3Link = select(ReactDOM.findDOMNode(this))
+        this.d3Link = select(this.edgeRef.current)
             .datum(this.props.data)
             .call(enterLink)
     }
@@ -31,8 +34,8 @@ class Edge extends Component {
 
     render() {
         return (
-            <line className='link' />
-        );
+            <line ref = {this.edgeRef} className = {this.props.linkName} />
+        )
     }
 }
 

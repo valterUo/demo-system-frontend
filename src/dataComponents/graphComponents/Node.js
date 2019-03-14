@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import { select } from 'd3-selection'
 import { scaleOrdinal } from 'd3-scale'
 import { schemeCategory10 } from 'd3-scale-chromatic'
@@ -23,15 +22,20 @@ const enterNode = (selection) => {
 }
 
 class Node extends Component {
+    constructor(props) {
+        super(props);
+        this.nodeRef = React.createRef();
+    }
 
     componentDidMount() {
-        this.d3Node = select(ReactDOM.findDOMNode(this))
+        this.d3Node = select(this.nodeRef.current)
             .datum(this.props.data)
             .call(enterNode)
     }
 
     componentDidUpdate() {
-        this.d3Node.datum(this.props.data)
+        this.d3Node
+            .datum(this.props.data)
             .call(updateNode)
     }
 
@@ -41,8 +45,8 @@ class Node extends Component {
 
     render() {
         return (
-            <g className='node'>
-                <circle ref='dragMe' onClick={this.handle.bind(this)} />
+            <g ref={this.nodeRef} className= {this.props.nodeName}>
+                <circle onClick={this.handle.bind(this)} />
                 <text>{this.props.data.name}</text>
             </g>
         );

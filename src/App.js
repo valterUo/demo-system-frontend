@@ -10,6 +10,9 @@ import { Navbar } from 'react-bootstrap'
 import githubimage from './GitHub-Mark-64px.png'
 import RelationalComponent from './dataComponents/relationalComponent'
 import Graph from './dataComponents/graphComponents/Graph'
+import data1 from './exampleData/data1.json'
+import data2 from './exampleData/data2.json'
+import data3 from './exampleData/data3.json'
 
 class App extends Component {
 
@@ -38,18 +41,18 @@ class App extends Component {
     						<Form.Label>Query Input</Form.Label>
     						<Form.Control type="text" placeholder="Enter query or choose defined query" />
   							</Form.Group>
-  						<Button variant="dark" type="submit">
+  						<Button variant="dark">
     						Execute
   						</Button>
 						</Form>
  					</Col>
 						<Col>
 							<Row>
-		Schema
+							<Graph id = "1" data = {data3} width = {500} height = {500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass = {"schemaGraph"}/>
 														  
 	    </Row>
 							<Row>
-							Another Schema
+							<Graph id = "2" data = {data2} width = {500} height = {500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass = {"queryGraph"}/>
 	    </Row>
 						</Col>
 						<Col>Output result
@@ -58,18 +61,18 @@ class App extends Component {
 									<RelationalComponent data={[['first', 'second'], ['1', '2']]} />
 								</Tab>
 								<Tab eventKey="tree" title="XML output">
-									Document Data
-	    </Tab>
+								<Graph id ="3" data={data1} width={500} height={500} tree={true} nodeName={"secondNodes"} linkName={"secondLinks"} nameClass = {"secondGraph"} />					
+	    			</Tab> 
 								<Tab eventKey="graph" title="Graph output">
-								<Graph data = {{"nodes": [{"name": "wqerty", "id": 0}, {"name": "fdsa", "id": 1}, {"name": "werweqerty", "id": 2}, {"name": "gfgf", "id": 3}], 
-								"links": [{"source": 3,"target":1 }, {"source": 2,"target": 0}, {"source": 2,"target": 1}, {"source": 0,"target": 3}]}} width = {300} height = {300} />
+								<Graph id = "4" data = {data2} width = {500} height = {500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass = {"firstGraph"}/>
+
 	    </Tab>
 							</Tabs>
 						</Col>
 					</Row>
 				</Container>
 			</Container>
-	);
+	)
     }
 }
 
