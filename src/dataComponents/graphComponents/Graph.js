@@ -100,7 +100,7 @@ class Graph extends Component {
         })
         const links = this.props.data.links.map((link, i) => {
             return (
-                <Edge key={link.target + link.source + i} data={link} linkName = {this.props.linkName} />)
+                <Edge key={i} data={link} linkName = {this.props.linkName} />)
         })
         return (<div>
             <svg className= {this.props.nameClass} ref = {this.graphRef} width={this.props.width} height={this.props.height}>
