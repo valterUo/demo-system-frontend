@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/sql'
+const baseUrl = 'http://localhost:8080/sql'
 
 const getTable = async () => {
 	const table = await axios.get(baseUrl)

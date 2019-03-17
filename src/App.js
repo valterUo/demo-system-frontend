@@ -18,12 +18,10 @@ import data3 from './exampleData/data3.json'
 
 const lightBorder = {
 	borderStyle: "solid",
-	//borderWidth: "1px",
 	borderLeftWidth: "1px",
 	borderRightWidth: "1px",
 	borderTopWidth: "0px",
 	borderBottomWidth: "1px",
-	//borderColor: "#e6e6e6"
 	borderColor: "#d9d9d9"
 }
 
@@ -117,7 +115,6 @@ class App extends Component {
 								</Tab>
 								<Tab eventKey="graph" title="Graph output">
 									<Graph id="4" data={data2} width={500} height={500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass={"firstGraph"} />
-
 								</Tab>
 							</Tabs>
 						</Col>
