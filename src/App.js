@@ -18,7 +18,8 @@ import data3 from './exampleData/data3.json'
 import schema from './exampleData/schema.json'
 import StatBox from './StatBox'
 import store from './store'
-import Tree from './dataComponents/treeComponents/Tree';
+import Tree from './dataComponents/treeComponents/Tree'
+import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
 
 const lightBorderLeft = {
 	borderStyle: "solid",
@@ -122,7 +123,7 @@ class App extends Component {
 							</Row>
 							<Row style={lightBorderLeft}>
 								<h4>Query schema</h4>
-								<Graph id="2" data={schema} width={500} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
+								<MultiGraph id="2" data={schema} width={500} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
 							</Row>
 						</Col>
 						<Col><h4>Result</h4>

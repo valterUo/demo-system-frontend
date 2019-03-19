@@ -26,12 +26,11 @@ const updateLink = (selection) => {
 
 class Edge extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.edgeRef = React.createRef()
     }
 
     componentDidMount() {
-
         this.d3Link = select(this.edgeRef.current)
             .datum(this.props.data)
             .call(enterLink)
