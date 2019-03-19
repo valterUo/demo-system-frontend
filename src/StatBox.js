@@ -1,11 +1,21 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-export default (props) => {
+class StatBox extends Component {
 
-    return <div>
-        <h4>Node contains: </h4>
-        <p>
-            {JSON.stringify(props.data)}
-        </p>
-    </div>
+    render() {
+        let dataBlock = <div />
+        const data = this.props.data
+        if (data[0]["key"] !== undefined) {
+            dataBlock = data.map(l => <p key={l["key"]}><b>{l["key"]} : </b> {l["value"]}</p>)
+        }
+
+        return <div>
+            <h4>Node: </h4>
+            <div>
+                {dataBlock}
+            </div>
+        </div>
+    }
 }
+
+export default StatBox

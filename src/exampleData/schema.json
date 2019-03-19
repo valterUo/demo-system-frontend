@@ -1,0 +1,21 @@
+{
+    "nodes": [
+        {"name": "Person", "id": 0},
+        {"name": "Int", "id": 1},
+        {"name": "Prod", "id": 2},
+        {"name": "Order", "id": 3},
+        {"name": "Str", "id": 4}
+    ], 
+    "links": [
+        {"source": 0, "target": 0, "name": "Knows"},
+        {"source": 0, "target": 1, "name": "Customer_id"},
+        {"source": 0, "target": 1, "name": "Credit_limits"},
+        {"source": 0, "target": 4, "name": "Person_name"},
+        {"source": 1, "target": 2, "name": "l1"},
+        {"source": 1, "target": 3, "name": "l2"},
+        {"source": 1, "target": 4, "name": "Key_val"},
+        {"source": 2, "target": 1, "name": "Price"},
+        {"source": 2, "target": 4, "name": "Product_id"},
+        {"source": 2, "target": 4, "name": "Product_name"},
+        {"source": 3, "target": 4, "name": "Order_no"}
+        ]}

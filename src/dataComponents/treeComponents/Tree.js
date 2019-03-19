@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import Node from './Node'
-import Edge from './Edge'
+import Node from './Vertex'
+import Edge from './Arc'
 import { select, selectAll } from 'd3-selection'
 import { event } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide } from 'd3-force'
 
-class Graph extends Component {
+class Tree extends Component {
     constructor(props) {
         super(props);
         this.graphRef = React.createRef()
@@ -15,41 +15,13 @@ class Graph extends Component {
     componentDidMount() {
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
-
-        const updateNode = (selection) => {
-            selection.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
-        }
-
-        const updateEdge = (selection) => {
-            selection.select('line')
-                .attr('x1', (d) => d.source.x)
-                .attr('y1', (d) => d.source.y)
-                .attr('x2', (d) => d.target.x)
-                .attr('y2', (d) => d.target.y)
-
-            selection.select('text')
-                .attr("x", function (d) {
-                    return ((d.source.x + d.target.x) / 2)
-                })
-                .attr("y", function (d) {
-                    return ((d.source.y + d.target.y) / 2)
-                })
-        }
-
-        const updateGraph = (selection) => {
-            selection.selectAll('.' + nodeName)
-                .call(updateNode)
-            selection.selectAll('.' + linkName)
-                .call(updateEdge)
-        }
-
         this.d3Graph = select(this.graphRef.current)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))
-            .force('link', forceLink(this.props.data.links).distance(100))
+            .force('link', forceLink(this.props.data.links).distance(80))
             .force('center', forceCenter().x(this.props.width / 2).y(this.props.height / 2))
-            .force('collide', forceCollide([10]).iterations([10]))
+            .force('collide', forceCollide([5]).iterations([5]))
 
         function dragStarted(d) {
             if (!event.active) force.alphaTarget(0.3).restart()
@@ -75,9 +47,27 @@ class Graph extends Component {
                 .on('end', dragEnded)
             )
 
+        
             force.on('tick', () => {
-                this.d3Graph.call(updateGraph)
+                this.d3Graph.call(tick)
             })
+
+        const tick = (selection) => {
+            const k = 6 * force.tick().alpha()
+
+            selection.selectAll('.' + linkName)
+                .each((d) => {
+                    d.source.y -= k
+                    d.target.y += k
+                })
+                .attr("x1", function (d) { return d.source.x })
+                .attr("y1", function (d) { return d.source.y })
+                .attr("x2", function (d) { return d.target.x })
+                .attr("y2", function (d) { return d.target.y })
+
+            selection.selectAll('.' + nodeName)
+                .attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
+        }
     }
 
     render() {
@@ -91,14 +81,6 @@ class Graph extends Component {
         })
         return (<div>
             <svg className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
-                <defs>
-                    <marker id="triangle"
-                        refX="21" refY="6"
-                        markerWidth="100" markerHeight="100"
-                        orient="auto" markerUnits = "userSpaceOnUse">
-                        <path d="M 0 0 12 6 0 12 3 6" fill="black" />
-                    </marker>
-                </defs>
                 <g>
                     {links}
                 </g>
@@ -111,4 +93,4 @@ class Graph extends Component {
     }
 }
 
-export default Graph
+export default Tree

@@ -15,10 +15,23 @@ import Graph from './dataComponents/graphComponents/Graph'
 import data1 from './exampleData/data1.json'
 import data2 from './exampleData/data2.json'
 import data3 from './exampleData/data3.json'
+import schema from './exampleData/schema.json'
+import StatBox from './StatBox'
+import store from './store'
+import Tree from './dataComponents/treeComponents/Tree';
 
-const lightBorder = {
+const lightBorderLeft = {
 	borderStyle: "solid",
 	borderLeftWidth: "1px",
+	borderRightWidth: "1px",
+	borderTopWidth: "0px",
+	borderBottomWidth: "1px",
+	borderColor: "#d9d9d9"
+}
+
+const lightBorderRight = {
+	borderStyle: "solid",
+	borderLeftWidth: "0px",
 	borderRightWidth: "1px",
 	borderTopWidth: "0px",
 	borderBottomWidth: "1px",
@@ -28,7 +41,7 @@ const lightBorder = {
 class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = { query: "" }
+		this.state = { query: "", showedData: [{ "key": undefined, "value": undefined }] }
 	}
 
 	handleQuery = (event) => {
@@ -44,20 +57,27 @@ class App extends Component {
 
 	selectQuery = (id) => {
 		// eslint-disable-next-line default-case
-		switch(id) {
-		case 1:
-		this.setState({query: "Select FirstName, LastName from Person where id = \"933\""})
-		break
-		case 2:
-		this.setState({query: ".//invoice[personId=\"10995116278711\"]/orderline"})
-		break
-		case 3:
-		this.setState({query: "MATCH (a:Person {name: 'Jennifer'})-[r:WORK_FOR]->(b:University)"})
-		break
+		switch (id) {
+			case 1:
+				this.setState({ query: "Select FirstName, LastName from Person where id = \"933\"" })
+				break
+			case 2:
+				this.setState({ query: ".//invoice[personId=\"10995116278711\"]/orderline" })
+				break
+			case 3:
+				this.setState({ query: "MATCH (a:Person {name: 'Jennifer'})-[r:WORK_FOR]->(b:University)" })
+				break
 		}
 	}
 
 	render() {
+
+		store.subscribe(() => {
+			this.setState({
+				showedData: store.getState().queriedData.data
+			})
+		})
+
 		return (
 			<Container fluid='true'>
 				<Navbar bg="light" expand="lg">
@@ -89,34 +109,39 @@ class App extends Component {
 							<div>&nbsp; &nbsp;</div>
 							<h5>Defined queries</h5>
 							<ListGroup>
-								<ListGroup.Item action variant="primary" onClick = {() => this.selectQuery(1)}><code><pre>Select FirstName, LastName from Person where id = "933"</pre></code></ListGroup.Item>
-								<ListGroup.Item action variant="primary" onClick = {() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></ListGroup.Item>
-								<ListGroup.Item action variant="primary" onClick = {() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></ListGroup.Item>
+								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(1)}><code><pre>Select FirstName, LastName from Person where id = "933"</pre></code></ListGroup.Item>
+								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></ListGroup.Item>
+								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></ListGroup.Item>
 							</ListGroup>
 						</Col>
 						<Col>
-							<Row style = {lightBorder}>
-							<h4>Schema</h4>
+							<Row style={lightBorderLeft}>
+								<h4>Schema</h4>
 								<Graph id="1" data={data3} width={500} height={500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass={"schemaGraph"} />
 
 							</Row>
-							<Row style = {lightBorder}>
-							<h4>Query schema</h4>
-								<Graph id="2" data={data2} width={500} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
+							<Row style={lightBorderLeft}>
+								<h4>Query schema</h4>
+								<Graph id="2" data={schema} width={500} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
 							</Row>
 						</Col>
 						<Col><h4>Result</h4>
-	        				<Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-								<Tab eventKey="rel" title="Relational output">
-									<RelationalComponent data={[['first', 'second'], ['1', '2']]} />
-								</Tab>
-								<Tab eventKey="tree" title="XML output">
-								<Graph id="3" data={data1} width={500} height={500} tree={true} nodeName={"secondNodes"} linkName={"secondLinks"} nameClass={"secondGraph"} />
-								</Tab>
-								<Tab eventKey="graph" title="Graph output">
-									<Graph id="4" data={data2} width={500} height={500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass={"firstGraph"} />
-								</Tab>
-							</Tabs>
+							<Row style={lightBorderRight}>
+								<Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+									<Tab eventKey="rel" title="Relational output">
+										<RelationalComponent data={[['first', 'second'], ['1', '2']]} />
+									</Tab>
+									<Tab eventKey="tree" title="XML output">
+										<Tree id="3" data={data1} width={500} height={500} nodeName={"secondNodes"} linkName={"secondLinks"} nameClass={"secondGraph"} />
+									</Tab>
+									<Tab eventKey="graph" title="Graph output">
+										<Graph id="4" data={data2} width={500} height={500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass={"firstGraph"} />
+									</Tab>
+								</Tabs>
+							</Row>
+							<Row style={lightBorderRight}>
+								<StatBox data={this.state.showedData} />
+							</Row>
 						</Col>
 					</Row>
 				</Container>
@@ -125,4 +150,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default App
