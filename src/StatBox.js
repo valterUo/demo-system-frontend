@@ -4,8 +4,8 @@ class StatBox extends Component {
 
     render() {
         let dataBlock = <div />
-        const data = this.props.data
-        if (data[0]["key"] !== undefined) {
+        const data = this.props.data.data
+        if (data[0]["key"] !== undefined && data[0]["key"] !== "") {
             dataBlock = data.map(l => <p key={l["key"]}><b>{l["key"]} : </b> {l["value"]}</p>)
         }
 

@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Navbar } from 'react-bootstrap'
 import githubimage from './GitHub-Mark-64px.png'
-import RelationalComponent from './dataComponents/relationalComponent'
+import RelationalTabs from './dataComponents/relationalComponents/relationalTabs'
 import Graph from './dataComponents/graphComponents/Graph'
 import data1 from './exampleData/data1.json'
 import data2 from './exampleData/data2.json'
@@ -20,6 +20,7 @@ import StatBox from './StatBox'
 import store from './store'
 import Tree from './dataComponents/treeComponents/Tree'
 import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
+import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
 
 const lightBorderLeft = {
 	borderStyle: "solid",
@@ -42,7 +43,11 @@ const lightBorderRight = {
 class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = { query: "", showedData: [{ "key": undefined, "value": undefined }] }
+		this.state = { query: "", showedNodeData: {data: [{ "key": undefined, "value": undefined }]}, sqlData: undefined, documentData: undefined, graphData: undefined, isHidden: true }
+	}
+
+	componentDidMount() {
+		DemoDataParser.loadData("document", store)
 	}
 
 	handleQuery = (event) => {
@@ -71,13 +76,29 @@ class App extends Component {
 		}
 	}
 
+	handleStoreChange = () => {
+		const currentObject = this.state.showedNodeData
+		const newObject = store.getState().nodeData
+		if (JSON.stringify(currentObject) !== JSON.stringify(newObject)) {
+			this.setState({
+				showedNodeData: store.getState().nodeData
+			})
+		}
+
+		const oldSqlData = this.state.sqlData
+		const newSqlData = store.getState().queriedDemoData.sqlData
+
+		if (JSON.stringify(oldSqlData) !== JSON.stringify(newSqlData)) {
+			console.log('sqlData')
+			this.setState({
+				sqlData: store.getState().queriedDemoData.sqlData
+			})
+		}
+	}
+
 	render() {
 
-		store.subscribe(() => {
-			this.setState({
-				showedData: store.getState().queriedData.data
-			})
-		})
+		store.subscribe(this.handleStoreChange)
 
 		return (
 			<Container fluid='true'>
@@ -128,20 +149,23 @@ class App extends Component {
 						</Col>
 						<Col><h4>Result</h4>
 							<Row style={lightBorderRight}>
-								<Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-									<Tab eventKey="rel" title="Relational output">
-										<RelationalComponent data={[['first', 'second'], ['1', '2']]} />
-									</Tab>
-									<Tab eventKey="tree" title="XML output">
-										<Tree id="3" data={data1} width={500} height={500} nodeName={"secondNodes"} linkName={"secondLinks"} nameClass={"secondGraph"} />
-									</Tab>
-									<Tab eventKey="graph" title="Graph output">
-										<Graph id="4" data={data2} width={500} height={500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass={"firstGraph"} />
-									</Tab>
-								</Tabs>
+								{this.state.sqlData !== undefined &&
+									<Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
+										<Tab eventKey="rel" title="Relational output">
+											<RelationalTabs tables={this.state.sqlData} />
+										</Tab>
+										<Tab eventKey="tree" title="XML output">
+											<Tree id="3" data={data1} width={500} height={500} nodeName={"secondNodes"} linkName={"secondLinks"} nameClass={"secondGraph"} />
+										</Tab>
+										<Tab eventKey="graph" title="Graph output">
+											<Graph id="4" data={data2} width={500} height={500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass={"firstGraph"} />
+										</Tab>
+									</Tabs>
+								}
+
 							</Row>
 							<Row style={lightBorderRight}>
-								<StatBox data={this.state.showedData} />
+								<StatBox data={this.state.showedNodeData} />
 							</Row>
 						</Col>
 					</Row>

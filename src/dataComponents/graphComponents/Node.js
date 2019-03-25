@@ -53,7 +53,7 @@ class Node extends Component {
                 break
             }
         }
-        store.dispatch({ type: 'ADD_DATA', data: filteredData })
+        store.dispatch({ type: 'ADD_NODE_DATA', data: filteredData })
     }
 
     render() {

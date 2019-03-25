@@ -26,10 +26,6 @@ const updateLink = (selection) => {
             dx = x2 - x1,
             dy = y2 - y1,
             dr = 0
-            // Set dr to 0 for straight edges.
-            // Set dr to Math.sqrt(dx * dx + dy * dy) for a simple curve.
-            // Assuming a simple curve, decrease dr to space curves.
-            // There's probably a better decay function that spaces things nice and evenly. 
             if(d.count !== 1){
                 dr = Math.sqrt(dx * dx + dy * dy)
             }

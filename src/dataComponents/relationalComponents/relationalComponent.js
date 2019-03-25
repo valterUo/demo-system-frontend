@@ -19,7 +19,8 @@ class RelationalComponent extends Component {
         const table = this.table
         const attributes = this.props.data[0]
         const dataData = this.props.data[1]
-
+        console.log(dataData)
+        
         select(table)
             .selectAll('Table')
             .data([1])
