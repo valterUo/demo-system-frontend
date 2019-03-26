@@ -17,17 +17,18 @@ class RelationalComponent extends Component {
 
     createRelationalComponent() {
         const table = this.table
-        const attributes = this.props.data[0]
-        const dataData = this.props.data[1]
-        console.log(dataData)
+        const data = this.props.data
+        const attributes = data[0]
+        const dataData = data.filter(row => row !== attributes)
         
         select(table)
-            .selectAll('Table')
+            .selectAll('table')
             .data([1])
             .enter()
             .append('table')
             .attr("class", "table")
             .append('thead')
+            .attr('display', 'block')
             .append('tr')
             .selectAll('th')
             .data(attributes)
@@ -36,28 +37,37 @@ class RelationalComponent extends Component {
             .text(d => d)
 
         select(table)
-            .selectAll('Table')
+            .selectAll('table')
             .selectAll('tbody')
             .data([1])
             .enter()
             .append('tbody')
-            .append('tr')
-            .selectAll('td')
+            .attr('display', 'block')
+            .attr('max-height', '500px')
+            .attr('overflow-y', 'scroll')
+            .selectAll('tr')
             .data(dataData)
             .enter()
+            .append('tr')
+            .selectAll('td')
+            .data(row => {
+                return attributes.map((column, i) => {
+                  return {column: column, value: row[i]}
+                })
+              })
+            .enter()
             .append('td')
-            .text(d => d)
+            .text(d => d.value)
 
     }
 
     render() {
-        return <div> <svg width={500} height={500}>
+        return <svg width={500} height={500}>
             <foreignObject width={500} height={500}>
                 <div ref={table => this.table = table}>
                 </div>
             </foreignObject>
         </svg>
-        </div>
     }
 }
 

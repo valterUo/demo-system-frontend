@@ -43,16 +43,65 @@ const lightBorderRight = {
 class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = { query: "", showedNodeData: {data: [{ "key": undefined, "value": undefined }]}, sqlData: undefined, documentData: undefined, graphData: undefined, isHidden: true }
+		this.state = { query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, 
+		sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined, 
+		nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined }
 	}
 
-	componentDidMount() {
+	/*componentDidMount() {
 		DemoDataParser.loadData("document", store)
-	}
+	}*/
 
-	handleQuery = (event) => {
+	handleQuery = async (event) => {
 		event.preventDefault()
 		console.log('nappia painettu')
+		let data = undefined;
+		switch (this.state.query) {
+			case "Select FirstName, LastName from Person where id = \"933\"":
+				data = await DemoDataParser.loadData("sql")
+				this.setState({
+					nodeName: "sqlNodes",
+					linkName: "sqlLinks",
+					nameClass: "sqlElement",
+					sqlData: data.sqlData,
+					documentData: data.documentData,
+					graphData: data.graphData,
+					treeKey: 10,
+					relationalKey: 20,
+					graphKey: 40
+				})
+				break
+			case ".//invoice[personId=\"10995116278711\"]/orderline":
+				data = await DemoDataParser.loadData("document")
+				this.setState({
+					nodeName: "documentNodes",
+					linkName: "documentLinks",
+					nameClass: "documentElement",
+					sqlData: data.sqlData,
+					documentData: data.documentData,
+					graphData: data.graphData,
+					treeKey: 50,
+					relationalKey: 60,
+					graphKey: 70
+				})
+				break
+			case "MATCH (a:Person {name: 'Jennifer'})-[r:WORK_FOR]->(b:University)":
+				data = await DemoDataParser.loadData("graph")
+				this.setState({
+					nodeName: "graphNodes",
+					linkName: "graphLinks",
+					nameClass: "graphElement",
+					sqlData: data.sqlData,
+					documentData: data.documentData,
+					graphData: data.graphData,
+					treeKey: 80,
+					relationalKey: 90,
+					graphKey: 100
+				})
+				break
+			default:
+				break
+		}
 		this.setState({ query: "" })
 	}
 
@@ -82,16 +131,6 @@ class App extends Component {
 		if (JSON.stringify(currentObject) !== JSON.stringify(newObject)) {
 			this.setState({
 				showedNodeData: store.getState().nodeData
-			})
-		}
-
-		const oldSqlData = this.state.sqlData
-		const newSqlData = store.getState().queriedDemoData.sqlData
-
-		if (JSON.stringify(oldSqlData) !== JSON.stringify(newSqlData)) {
-			console.log('sqlData')
-			this.setState({
-				sqlData: store.getState().queriedDemoData.sqlData
 			})
 		}
 	}
@@ -149,16 +188,16 @@ class App extends Component {
 						</Col>
 						<Col><h4>Result</h4>
 							<Row style={lightBorderRight}>
-								{this.state.sqlData !== undefined &&
+								{(this.state.sqlData !== undefined && this.state.documentData !== undefined && this.state.graphData !== undefined) &&
 									<Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
 										<Tab eventKey="rel" title="Relational output">
-											<RelationalTabs tables={this.state.sqlData} />
+											<RelationalTabs key = {this.state.relationalKey} tables={this.state.sqlData} />
 										</Tab>
 										<Tab eventKey="tree" title="XML output">
-											<Tree id="3" data={data1} width={500} height={500} nodeName={"secondNodes"} linkName={"secondLinks"} nameClass={"secondGraph"} />
+										<Tree key = {this.state.treeKey} id="3" data={this.state.documentData} width={500} height={500} nodeName={this.state.nodeName + 'First'} linkName={this.state.linkName + 'First'} nameClass={this.state.nameClass + 'First'} />
 										</Tab>
 										<Tab eventKey="graph" title="Graph output">
-											<Graph id="4" data={data2} width={500} height={500} nodeName={"firstNodes"} linkName={"firstLinks"} nameClass={"firstGraph"} />
+											<Graph key = {this.state.graphKey} id="4" data={this.state.graphData} width={500} height={500} nodeName={this.state.nodeName + 'Second'} linkName={this.state.linkName + 'Second'} nameClass={this.state.nameClass + 'Second'} />
 										</Tab>
 									</Tabs>
 								}

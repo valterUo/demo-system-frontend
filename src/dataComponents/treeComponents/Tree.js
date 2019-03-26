@@ -8,7 +8,7 @@ import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide } 
 
 class Tree extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.graphRef = React.createRef()
     }
 
@@ -16,6 +16,7 @@ class Tree extends Component {
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
         this.d3Graph = select(this.graphRef.current)
+        console.log(this.d3Graph)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))
@@ -47,7 +48,6 @@ class Tree extends Component {
                 .on('end', dragEnded)
             )
 
-        
             force.on('tick', () => {
                 this.d3Graph.call(tick)
             })
@@ -71,15 +71,15 @@ class Tree extends Component {
     }
 
     render() {
-        const nodes = this.props.data.nodes.map((node) => {
+        const nodes = this.props.data.nodes.map((node, i) => {
             return (
-                <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} />)
+                <Node data={node} name={node.name} key={node.id + i} nodeName={this.props.nodeName} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (
                 <Edge key={i} data={link} linkName={this.props.linkName} />)
         })
-        return (<div>
+        return (
             <svg className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
                 <g>
                     {links}
@@ -88,7 +88,6 @@ class Tree extends Component {
                     {nodes}
                 </g>
             </svg>
-        </div>
         )
     }
 }

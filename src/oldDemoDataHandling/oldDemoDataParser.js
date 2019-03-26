@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
 import dataService from '../services/dataService'
 
-const loadData = async (type, store) => {
+const loadData = async (type) => {
+
     const data = await dataService.getData(type)
-    console.log(data)
     const tables = data.data.tables.map((table, i) => {
         const obj = { title: table.name, eventKey: i, data: [table.attributes] }
         table.rows.map(d => obj.data.push(d.row))
@@ -12,30 +11,50 @@ const loadData = async (type, store) => {
 
     const rawTree = JSON.parse(data.data.tree)
     const tree = { nodes: [], links: [] }
-    walkTree(rawTree, tree.nodes, tree.links)
+    const tempLinks = []
+    walkTree(rawTree, tree.nodes, tempLinks)
+    constructLinks(tree.nodes, tempLinks, tree.links)
     console.log(tree)
 
-    store.dispatch({ type: 'ADD_DATA', sqlData: tables, documentData: tree, graphData: data.data.graph})
+    const graph = { nodes: [], links: [] }
+    data.data.graph.nodes.map(o => {
+        const newObj = o.dataAndAttributes
+        newObj['id'] = o.id
+        return graph.nodes.push(newObj)
+    })
+    constructLinks(graph.nodes, data.data.graph.links, graph.links)
+
+    return { sqlData: tables, documentData: tree, graphData: graph }
 }
 
 const walkTree = (tree, nodes, links) => {
-    nodes.push({"name": tree.userObject, "id": tree.id})
+    nodes.push({ "name": tree.userObject, "id": tree.id })
     if (tree.children !== undefined) {
         tree.children.map(c => links.push({"source": tree.id, "target": c.id}))
         tree.children.map(c => walkTree(c, nodes, links))
     }
 }
 
-class DemoDataParser extends Component {
-    constructor(props) {
-        super(props)
-        this.state = { sqlData: undefined, documentData: undefined, graphData: undefined }
-    }
+const constructLinks = (nodes, links, newLinks) => {
+    console.log(newLinks)
+    links.map(link => {
+        let sourceObjectIndex = undefined
+        let targetObjectIndex = undefined
+        nodes.map((node, i) => {
+            if (node.id === link.source) {
+                sourceObjectIndex = i
+            }
+            return node
+        })
 
-    loadData = async (type) => {
-        const data = await dataService.getData(type)
-        console.log(data)
-    }
+        nodes.map((node, i) => {
+            if (node.id === link.target) {
+                targetObjectIndex = i
+            }
+            return node
+        })
+        return newLinks.push({ "source": sourceObjectIndex, "target": targetObjectIndex })
+    })
 }
 
 export default { loadData }

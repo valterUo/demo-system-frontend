@@ -44,6 +44,7 @@ class Graph extends Component {
         }
 
         this.d3Graph = select(this.graphRef.current)
+        console.log(this.d3Graph)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))
@@ -84,14 +85,14 @@ class Graph extends Component {
     render() {
         const nodes = this.props.data.nodes.map((node) => {
             return (
-                <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} />)
+                <Node data={node} name={node.name} key={this.props.nodeName + node.id} nodeName={this.props.nodeName} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (
                 <Edge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
-            <svg className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
+            <svg key = {this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
                 <defs>
                     <marker id="triangle"
                         refX="21" refY="6"

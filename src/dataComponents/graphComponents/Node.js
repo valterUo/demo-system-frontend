@@ -7,6 +7,7 @@ import store from '../../store'
 const color = scaleOrdinal(schemeCategory10);
 
 const updateNode = (selection) => {
+    //console.log(selection)
     selection.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
 }
 
@@ -29,6 +30,7 @@ class Node extends Component {
     }
 
     componentDidMount() {
+        console.log('Node mounted')
         this.d3Node = select(this.nodeRef.current)
             .datum(this.props.data)
             .call(enterNode)
