@@ -14,7 +14,6 @@ const loadData = async (type) => {
     const tempLinks = []
     walkTree(rawTree, tree.nodes, tempLinks)
     constructLinks(tree.nodes, tempLinks, tree.links)
-    console.log(tree)
 
     const graph = { nodes: [], links: [] }
     data.data.graph.nodes.map(o => {
@@ -36,7 +35,6 @@ const walkTree = (tree, nodes, links) => {
 }
 
 const constructLinks = (nodes, links, newLinks) => {
-    console.log(newLinks)
     links.map(link => {
         let sourceObjectIndex = undefined
         let targetObjectIndex = undefined

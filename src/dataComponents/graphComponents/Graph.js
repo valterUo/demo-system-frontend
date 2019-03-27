@@ -42,9 +42,7 @@ class Graph extends Component {
             selection.selectAll('.' + linkName)
                 .call(updateEdge)
         }
-
         this.d3Graph = select(this.graphRef.current)
-        console.log(this.d3Graph)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))

@@ -16,7 +16,6 @@ class Tree extends Component {
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
         this.d3Graph = select(this.graphRef.current)
-        console.log(this.d3Graph)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))

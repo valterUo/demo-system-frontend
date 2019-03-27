@@ -30,7 +30,6 @@ class Node extends Component {
     }
 
     componentDidMount() {
-        console.log('Node mounted')
         this.d3Node = select(this.nodeRef.current)
             .datum(this.props.data)
             .call(enterNode)
@@ -43,7 +42,6 @@ class Node extends Component {
     }
 
     handle(e) {
-        //console.log(this.props.data + ' been clicked')
         let jsonData = this.props.data
         let filteredData = []
         for (const key in jsonData) {

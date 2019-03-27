@@ -4,10 +4,9 @@ import { scaleOrdinal } from 'd3-scale'
 import { schemeCategory10 } from 'd3-scale-chromatic'
 import store from '../../store'
 
-const color = scaleOrdinal(schemeCategory10);
+const color = scaleOrdinal(schemeCategory10)
 
 const updateNode = (selection) => {
-    //console.log(selection)
     selection.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
 }
 
@@ -36,14 +35,12 @@ class Node extends Component {
     }
 
     componentDidUpdate() {
-        //console.log(this.nodeRef.current)
         this.d3Node
             .datum(this.props.data)
             .call(updateNode)
     }
 
     handle(e) {
-        //console.log(this.props.data + ' been clicked')
         let jsonData = this.props.data
         let filteredData = []
         for (const key in jsonData) {

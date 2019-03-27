@@ -12,8 +12,6 @@ import { Navbar } from 'react-bootstrap'
 import githubimage from './GitHub-Mark-64px.png'
 import RelationalTabs from './dataComponents/relationalComponents/relationalTabs'
 import Graph from './dataComponents/graphComponents/Graph'
-import data1 from './exampleData/data1.json'
-import data2 from './exampleData/data2.json'
 import data3 from './exampleData/data3.json'
 import schema from './exampleData/schema.json'
 import StatBox from './StatBox'
@@ -21,6 +19,9 @@ import store from './store'
 import Tree from './dataComponents/treeComponents/Tree'
 import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
 import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
+import FileSender from './services/sendFiles'
+//import data1 from './exampleData/data1.json'
+//import data2 from './exampleData/data2.json'
 
 const lightBorderLeft = {
 	borderStyle: "solid",
@@ -43,19 +44,17 @@ const lightBorderRight = {
 class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = { query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, 
-		sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined, 
-		nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined }
+		this.state = {
+			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
+			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
+			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined
+		}
+		this.file = React.createRef()
 	}
-
-	/*componentDidMount() {
-		DemoDataParser.loadData("document", store)
-	}*/
 
 	handleQuery = async (event) => {
 		event.preventDefault()
-		console.log('nappia painettu')
-		let data = undefined;
+		let data = undefined
 		switch (this.state.query) {
 			case "Select FirstName, LastName from Person where id = \"933\"":
 				data = await DemoDataParser.loadData("sql")
@@ -110,6 +109,14 @@ class App extends Component {
 		this.setState({ query: event.target.value })
 	}
 
+	handleFileSubmit = async (event) => {
+		event.preventDefault()
+		console.log('file submitted')
+		console.log(this.file.current.files[0].name)
+		const answer = await FileSender.sendFiles(this.file.current.files[0], this.file.current.files[0].name)
+		console.log(answer)
+	}
+
 	selectQuery = (id) => {
 		// eslint-disable-next-line default-case
 		switch (id) {
@@ -126,13 +133,9 @@ class App extends Component {
 	}
 
 	handleStoreChange = () => {
-		const currentObject = this.state.showedNodeData
-		const newObject = store.getState().nodeData
-		if (JSON.stringify(currentObject) !== JSON.stringify(newObject)) {
-			this.setState({
-				showedNodeData: store.getState().nodeData
-			})
-		}
+		this.setState({
+			showedNodeData: store.getState().nodeData
+		})
 	}
 
 	render() {
@@ -174,6 +177,17 @@ class App extends Component {
 								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></ListGroup.Item>
 								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></ListGroup.Item>
 							</ListGroup>
+							<div>&nbsp; &nbsp;</div>
+							<Form onSubmit={this.handleFileSubmit}>
+							<Form.Group>
+								<Form.Label>
+								<h4>Upload file</h4>
+									</Form.Label>
+									<Form.Control as='input' type="file" ref={this.file} />
+									</Form.Group>
+								<Button type="submit" value="Submit" variant="dark">Submit</Button>
+							</Form>
+
 						</Col>
 						<Col>
 							<Row style={lightBorderLeft}>
@@ -191,17 +205,16 @@ class App extends Component {
 								{(this.state.sqlData !== undefined && this.state.documentData !== undefined && this.state.graphData !== undefined) &&
 									<Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
 										<Tab eventKey="rel" title="Relational output">
-											<RelationalTabs key = {this.state.relationalKey} tables={this.state.sqlData} />
+											<RelationalTabs key={this.state.relationalKey} tables={this.state.sqlData} />
 										</Tab>
 										<Tab eventKey="tree" title="XML output">
-										<Tree key = {this.state.treeKey} id="3" data={this.state.documentData} width={500} height={500} nodeName={this.state.nodeName + 'First'} linkName={this.state.linkName + 'First'} nameClass={this.state.nameClass + 'First'} />
+											<Tree key={this.state.treeKey} id="3" data={this.state.documentData} width={500} height={500} nodeName={this.state.nodeName + 'First'} linkName={this.state.linkName + 'First'} nameClass={this.state.nameClass + 'First'} />
 										</Tab>
 										<Tab eventKey="graph" title="Graph output">
-											<Graph key = {this.state.graphKey} id="4" data={this.state.graphData} width={500} height={500} nodeName={this.state.nodeName + 'Second'} linkName={this.state.linkName + 'Second'} nameClass={this.state.nameClass + 'Second'} />
+											<Graph key={this.state.graphKey} id="4" data={this.state.graphData} width={500} height={500} nodeName={this.state.nodeName + 'Second'} linkName={this.state.linkName + 'Second'} nameClass={this.state.nameClass + 'Second'} />
 										</Tab>
 									</Tabs>
 								}
-
 							</Row>
 							<Row style={lightBorderRight}>
 								<StatBox data={this.state.showedNodeData} />
