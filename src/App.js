@@ -20,6 +20,7 @@ import Tree from './dataComponents/treeComponents/Tree'
 import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
 import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
 import FileSender from './services/sendFiles'
+import MLarrowToGraph from './metaLanguageComponents/MLarrowToGraph'
 //import data1 from './exampleData/data1.json'
 //import data2 from './exampleData/data2.json'
 
@@ -181,9 +182,9 @@ class App extends Component {
 							<Form onSubmit={this.handleFileSubmit}>
 							<Form.Group>
 								<Form.Label>
-								<h4>Upload file</h4>
+								<h4>Upload files</h4>
 									</Form.Label>
-									<Form.Control as='input' type="file" ref={this.file} />
+									<Form.Control as='input' type="file" multiple="multiple" ref={this.file} />
 									</Form.Group>
 								<Button type="submit" value="Submit" variant="dark">Submit</Button>
 							</Form>
@@ -221,6 +222,7 @@ class App extends Component {
 							</Row>
 						</Col>
 					</Row>
+					<MLarrowToGraph/>
 				</Container>
 			</Container>
 		)

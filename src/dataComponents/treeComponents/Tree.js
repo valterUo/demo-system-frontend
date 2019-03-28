@@ -52,7 +52,7 @@ class Tree extends Component {
             })
 
         const tick = (selection) => {
-            const k = 6 * force.tick().alpha()
+            const k = 60 * force.tick().alpha()
 
             selection.selectAll('.' + linkName)
                 .each((d) => {
