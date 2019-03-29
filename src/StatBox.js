@@ -9,8 +9,8 @@ class StatBox extends Component {
             dataBlock = data.map(l => <p key={l["key"]}><b>{l["key"]} : </b> {l["value"]}</p>)
         }
 
-        return <div>
-            <h4>Node: </h4>
+        return <div className= "col">
+            <h4> Node: </h4>
             <div>
                 {dataBlock}
             </div>

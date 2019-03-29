@@ -7,7 +7,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import ListGroup from 'react-bootstrap/ListGroup'
+import Dropdown from 'react-bootstrap/Dropdown'
 import { Navbar } from 'react-bootstrap'
 import githubimage from './GitHub-Mark-64px.png'
 import RelationalTabs from './dataComponents/relationalComponents/relationalTabs'
@@ -21,25 +21,62 @@ import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
 import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
 import FileSender from './services/sendFiles'
 import MLarrowToGraph from './metaLanguageComponents/MLarrowToGraph'
+//import { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle } from './styles'
 //import data1 from './exampleData/data1.json'
 //import data2 from './exampleData/data2.json'
 
-const lightBorderLeft = {
-	borderStyle: "solid",
-	borderLeftWidth: "1px",
-	borderRightWidth: "1px",
-	borderTopWidth: "0px",
-	borderBottomWidth: "1px",
-	borderColor: "#d9d9d9"
+const backgroundColorStyle = {
+	backgroundColor: "#f1f1f2"
 }
 
-const lightBorderRight = {
+const headerBackGroundColorStyle = {
+	backgroundColor: "#A1D6E2",
+	borderRadius: "5px",
+	marginBottom: "12px",
+	marginRight: "0px",
+	marginLeft: "0px"
+}
+
+const fileInputStyle = {
+	border: 0,
+	clip: "rect(0, 0, 0, 0)",
+	height: "1px",
+	overflow: "hidden",
+	padding: 0,
+	position: "absolute",
+	whiteSpace: "nowrap",
+	width: "1px"
+}
+
+const fileInputLabelStyle = {
+	backgroundColor: "#343a40",
+	color: "#fff",
+	marginRight: "4px",
+	height: "36px",
+	borderRadius: "5px",
+	display: "inline-block",
+	paddingLeft: "1rem",
+	paddingRight: "1rem",
+	lineHeight: "33px"
+}
+
+const componentMarginalStyle = {
+	height: "0px",
+	width: "100%",
+	clear: "both"
+}
+
+const basicComponentsStyle = {
+	backgroundColor: "#ffffff",
 	borderStyle: "solid",
-	borderLeftWidth: "0px",
-	borderRightWidth: "1px",
-	borderTopWidth: "0px",
-	borderBottomWidth: "1px",
-	borderColor: "#d9d9d9"
+	borderRadius: "5px",
+	borderColor: "#d9d9d9",
+	borderWidth: "1px",
+	marginTop: "12px",
+	marginBottom: "12px",
+	marginRight: "0px",
+	marginLeft: "0px",
+	align: "middle"
 }
 
 class App extends Component {
@@ -143,15 +180,13 @@ class App extends Component {
 
 		store.subscribe(this.handleStoreChange)
 
-		return (
-			<Container fluid='true'>
-				<Navbar bg="light" expand="lg">
+		return (<div>
+			<Container style={backgroundColorStyle} fluid='true'>
+				<Navbar style={headerBackGroundColorStyle} variant="light" expand="lg">
 					<Navbar.Brand href="#home"><h3>Category Theory in Multi-model Databases</h3></Navbar.Brand>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse className="justify-content-end">
-						<a href="https://www.helsinki.fi/en/researchgroups/unified-database-management-systems-udbms">
-							UDBMS
-	    </a>
+						<a href="https://www.helsinki.fi/en/researchgroups/unified-database-management-systems-udbms"> UDBMS </a>
 						<div>&nbsp; &nbsp;</div>
 						<a href="https://github.com/enorvio/demo-system">
 							<img width="30" height="30" src={githubimage} alt="githublogo" />
@@ -160,71 +195,78 @@ class App extends Component {
 				</Navbar>
 
 				<Container fluid='true'>
-					<Row>
-						<Col>
-							<Form onSubmit={this.handleQuery}>
-								<Form.Group controlId="queryForm">
-									<Form.Label><h4>Query Input</h4></Form.Label>
-									<Form.Control type="text" placeholder="Enter query or choose defined query" value={this.state.query} onChange={this.handleQueryChange} />
-								</Form.Group>
-								<Button type="submit" variant="dark">
-									Execute
-  						</Button>
+					<Row style={basicComponentsStyle}>
+						<Col xl={1}>
+							<h4 align="right">Query Input</h4>
+						</Col>
+						<Col xl={6} style={{ align: "left" }}>
+							<Form onSubmit={this.handleQuery} inline>
+								<Form.Control type="text" placeholder="Enter query or choose defined query" value={this.state.query} onChange={this.handleQueryChange} style={{ width: "80%", marginRight: "5px" }} />
+								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px' }}></i> </Button>
 							</Form>
-							<div>&nbsp; &nbsp;</div>
-							<h5>Defined queries</h5>
-							<ListGroup>
-								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(1)}><code><pre>Select FirstName, LastName from Person where id = "933"</pre></code></ListGroup.Item>
-								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></ListGroup.Item>
-								<ListGroup.Item action variant="primary" onClick={() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></ListGroup.Item>
-							</ListGroup>
-							<div>&nbsp; &nbsp;</div>
+						</Col>
+						<Col xl={3}>
+							<Dropdown style={{ marginTop: "4px" }}>
+								<Dropdown.Toggle variant="dark" id="dropdown-predefined-queries">
+									Defined queries
+  							</Dropdown.Toggle>
+								<Dropdown.Menu>
+									<Dropdown.Item action variant="primary" onClick={() => this.selectQuery(1)}><code><pre>Select FirstName, LastName from Person where id = "933"</pre></code></Dropdown.Item>
+									<Dropdown.Item action variant="primary" onClick={() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></Dropdown.Item>
+									<Dropdown.Item action variant="primary" onClick={() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></Dropdown.Item>
+								</Dropdown.Menu>
+							</Dropdown>
+						</Col>
+						<Col xl={2}>
 							<Form onSubmit={this.handleFileSubmit}>
-							<Form.Group>
-								<Form.Label>
-								<h4>Upload files</h4>
-									</Form.Label>
-									<Form.Control as='input' type="file" multiple="multiple" ref={this.file} />
-									</Form.Group>
-								<Button type="submit" value="Submit" variant="dark">Submit</Button>
+								<label style = {fileInputLabelStyle} for="fileInput">Select files</label>
+								<input name="fileInput" id = "fileInput" style = {fileInputStyle} as='input' type="file" multiple="multiple" ref={this.file} />
+								<Button type="submit" value="Submit" variant="dark"><i class='fas fa-upload' style={{ 'fontSize': '24px' }}></i></Button>
 							</Form>
-
 						</Col>
-						<Col>
-							<Row style={lightBorderLeft}>
+					</Row>
+					<Row>
+						<Col xl={6}>
+							<Row style={basicComponentsStyle}>
 								<h4>Schema</h4>
-								<Graph id="1" data={data3} width={500} height={500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass={"schemaGraph"} />
+								<Graph id="1" data={data3} width={745} height={500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass={"schemaGraph"} />
 
 							</Row>
-							<Row style={lightBorderLeft}>
+							<div style={componentMarginalStyle}></div>
+							<Row style={basicComponentsStyle}>
 								<h4>Query schema</h4>
-								<MultiGraph id="2" data={schema} width={500} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
+								<MultiGraph id="2" data={schema} width={745} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
 							</Row>
 						</Col>
-						<Col><h4>Result</h4>
-							<Row style={lightBorderRight}>
-								{(this.state.sqlData !== undefined && this.state.documentData !== undefined && this.state.graphData !== undefined) &&
-									<Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
-										<Tab eventKey="rel" title="Relational output">
-											<RelationalTabs key={this.state.relationalKey} tables={this.state.sqlData} />
-										</Tab>
-										<Tab eventKey="tree" title="XML output">
-											<Tree key={this.state.treeKey} id="3" data={this.state.documentData} width={500} height={500} nodeName={this.state.nodeName + 'First'} linkName={this.state.linkName + 'First'} nameClass={this.state.nameClass + 'First'} />
-										</Tab>
-										<Tab eventKey="graph" title="Graph output">
-											<Graph key={this.state.graphKey} id="4" data={this.state.graphData} width={500} height={500} nodeName={this.state.nodeName + 'Second'} linkName={this.state.linkName + 'Second'} nameClass={this.state.nameClass + 'Second'} />
-										</Tab>
-									</Tabs>
-								}
+						<Col xl={6}>
+							<Row style={basicComponentsStyle}>
+								<Col>
+									<h4>Result:</h4>
+									{(this.state.sqlData !== undefined && this.state.documentData !== undefined && this.state.graphData !== undefined) &&
+										<Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
+											<Tab eventKey="rel" title="Relational output">
+												<RelationalTabs key={this.state.relationalKey} tables={this.state.sqlData} />
+											</Tab>
+											<Tab eventKey="tree" title="XML output">
+												<Tree key={this.state.treeKey} id="3" data={this.state.documentData} width={500} height={500} nodeName={this.state.nodeName + 'First'} linkName={this.state.linkName + 'First'} nameClass={this.state.nameClass + 'First'} />
+											</Tab>
+											<Tab eventKey="graph" title="Graph output">
+												<Graph key={this.state.graphKey} id="4" data={this.state.graphData} width={500} height={500} nodeName={this.state.nodeName + 'Second'} linkName={this.state.linkName + 'Second'} nameClass={this.state.nameClass + 'Second'} />
+											</Tab>
+										</Tabs>
+									}
+								</Col>
 							</Row>
-							<Row style={lightBorderRight}>
+							<div style={componentMarginalStyle}></div>
+							<Row style={basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>
 						</Col>
 					</Row>
-					<MLarrowToGraph/>
+					<MLarrowToGraph />
 				</Container>
 			</Container>
+		</div>
 		)
 	}
 }

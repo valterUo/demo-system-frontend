@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import MultiGraph from '../dataComponents/multiGraphComponents/MultiGraph'
-import Graph from '../dataComponents/graphComponents/Graph'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import data4 from '../exampleData/data4'
 
 class MLarrowToGraph extends Component {
     constructor(props) {
@@ -59,9 +57,6 @@ class MLarrowToGraph extends Component {
             })
             return linkPairIndex
         })
-
-        console.log(links)
-
         links.map(linkObject => {
             targetLinks.map(targetLink => {
                 if (targetLink[0] === linkObject.name) {
@@ -76,7 +71,6 @@ class MLarrowToGraph extends Component {
             })
             return linkObject
         })
-        console.log(links)
         return links
     }
 
@@ -89,7 +83,6 @@ class MLarrowToGraph extends Component {
         let nodes = [...nodesSet].map((element, i) => { return { name: element, id: i } })
         let links = this.constructLinks(nodes, sourceLinks, targetLinks)
         links = this.countLinks(links)
-        console.log(links)
         return { nodes: nodes, links: links }
     }
 
