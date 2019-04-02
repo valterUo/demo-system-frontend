@@ -80,6 +80,10 @@ class Graph extends Component {
 
     }
 
+    handleClick() {
+        //console.log("SVG clicked!")
+    }
+
     render() {
         const nodes = this.props.data.nodes.map((node) => {
             return (
@@ -90,7 +94,7 @@ class Graph extends Component {
                 <Edge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
-            <svg key = {this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
+            <svg key = {this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height} onClick = {this.handleClick}>
                 <defs>
                     <marker id="triangle"
                         refX="21" refY="6"

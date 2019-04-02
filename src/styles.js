@@ -25,11 +25,13 @@ const fileInputLabelStyle = {
 	backgroundColor: "#343a40",
 	color: "#fff",
 	marginRight: "4px",
+	marginTop: "5px",
 	height: "36px",
 	borderRadius: "5px",
 	display: "inline-block",
 	paddingLeft: "1rem",
-	paddingRight: "1rem"
+	paddingRight: "1rem",
+	lineHeight: "33px"
 }
 
 const componentMarginalStyle = {

@@ -15,79 +15,30 @@ import Graph from './dataComponents/graphComponents/Graph'
 import data3 from './exampleData/data3.json'
 import schema from './exampleData/schema.json'
 import StatBox from './StatBox'
+import NodeDataTextField from './NodeDataTextField'
 import store from './store'
 import Tree from './dataComponents/treeComponents/Tree'
 import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
 import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
 import FileSender from './services/sendFiles'
 import MLarrowToGraph from './metaLanguageComponents/MLarrowToGraph'
-//import { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle } from './styles'
+import style from './styles'
 //import data1 from './exampleData/data1.json'
 //import data2 from './exampleData/data2.json'
-
-const backgroundColorStyle = {
-	backgroundColor: "#f1f1f2"
-}
-
-const headerBackGroundColorStyle = {
-	backgroundColor: "#A1D6E2",
-	borderRadius: "5px",
-	marginBottom: "12px",
-	marginRight: "0px",
-	marginLeft: "0px"
-}
-
-const fileInputStyle = {
-	border: 0,
-	clip: "rect(0, 0, 0, 0)",
-	height: "1px",
-	overflow: "hidden",
-	padding: 0,
-	position: "absolute",
-	whiteSpace: "nowrap",
-	width: "1px"
-}
-
-const fileInputLabelStyle = {
-	backgroundColor: "#343a40",
-	color: "#fff",
-	marginRight: "4px",
-	height: "36px",
-	borderRadius: "5px",
-	display: "inline-block",
-	paddingLeft: "1rem",
-	paddingRight: "1rem",
-	lineHeight: "33px"
-}
-
-const componentMarginalStyle = {
-	height: "0px",
-	width: "100%",
-	clear: "both"
-}
-
-const basicComponentsStyle = {
-	backgroundColor: "#ffffff",
-	borderStyle: "solid",
-	borderRadius: "5px",
-	borderColor: "#d9d9d9",
-	borderWidth: "1px",
-	marginTop: "12px",
-	marginBottom: "12px",
-	marginRight: "0px",
-	marginLeft: "0px",
-	align: "middle"
-}
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
+			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "",
 			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
 			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined
 		}
 		this.file = React.createRef()
+	}
+
+	componentDidMount() {
+		store.dispatch({ type: "ADD_SCHEMA_DATA", data: data3 })
 	}
 
 	handleQuery = async (event) => {
@@ -171,18 +122,25 @@ class App extends Component {
 	}
 
 	handleStoreChange = () => {
-		this.setState({
-			showedNodeData: store.getState().nodeData
-		})
+		if (this.state.showedNodeData !== store.getState().nodeData) {
+			this.setState({
+				showedNodeData: store.getState().nodeData
+			})
+		}
+		if (store.getState().schemaData.key !== this.state.schemaKey) {
+			this.setState({
+				schemaData: store.getState().schemaData.schema,
+				schemaKey: store.getState().schemaData.key
+			})
+		}
 	}
 
 	render() {
-
 		store.subscribe(this.handleStoreChange)
 
 		return (<div>
-			<Container style={backgroundColorStyle} fluid='true'>
-				<Navbar style={headerBackGroundColorStyle} variant="light" expand="lg">
+			<Container style={style.backgroundColorStyle} fluid='true'>
+				<Navbar style={style.headerBackGroundColorStyle} variant="light" expand="lg">
 					<Navbar.Brand href="#home"><h3>Category Theory in Multi-model Databases</h3></Navbar.Brand>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse className="justify-content-end">
@@ -195,14 +153,14 @@ class App extends Component {
 				</Navbar>
 
 				<Container fluid='true'>
-					<Row style={basicComponentsStyle}>
+					<Row style={style.basicComponentsStyle}>
 						<Col xl={1}>
 							<h4 align="right">Query Input</h4>
 						</Col>
 						<Col xl={6} style={{ align: "left" }}>
 							<Form onSubmit={this.handleQuery} inline>
 								<Form.Control type="text" placeholder="Enter query or choose defined query" value={this.state.query} onChange={this.handleQueryChange} style={{ width: "80%", marginRight: "5px" }} />
-								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px' }}></i> </Button>
+								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
 							</Form>
 						</Col>
 						<Col xl={3}>
@@ -211,35 +169,37 @@ class App extends Component {
 									Defined queries
   							</Dropdown.Toggle>
 								<Dropdown.Menu>
-									<Dropdown.Item action variant="primary" onClick={() => this.selectQuery(1)}><code><pre>Select FirstName, LastName from Person where id = "933"</pre></code></Dropdown.Item>
-									<Dropdown.Item action variant="primary" onClick={() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></Dropdown.Item>
-									<Dropdown.Item action variant="primary" onClick={() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></Dropdown.Item>
+									<Dropdown.Item action="true" variant="primary" onClick={() => this.selectQuery(1)}><code><pre>Select FirstName, LastName from Person where id = "933"</pre></code></Dropdown.Item>
+									<Dropdown.Item action="true" variant="primary" onClick={() => this.selectQuery(2)}><code><pre>.//invoice[personId="10995116278711"]/orderline</pre></code></Dropdown.Item>
+									<Dropdown.Item action="true" variant="primary" onClick={() => this.selectQuery(3)}><code><pre>MATCH (a:Person name: 'Jennifer')-[r:WORK_FOR]->(b:University)</pre> <pre>RETURN a, r, b</pre></code></Dropdown.Item>
 								</Dropdown.Menu>
 							</Dropdown>
 						</Col>
 						<Col xl={2}>
 							<Form onSubmit={this.handleFileSubmit}>
-								<label style = {fileInputLabelStyle} for="fileInput">Select files</label>
-								<input name="fileInput" id = "fileInput" style = {fileInputStyle} as='input' type="file" multiple="multiple" ref={this.file} />
-								<Button type="submit" value="Submit" variant="dark"><i class='fas fa-upload' style={{ 'fontSize': '24px' }}></i></Button>
+								<label style={style.fileInputLabelStyle} htmlFor="fileInput">Select files</label>
+								<input name="fileInput" id="fileInput" style={style.fileInputStyle} as='input' type="file" multiple="multiple" ref={this.file} />
+								<Button type="submit" value="Submit" variant="dark"><i className='fas fa-upload' style={{ 'fontSize': '24px' }}></i></Button>
 							</Form>
 						</Col>
 					</Row>
 					<Row>
 						<Col xl={6}>
-							<Row style={basicComponentsStyle}>
-								<h4>Schema</h4>
-								<Graph id="1" data={data3} width={745} height={500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass={"schemaGraph"} />
-
+							<Row style={style.basicComponentsStyle}>
+								<Col>
+									<h4>Schema</h4>
+									<Graph key={this.state.schemaKey} id="1" data={this.state.schemaData} width={930} height={500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass={"schemaGraph"} />
+								</Col>
 							</Row>
-							<div style={componentMarginalStyle}></div>
-							<Row style={basicComponentsStyle}>
-								<h4>Query schema</h4>
-								<MultiGraph id="2" data={schema} width={745} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
+							<Row style={style.basicComponentsStyle}>
+								<Col>
+									<h4>Query schema</h4>
+									<MultiGraph id="2" data={schema} width={930} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
+								</Col>
 							</Row>
 						</Col>
 						<Col xl={6}>
-							<Row style={basicComponentsStyle}>
+							<Row style={style.basicComponentsStyle}>
 								<Col>
 									<h4>Result:</h4>
 									{(this.state.sqlData !== undefined && this.state.documentData !== undefined && this.state.graphData !== undefined) &&
@@ -257,9 +217,13 @@ class App extends Component {
 									}
 								</Col>
 							</Row>
-							<div style={componentMarginalStyle}></div>
-							<Row style={basicComponentsStyle}>
+							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
+							</Row>
+							<Row style={style.basicComponentsStyle}>
+								<Col>
+									<NodeDataTextField />
+								</Col>
 							</Row>
 						</Col>
 					</Row>
