@@ -117,7 +117,9 @@ class Node extends Component {
                 break
             }
         }
-        store.dispatch({ type: 'ADD_NODE_DATA', data: filteredData })
+        if(JSON.stringify(store.getState().nodeData.data) !== JSON.stringify(filteredData)){
+            store.dispatch({ type: 'ADD_NODE_DATA', data: filteredData })
+        }
         this.d3Node.select("circle").style("fill", "#FCBC34")
     }
 
@@ -131,12 +133,17 @@ class Node extends Component {
                 this.d3Node.select(".nodeHandlingButtons").attr("display", "block")
             } else {
                 this.d3Node.select(".nodeHandlingButtons").attr("display", "none")
+                store.dispatch({type: 'DELETE_NODE_MODEL'})
             }
         }
     }
 
-    changeNodeHandlingButtonColor(event) {
-        console.log(event.target)
+    changeNodeHandlingButtonColorEnter(name) {
+        this.d3Node.select("." + name).select("path").style("fill", "#FCBC34")
+    }
+
+    changeNodeHandlingButtonColorExit(name) {
+        this.d3Node.select("." + name).select("path").style("fill", "#69b3a2")
     }
 
     handleAddEdge() {
@@ -148,12 +155,14 @@ class Node extends Component {
         const newNodes = oldData.nodes.filter(node => JSON.stringify(node) !== JSON.stringify(this.props.data))
         const newLinks = oldData.links.filter(link => JSON.stringify(link.source) !== JSON.stringify(this.props.data) && JSON.stringify(link.target) !== JSON.stringify(this.props.data))
         store.dispatch({ type: "ADD_SCHEMA_DATA", data: { nodes: newNodes, links: newLinks }, key: "removedNodeKey" + newNodes.length })
+        this.showNodeHandlingButtons()
     }
 
     handleRemoveEdges() {
         let oldData = store.getState().schemaData.schema
         const newLinks = oldData.links.filter(link => JSON.stringify(link.source) !== JSON.stringify(this.props.data) && JSON.stringify(link.target) !== JSON.stringify(this.props.data))
         store.dispatch({ type: "ADD_SCHEMA_DATA", data: { nodes: oldData.nodes, links: newLinks }, key: "removedEdgesKey" + newLinks.length })
+        this.showNodeHandlingButtons()
     }
 
     handleAddNodeStartingFromThisNode() {
@@ -176,19 +185,23 @@ class Node extends Component {
                 <text>{this.props.data.name}</text>
 
                 <g className="nodeHandlingButtons" display="none">
-                    <g onClick={this.handleAddEdge.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
+                    <g className = "addEdgeElement" onClick={this.handleAddEdge.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addEdgeElement")} 
+                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addEdgeElement")}>
                         <path className="addEdge" />
                         <text className="addEdgeLabel">+e</text>
                     </g>
-                    <g onClick={this.handleRemoveNode.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
+                    <g className = "removeNodeElement" onClick={this.handleRemoveNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeNodeElement")} 
+                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeNodeElement")}>
                         <path className="removeNode" />
                         <text className="removeNodeLabel">-n</text>
                     </g>
-                    <g onClick={this.handleRemoveEdges.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
+                    <g className = "removeEdgesElement" onClick={this.handleRemoveEdges.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeEdgesElement")} 
+                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeEdgesElement")}>
                         <path className="removeEdges" />
                         <text className="removeEdgesLabel">-e</text>
                     </g>
-                    <g onClick={this.handleAddNodeStartingFromThisNode.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
+                    <g className = "addNodeStartingFromThisNodeElement" onClick={this.handleAddNodeStartingFromThisNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addNodeStartingFromThisNodeElement")} 
+                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addNodeStartingFromThisNodeElement")}>
                         <path className="addNodeStartingFromThisNode" />
                         <text className="addNodeStartingFromThisNodeLabel">+n</text>
                     </g>

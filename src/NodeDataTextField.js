@@ -13,7 +13,8 @@ class NodeDataTextField extends Component {
     }
 
     handleStoreChange = () => {
-        if (this.state.textfieldValue !== JSON.stringify(store.getState().nodeModelData.nodeModel)) {
+        if (this.state.textfieldValue !== JSON.stringify(store.getState().nodeModelData.nodeModel) 
+        || this.state.textFieldVisible !== store.getState().nodeModelData.textFieldVisible) {
             this.setState({
                 textFieldVisible: store.getState().nodeModelData.textFieldVisible,
                 textfieldValue: JSON.stringify(store.getState().nodeModelData.nodeModel)

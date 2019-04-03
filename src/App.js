@@ -29,6 +29,10 @@ class App extends Component {
 		this.file = React.createRef()
 	}
 
+	componentDidMount() {
+		store.dispatch({type: 'ADD_SCHEMA_DATA', data: data3, key: ""})
+	}
+
 	handleQuery = async (event) => {
 		event.preventDefault()
 		let data = undefined
@@ -167,6 +171,10 @@ class App extends Component {
 					</Row>
 					<MLarrowToGraph />
 				</Container>
+				<footer>
+				<hr style= {{ color: "black", borderWidth:"1px", display: "block", borderStyle: "inset" }}></hr>
+					<p>Category Theory in Multi-model Databases</p>
+				</footer>
 			</Container>
 		)
 	}
