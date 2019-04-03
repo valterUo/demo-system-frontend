@@ -138,7 +138,7 @@ class Graph extends Component {
     render() {
         const nodes = this.props.data.nodes.map((node) => {
             return (
-                <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} />)
+                <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} editableGraph = {this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (

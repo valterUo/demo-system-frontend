@@ -5,7 +5,7 @@ import { schemeCategory10 } from 'd3-scale-chromatic'
 import { arc } from 'd3'
 import store from '../../store'
 
-const color = scaleOrdinal(schemeCategory10);
+const color = scaleOrdinal(schemeCategory10)
 
 const updateNode = (selection) => {
     selection.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
@@ -51,7 +51,7 @@ const enterNode = (selection) => {
         .style('stroke-width', '1')
         .attr('fill', '#69b3a2')
 
-        selection.select(".removeNodeLabel")
+    selection.select(".removeNodeLabel")
         .attr("transform", "translate(5, 15)")
 
     selection.select('g')
@@ -66,7 +66,7 @@ const enterNode = (selection) => {
         .style('stroke-width', '1')
         .attr('fill', '#69b3a2')
 
-        selection.select(".removeEdgesLabel")
+    selection.select(".removeEdgesLabel")
         .attr("transform", "translate(-21, 15)")
 
     selection.select('g')
@@ -81,7 +81,7 @@ const enterNode = (selection) => {
         .style('stroke-width', '1')
         .attr('fill', '#69b3a2')
 
-        selection.select(".addNodeStartingFromThisNodeLabel")
+    selection.select(".addNodeStartingFromThisNodeLabel")
         .attr("transform", "translate(-21, -9)")
 
 }
@@ -126,11 +126,17 @@ class Node extends Component {
     }
 
     showNodeHandlingButtons() {
-        if (this.d3Node.select(".nodeHandlingButtons").attr("display") === "none") {
-            this.d3Node.select(".nodeHandlingButtons").attr("display", "block")
-        } else {
-            this.d3Node.select(".nodeHandlingButtons").attr("display", "none")
+        if (this.props.editableGraph) {
+            if (this.d3Node.select(".nodeHandlingButtons").attr("display") === "none") {
+                this.d3Node.select(".nodeHandlingButtons").attr("display", "block")
+            } else {
+                this.d3Node.select(".nodeHandlingButtons").attr("display", "none")
+            }
         }
+    }
+
+    changeNodeHandlingButtonColor(event) {
+        console.log(event.target)
     }
 
     handleAddEdge() {
@@ -152,7 +158,7 @@ class Node extends Component {
 
     handleAddNodeStartingFromThisNode() {
         let newNode = {}
-        for(const key in this.props.data) {
+        for (const key in this.props.data) {
             if (key !== "index") {
                 newNode[key] = ""
             }
@@ -160,7 +166,7 @@ class Node extends Component {
                 break
             }
         }
-        store.dispatch({type: 'ADD_NODE_MODEL', textFieldVisible: true, nodeModel: newNode, sourceNode: this.props.data})
+        store.dispatch({ type: 'ADD_NODE_MODEL', textFieldVisible: true, nodeModel: newNode, sourceNode: this.props.data })
     }
 
     render() {
@@ -170,19 +176,19 @@ class Node extends Component {
                 <text>{this.props.data.name}</text>
 
                 <g className="nodeHandlingButtons" display="none">
-                    <g onClick={this.handleAddEdge.bind(this)}>
+                    <g onClick={this.handleAddEdge.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
                         <path className="addEdge" />
                         <text className="addEdgeLabel">+e</text>
                     </g>
-                    <g onClick={this.handleRemoveNode.bind(this)}>
+                    <g onClick={this.handleRemoveNode.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
                         <path className="removeNode" />
                         <text className="removeNodeLabel">-n</text>
                     </g>
-                    <g onClick={this.handleRemoveEdges.bind(this)}>
+                    <g onClick={this.handleRemoveEdges.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
                         <path className="removeEdges" />
                         <text className="removeEdgesLabel">-e</text>
                     </g>
-                    <g onClick={this.handleAddNodeStartingFromThisNode.bind(this)}>
+                    <g onClick={this.handleAddNodeStartingFromThisNode.bind(this)} onMouseEnter={this.changeNodeHandlingButtonColor.bind(this)}>
                         <path className="addNodeStartingFromThisNode" />
                         <text className="addNodeStartingFromThisNodeLabel">+n</text>
                     </g>

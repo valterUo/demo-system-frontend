@@ -3,28 +3,20 @@ import './App.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { Navbar } from 'react-bootstrap'
-import githubimage from './GitHub-Mark-64px.png'
-import RelationalTabs from './dataComponents/relationalComponents/relationalTabs'
-import Graph from './dataComponents/graphComponents/Graph'
 import data3 from './exampleData/data3.json'
-import schema from './exampleData/schema.json'
 import StatBox from './StatBox'
 import NodeDataTextField from './NodeDataTextField'
 import store from './store'
-import Tree from './dataComponents/treeComponents/Tree'
-import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
 import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
-import FileSender from './services/sendFiles'
+import FileSubmitComponent from './FileSubmitComponent'
+import NavigationBarComponent from './NavigationBarComponent'
+import SchemaComponent from './SchemaComponent'
 import MLarrowToGraph from './metaLanguageComponents/MLarrowToGraph'
 import style from './styles'
-//import data1 from './exampleData/data1.json'
-//import data2 from './exampleData/data2.json'
+import ResultComponent from './ResultComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -35,10 +27,6 @@ class App extends Component {
 			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined
 		}
 		this.file = React.createRef()
-	}
-
-	componentDidMount() {
-		store.dispatch({ type: "ADD_SCHEMA_DATA", data: data3 })
 	}
 
 	handleQuery = async (event) => {
@@ -98,14 +86,6 @@ class App extends Component {
 		this.setState({ query: event.target.value })
 	}
 
-	handleFileSubmit = async (event) => {
-		event.preventDefault()
-		console.log('file submitted')
-		console.log(this.file.current.files[0].name)
-		const answer = await FileSender.sendFiles(this.file.current.files[0], this.file.current.files[0].name)
-		console.log(answer)
-	}
-
 	selectQuery = (id) => {
 		// eslint-disable-next-line default-case
 		switch (id) {
@@ -138,20 +118,9 @@ class App extends Component {
 	render() {
 		store.subscribe(this.handleStoreChange)
 
-		return (<div>
+		return (
 			<Container style={style.backgroundColorStyle} fluid='true'>
-				<Navbar style={style.headerBackGroundColorStyle} variant="light" expand="lg">
-					<Navbar.Brand href="#home"><h3>Category Theory in Multi-model Databases</h3></Navbar.Brand>
-					<Navbar.Toggle aria-controls="basic-navbar-nav" />
-					<Navbar.Collapse className="justify-content-end">
-						<a href="https://www.helsinki.fi/en/researchgroups/unified-database-management-systems-udbms"> UDBMS </a>
-						<div>&nbsp; &nbsp;</div>
-						<a href="https://github.com/enorvio/demo-system">
-							<img width="30" height="30" src={githubimage} alt="githublogo" />
-						</a>
-					</Navbar.Collapse>
-				</Navbar>
-
+				<NavigationBarComponent />
 				<Container fluid='true'>
 					<Row style={style.basicComponentsStyle}>
 						<Col xl={1}>
@@ -176,47 +145,16 @@ class App extends Component {
 							</Dropdown>
 						</Col>
 						<Col xl={2}>
-							<Form onSubmit={this.handleFileSubmit}>
-								<label style={style.fileInputLabelStyle} htmlFor="fileInput">Select files</label>
-								<input name="fileInput" id="fileInput" style={style.fileInputStyle} as='input' type="file" multiple="multiple" ref={this.file} />
-								<Button type="submit" value="Submit" variant="dark"><i className='fas fa-upload' style={{ 'fontSize': '24px' }}></i></Button>
-							</Form>
+							<FileSubmitComponent />
 						</Col>
 					</Row>
 					<Row>
 						<Col xl={6}>
-							<Row style={style.basicComponentsStyle}>
-								<Col>
-									<h4>Schema</h4>
-									<Graph key={this.state.schemaKey} id="1" data={this.state.schemaData} width={930} height={500} nodeName={"schemaNodes"} linkName={"schemaLinks"} nameClass={"schemaGraph"} />
-								</Col>
-							</Row>
-							<Row style={style.basicComponentsStyle}>
-								<Col>
-									<h4>Query schema</h4>
-									<MultiGraph id="2" data={schema} width={930} height={500} nodeName={"queryNodes"} linkName={"queryLinks"} nameClass={"queryGraph"} />
-								</Col>
-							</Row>
+							<SchemaComponent schemaKey={this.state.schemaKey} schemaData={this.state.schemaData} />
 						</Col>
 						<Col xl={6}>
-							<Row style={style.basicComponentsStyle}>
-								<Col>
-									<h4>Result:</h4>
-									{(this.state.sqlData !== undefined && this.state.documentData !== undefined && this.state.graphData !== undefined) &&
-										<Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
-											<Tab eventKey="rel" title="Relational output">
-												<RelationalTabs key={this.state.relationalKey} tables={this.state.sqlData} />
-											</Tab>
-											<Tab eventKey="tree" title="XML output">
-												<Tree key={this.state.treeKey} id="3" data={this.state.documentData} width={500} height={500} nodeName={this.state.nodeName + 'First'} linkName={this.state.linkName + 'First'} nameClass={this.state.nameClass + 'First'} />
-											</Tab>
-											<Tab eventKey="graph" title="Graph output">
-												<Graph key={this.state.graphKey} id="4" data={this.state.graphData} width={500} height={500} nodeName={this.state.nodeName + 'Second'} linkName={this.state.linkName + 'Second'} nameClass={this.state.nameClass + 'Second'} />
-											</Tab>
-										</Tabs>
-									}
-								</Col>
-							</Row>
+							<ResultComponent sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
+								graphData={this.state.graphData} graphKey={this.state.graphKey} nodeName={this.state.nodeName} linkName={this.state.linkName} nameClass={this.state.className} />
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>
@@ -230,7 +168,6 @@ class App extends Component {
 					<MLarrowToGraph />
 				</Container>
 			</Container>
-		</div>
 		)
 	}
 }
