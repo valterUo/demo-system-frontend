@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
-import style from './styles'
-import githubimage from './GitHub-Mark-64px.png'
+import style from '../styles'
+import githubimage from '../GitHub-Mark-64px.png'
 
 class NavigationBarComponent extends Component {
 

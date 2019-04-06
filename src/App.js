@@ -7,16 +7,17 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import data3 from './exampleData/data3.json'
-import StatBox from './StatBox'
-import NodeDataTextField from './NodeDataTextField'
+import StatBox from './components/StatBox'
+import NodeDataTextField from './components/NodeDataTextField'
 import store from './store'
 import DemoDataParser from './oldDemoDataHandling/oldDemoDataParser'
-import FileSubmitComponent from './FileSubmitComponent'
-import NavigationBarComponent from './NavigationBarComponent'
-import SchemaComponent from './SchemaComponent'
+import FileSubmitComponent from './components/FileSubmitComponent'
+import NavigationBarComponent from './components/NavigationBarComponent'
+import SchemaComponent from './components/SchemaComponent'
 import MLarrowToGraph from './metaLanguageComponents/MLarrowToGraph'
 import style from './styles'
-import ResultComponent from './ResultComponent'
+import ResultComponent from './components/ResultComponent'
+import ml from './services/metaLanguageCompilerService'
 
 class App extends Component {
 	constructor(props) {
@@ -26,11 +27,14 @@ class App extends Component {
 			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
 			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined
 		}
-		this.file = React.createRef()
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		//"OS.Process.exit(OS.Process.success); \n"
 		store.dispatch({type: 'ADD_SCHEMA_DATA', data: data3, key: ""})
+		await ml.compile("datatype ('oA,'aA, 'oB,'aB) Functor = ffunctor of ('oA, 'aA) Cat * ('oA -> 'oB) * ('aA -> 'aB) * ('oB,'aB) Cat;")
+		//await ml.compile("datatype ('oA,'aA, 'oB,'aB) Functor = ffunctor of ('oA, 'aA) Cat * ('oA -> 'oB) * ('aA -> 'aB) * ('oB,'aB) Cat;\n")
+		await ml.compile("1 + 2 + 3;")
 	}
 
 	handleQuery = async (event) => {

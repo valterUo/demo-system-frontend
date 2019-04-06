@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import style from './styles'
+import style from '../styles'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Graph from './dataComponents/graphComponents/Graph'
-import MultiGraph from './dataComponents/multiGraphComponents/MultiGraph'
-import schema from './exampleData/schema.json'
+import Graph from '../dataComponents/graphComponents/Graph'
+import MultiGraph from '../dataComponents/multiGraphComponents/MultiGraph'
+import schema from '../exampleData/schema.json'
 
 class SchemaComponent extends Component {
 

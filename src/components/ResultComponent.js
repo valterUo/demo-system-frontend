@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import style from './styles'
+import style from '../styles'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import RelationalTabs from './dataComponents/relationalComponents/relationalTabs'
-import Tree from './dataComponents/treeComponents/Tree'
-import Graph from './dataComponents/graphComponents/Graph'
+import RelationalTabs from '../dataComponents/relationalComponents/relationalTabs'
+import Tree from '../dataComponents/treeComponents/Tree'
+import Graph from '../dataComponents/graphComponents/Graph'
 
 class ResultComponent extends Component {
 
