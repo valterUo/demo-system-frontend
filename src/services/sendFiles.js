@@ -1,18 +1,19 @@
 import axios from 'axios'
 
 const sendFiles = async (file, fileName) => {
+    let answer = undefined
     const reader = new FileReader()
     var headers = {
-        'Content-Type': 'text/csv',
+        'Content-Type': 'text/plain',
         'FileName': fileName
     }
     reader.onload = async function (evt) {
-        const answer = await axios.post('/files', evt.target.result, { headers: headers })
+        //console.log(evt.target.result)
+        answer = await axios.post('http://localhost:3001/files', evt.target.result, { headers: headers })
         console.log(answer)
     }
-    reader.readAsText(file)
-
-    return "Success?"
+    await reader.readAsText(file)
+    return answer
 }
 
 export default { sendFiles }

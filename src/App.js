@@ -17,6 +17,7 @@ import SchemaComponent from './components/SchemaComponent'
 import MLarrowToGraph from './metaLanguageComponents/MLarrowToGraph'
 import style from './styles'
 import ResultComponent from './components/ResultComponent'
+import MLQueryComponent from './components/MLQueryComponent'
 import ml from './services/metaLanguageCompilerService'
 
 class App extends Component {
@@ -25,16 +26,13 @@ class App extends Component {
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "",
 			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
-			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined
+			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined, queryAnswers: []
 		}
 	}
 
 	async componentDidMount() {
 		//"OS.Process.exit(OS.Process.success); \n"
 		store.dispatch({type: 'ADD_SCHEMA_DATA', data: data3, key: ""})
-		await ml.compile("datatype ('oA,'aA, 'oB,'aB) Functor = ffunctor of ('oA, 'aA) Cat * ('oA -> 'oB) * ('aA -> 'aB) * ('oB,'aB) Cat;")
-		//await ml.compile("datatype ('oA,'aA, 'oB,'aB) Functor = ffunctor of ('oA, 'aA) Cat * ('oA -> 'oB) * ('aA -> 'aB) * ('oB,'aB) Cat;\n")
-		await ml.compile("1 + 2 + 3;")
 	}
 
 	handleQuery = async (event) => {
@@ -84,13 +82,18 @@ class App extends Component {
 				})
 				break
 			default:
+				const answer = await ml.compile(this.state.query)
+				this.setState(state => {
+					const newAnswers = [...state.queryAnswers, answer.data]
+					return {queryAnswers: newAnswers}
+				})
+				console.log(this.state.queryAnswers)
 				break
 		}
 		this.setState({ query: "" })
 	}
 
 	handleQueryChange = (event) => {
-		console.log(event.target.value)
 		this.setState({ query: event.target.value })
 	}
 
@@ -161,6 +164,7 @@ class App extends Component {
 							<SchemaComponent schemaKey={this.state.schemaKey} schemaData={this.state.schemaData} />
 						</Col>
 						<Col xl={6}>
+						<MLQueryComponent answers = {this.state.queryAnswers} />
 							<ResultComponent sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
 								graphData={this.state.graphData} graphKey={this.state.graphKey} nodeName={this.state.nodeName} linkName={this.state.linkName} nameClass={this.state.className} />
 							<Row style={style.basicComponentsStyle}>

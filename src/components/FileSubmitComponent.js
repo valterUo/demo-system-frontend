@@ -3,6 +3,7 @@ import FileSender from '../services/sendFiles'
 import style from '../styles'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import ml from '../services/metaLanguageCompilerService'
 
 class FileSubmitComponent extends Component {
     constructor(props) {
@@ -12,10 +13,7 @@ class FileSubmitComponent extends Component {
 
     handleFileSubmit = async (event) => {
         event.preventDefault()
-        console.log('file submitted')
-        console.log(this.file.current.files[0].name)
-        const answer = await FileSender.sendFiles(this.file.current.files[0], this.file.current.files[0].name)
-        console.log(answer)
+        await FileSender.sendFiles(this.file.current.files[0], this.file.current.files[0].name)
     }
 
     render() {

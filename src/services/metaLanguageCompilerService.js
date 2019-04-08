@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const compile = async (command) => {
-    const answer = await axios.post('http://localhost:3002/ml', {"command": command})
+    const answer = await axios.post('/ml', command, { headers: {'Content-Type': 'text/plain'} })
     console.log(answer)
     return answer
 }
