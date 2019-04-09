@@ -3,13 +3,18 @@ import Row from 'react-bootstrap/Row'
 import style from '../styles'
 
 class MLQueryComponent extends Component {
-    
+
     render() {
-        return <Row style={style.basicComponentsStyle}>
-        <div style = {{marginLeft: "10px"}}>
-            {this.props.answers.map((answer, i) => <p key = {i} >{answer}</p>)}
-            </div>
-        </Row>
+        if (this.props.answers.length !== 0) {
+            return <Row style={style.basicComponentsStyle}>
+                <div style={{ marginLeft: "10px" }}>
+                <h4>ML command line:</h4>
+                    {this.props.answers.map((answer, i) => <p key={i} >{answer}</p>)}
+                </div>
+            </Row>
+        } else {
+            return null
+        }
     }
 }
 export default MLQueryComponent

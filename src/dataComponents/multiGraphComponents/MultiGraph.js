@@ -100,7 +100,7 @@ class Graph extends Component {
         this.d3Graph = select(this.graphRef.current)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
-            .force('charge', forceManyBody().strength(-100))
+            .force('charge', forceManyBody().strength(-50))
             .force('link', forceLink(this.props.data.links).distance(200))
             .force('center', forceCenter().x(this.props.width / 2).y(this.props.height / 2))
             .force('collide', forceCollide([10]).iterations([10]))

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import store from '../store'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import style from '../styles'
 
 class NodeDataTextField extends Component {
     constructor(props) {
@@ -13,8 +16,8 @@ class NodeDataTextField extends Component {
     }
 
     handleStoreChange = () => {
-        if (this.state.textfieldValue !== JSON.stringify(store.getState().nodeModelData.nodeModel) 
-        || this.state.textFieldVisible !== store.getState().nodeModelData.textFieldVisible) {
+        if (this.state.textfieldValue !== JSON.stringify(store.getState().nodeModelData.nodeModel)
+            || this.state.textFieldVisible !== store.getState().nodeModelData.textFieldVisible) {
             this.setState({
                 textFieldVisible: store.getState().nodeModelData.textFieldVisible,
                 textfieldValue: JSON.stringify(store.getState().nodeModelData.nodeModel)
@@ -41,14 +44,23 @@ class NodeDataTextField extends Component {
 
     render() {
         store.subscribe(this.handleStoreChange)
-        return this.state.textFieldVisible === true ? <div style={{ marginBottom: "7px" }}>
-            <h4>Enter the data for the new node:</h4>
-            <p>(JSON format)</p>
-            <Form onSubmit={this.handleNodeDataSubmit}>
-                <Form.Control as="textarea" rows="2" value={this.state.textfieldValue} onChange={this.handleTextFieldChange} />
-                <Button type="submit" value="Submit" variant="dark">Add</Button>
-            </Form>
-        </div> : <div />
+
+        if (this.state.textFieldVisible === true) {
+            return <Row style={style.basicComponentsStyle}>
+                <Col>
+                    <div style={{ marginBottom: "7px" }}>
+                        <h4>Enter the data for the new node:</h4>
+                        <p>(JSON format)</p>
+                        <Form onSubmit={this.handleNodeDataSubmit}>
+                            <Form.Control as="textarea" rows="2" value={this.state.textfieldValue} onChange={this.handleTextFieldChange} />
+                            <Button type="submit" value="Submit" variant="dark">Add</Button>
+                        </Form>
+                    </div>
+                </Col>
+            </Row>
+        } else {
+            return null
+        }
     }
 }
 
