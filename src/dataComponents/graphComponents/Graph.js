@@ -13,6 +13,8 @@ class Graph extends Component {
     }
 
     componentDidMount() {
+        const scaledwidth = 0.44*this.props.width
+        const scaledheigth = 0.44*this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -47,7 +49,7 @@ class Graph extends Component {
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-50))
             .force('link', forceLink(this.props.data.links).distance(100))
-            .force('center', forceCenter().x(this.props.width / 2).y(this.props.height / 2))
+            .force('center', forceCenter().x(scaledwidth/2).y(scaledheigth/2))
             .force('collide', forceCollide([10]).iterations([10]))
 
         function dragStarted(d) {
@@ -85,6 +87,9 @@ class Graph extends Component {
     }
 
     render() {
+        const scaledwidth = 0.44*this.props.width
+        const scaledheigth = 0.44*this.props.height
+        
         const nodes = this.props.data.nodes.map((node) => {
             return (
                 <Node data={node} name={node.name} key={this.props.nodeName + node.id} nodeName={this.props.nodeName} editableGraph = {this.props.editableGraph} />)
@@ -94,7 +99,7 @@ class Graph extends Component {
                 <Edge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
-            <svg key = {this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height} onClick = {this.handleClick}>
+            <svg key = {this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth} onClick = {this.handleClick}>
                 <defs>
                     <marker id="triangle"
                         refX="21" refY="6"

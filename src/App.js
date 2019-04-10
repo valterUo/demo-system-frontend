@@ -26,7 +26,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "",
 			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
 			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined, queryAnswers: [], activeDropdown: false, sourceFunction: undefined, targetFunction: undefined,
-			queryMode: "", acceptSourceFunction: false, acceptTargetFunction: false, width: 0, height: 0
+			queryMode: "", acceptSourceFunction: false, acceptTargetFunction: false, width: window.innerWidth, height: window.innerHeight
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -216,11 +216,11 @@ class App extends Component {
 					</Row>
 					<Row>
 						<Col xl={6}>
-							<SchemaComponent schemaKey={this.state.schemaKey} schemaData={this.state.schemaData} sourceFunction={this.state.sourceFunction} targetFunction={this.state.targetFunction} />
+							<SchemaComponent width = {this.state.width} height = {this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData} sourceFunction={this.state.sourceFunction} targetFunction={this.state.targetFunction} />
 						</Col>
 						<Col xl={6}>
 							<MLQueryComponent answers={this.state.queryAnswers} />
-							<ResultComponent sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
+							<ResultComponent width = {this.state.width} height = {this.state.height} sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
 								graphData={this.state.graphData} graphKey={this.state.graphKey} nodeName={this.state.nodeName} linkName={this.state.linkName} nameClass={this.state.className} />
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />

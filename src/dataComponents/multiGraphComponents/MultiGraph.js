@@ -13,6 +13,8 @@ class Graph extends Component {
     }
 
     componentDidMount() {
+        const scaledwith = 0.44*this.props.width
+        const scaledheight = 0.44*this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -102,7 +104,7 @@ class Graph extends Component {
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-50))
             .force('link', forceLink(this.props.data.links).distance(200))
-            .force('center', forceCenter().x(this.props.width / 2).y(this.props.height / 2))
+            .force('center', forceCenter().x(scaledwith / 2).y(scaledheight / 2))
             .force('collide', forceCollide([10]).iterations([10]))
 
         function dragStarted(d) {
@@ -136,6 +138,8 @@ class Graph extends Component {
     }
 
     render() {
+        const scaledwith = 0.44*this.props.width
+        const scaledheight = 0.44*this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
                 <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} editableGraph = {this.props.editableGraph} />)
@@ -145,7 +149,7 @@ class Graph extends Component {
                 <Multiedge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
-            <svg className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
+            <svg className={this.props.nameClass} ref={this.graphRef} width={scaledwith} height={scaledheight}>
                 <defs>
                     <marker id="triangle"
                         refX="21" refY="6"

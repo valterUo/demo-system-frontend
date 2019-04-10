@@ -20,7 +20,7 @@ class RelationalComponent extends Component {
         const data = this.props.data
         const attributes = data[0]
         const dataData = data.filter(row => row !== attributes)
-        
+
         select(table)
             .selectAll('table')
             .data([1])
@@ -28,7 +28,6 @@ class RelationalComponent extends Component {
             .append('table')
             .attr("class", "table")
             .append('thead')
-            .attr('display', 'block')
             .append('tr')
             .selectAll('th')
             .data(attributes)
@@ -43,8 +42,6 @@ class RelationalComponent extends Component {
             .enter()
             .append('tbody')
             .attr('display', 'block')
-            .attr('max-height', '500px')
-            .attr('overflow-y', 'scroll')
             .selectAll('tr')
             .data(dataData)
             .enter()
@@ -52,9 +49,9 @@ class RelationalComponent extends Component {
             .selectAll('td')
             .data(row => {
                 return attributes.map((column, i) => {
-                  return {column: column, value: row[i]}
+                    return { column: column, value: row[i] }
                 })
-              })
+            })
             .enter()
             .append('td')
             .text(d => d.value)
@@ -62,12 +59,12 @@ class RelationalComponent extends Component {
     }
 
     render() {
-        return <svg width={500} height={500}>
-            <foreignObject width={500} height={500}>
-                <div ref={table => this.table = table}>
-                </div>
-            </foreignObject>
-        </svg>
+        const scaledwith = 0.44*this.props.width
+        const scaledheigth = 0.44*this.props.height
+        return <div style={{ overflow: "scroll", width: scaledwith, height: scaledheigth }}>
+            <div ref={table => this.table = table}>
+            </div>
+        </div>
     }
 }
 

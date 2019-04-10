@@ -13,6 +13,8 @@ class Tree extends Component {
     }
 
     componentDidMount() {
+        const scaledwith = 0.44*this.props.width
+        const scaledheight = 0.64*this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
         this.d3Graph = select(this.graphRef.current)
@@ -20,7 +22,7 @@ class Tree extends Component {
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))
             .force('link', forceLink(this.props.data.links).distance(80))
-            .force('center', forceCenter().x(this.props.width / 2).y(this.props.height / 2))
+            .force('center', forceCenter().x(scaledwith/2).y(scaledheight/1.5))
             .force('collide', forceCollide([5]).iterations([5]))
 
         function dragStarted(d) {
@@ -70,6 +72,8 @@ class Tree extends Component {
     }
 
     render() {
+        const scaledwith = 0.44*this.props.width
+        const scaledheight = 0.64*this.props.height
         const nodes = this.props.data.nodes.map((node, i) => {
             return (
                 <Node data={node} name={node.name} key={node.id + i} nodeName={this.props.nodeName} />)
@@ -79,7 +83,7 @@ class Tree extends Component {
                 <Edge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (
-            <svg className={this.props.nameClass} ref={this.graphRef} width={this.props.width} height={this.props.height}>
+            <svg className={this.props.nameClass} ref={this.graphRef} width={scaledwith} height={scaledheight}>
                 <g>
                     {links}
                 </g>

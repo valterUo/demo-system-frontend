@@ -1,7 +1,7 @@
 import dataService from '../services/dataService'
 
 const loadData = async (type) => {
-
+    //Table:
     const data = await dataService.getData(type)
     const tables = data.data.tables.map((table, i) => {
         const obj = { title: table.name, eventKey: i, data: [table.attributes] }
@@ -9,12 +9,14 @@ const loadData = async (type) => {
         return obj
     })
 
+    //Tree:
     const rawTree = JSON.parse(data.data.tree)
     const tree = { nodes: [], links: [] }
     const tempLinks = []
     walkTree(rawTree, tree.nodes, tempLinks)
     constructLinks(tree.nodes, tempLinks, tree.links)
 
+    //Graph::
     const graph = { nodes: [], links: [] }
     data.data.graph.nodes.map(o => {
         const newObj = o.dataAndAttributes
@@ -22,7 +24,7 @@ const loadData = async (type) => {
         return graph.nodes.push(newObj)
     })
     constructLinks(graph.nodes, data.data.graph.links, graph.links)
-
+    console.log(tree)
     return { sqlData: tables, documentData: tree, graphData: graph }
 }
 
