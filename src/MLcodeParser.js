@@ -86,8 +86,9 @@ const parse = (source, target) => {
         const filteredLinks = data.links.filter(link => {
             const count = (link.name.match(/_/g) || []).length
             if (count === i) {
-                return link
+                return true
             }
+            return false
         })
         if (filteredLinks.length === 0) {
             break
@@ -101,7 +102,6 @@ const parse = (source, target) => {
             i++
         }
     }
-    console.log(categoricalData)
     return categoricalData
 }
 

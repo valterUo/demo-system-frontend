@@ -3,7 +3,6 @@ import FileSender from '../services/sendFiles'
 import style from '../styles'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import ml from '../services/metaLanguageCompilerService'
 
 class FileSubmitComponent extends Component {
     constructor(props) {
@@ -18,9 +17,9 @@ class FileSubmitComponent extends Component {
 
     render() {
         return <Form onSubmit={this.handleFileSubmit}>
-            <label style={style.fileInputLabelStyle} htmlFor="fileInput">{"Select files"}</label>
+            <label style={style.fileInputLabelStyle} htmlFor="fileInput">{"Select file"}</label>
             <input name="fileInput" id="fileInput" style={style.fileInputStyle} as='input' type="file" multiple="multiple" ref={this.file} />
-            <Button type="submit" value="Submit" variant="dark"><i className='fas fa-upload' style={{ 'fontSize': '24px' }}></i></Button>
+            <Button type="submit" value="Submit" variant="dark"><i className='fas fa-upload' style={{ 'fontSize': '20px' }}></i></Button>
         </Form>
     }
 }

@@ -89,7 +89,6 @@ class Graph extends Component {
     render() {
         const scaledwidth = 0.44*this.props.width
         const scaledheigth = 0.44*this.props.height
-        
         const nodes = this.props.data.nodes.map((node) => {
             return (
                 <Node data={node} name={node.name} key={this.props.nodeName + node.id} nodeName={this.props.nodeName} editableGraph = {this.props.editableGraph} />)

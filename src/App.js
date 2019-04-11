@@ -18,6 +18,7 @@ import style from './styles'
 import ResultComponent from './components/ResultComponent'
 import MLQueryComponent from './components/MLQueryComponent'
 import ml from './services/metaLanguageCompilerService'
+import NotificationComponent from './components/NotificationComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -26,7 +27,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "",
 			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
 			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined, queryAnswers: [], activeDropdown: false, sourceFunction: undefined, targetFunction: undefined,
-			queryMode: "", acceptSourceFunction: false, acceptTargetFunction: false, width: window.innerWidth, height: window.innerHeight
+			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: ""
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -48,78 +49,78 @@ class App extends Component {
 	handleQuery = async (event) => {
 		event.preventDefault()
 		let data = undefined
-		if (this.state.acceptSourceFunction === false && this.state.acceptTargetFunction === false) {
-			switch (this.state.query) {
-				case "Select FirstName, LastName from Person where id = \"933\"":
-					data = await DemoDataParser.loadData("sql")
-					this.setState({
-						nodeName: "sqlNodes",
-						linkName: "sqlLinks",
-						nameClass: "sqlElement",
-						sqlData: data.sqlData,
-						documentData: data.documentData,
-						graphData: data.graphData,
-						treeKey: 10,
-						relationalKey: 20,
-						graphKey: 40
-					})
-					break
-				case ".//invoice[personId=\"10995116278711\"]/orderline":
-					data = await DemoDataParser.loadData("document")
-					this.setState({
-						nodeName: "documentNodes",
-						linkName: "documentLinks",
-						nameClass: "documentElement",
-						sqlData: data.sqlData,
-						documentData: data.documentData,
-						graphData: data.graphData,
-						treeKey: 50,
-						relationalKey: 60,
-						graphKey: 70
-					})
-					break
-				case "MATCH (a:Person {name: 'Jennifer'})-[r:WORK_FOR]->(b:University)":
-					data = await DemoDataParser.loadData("graph")
-					this.setState({
-						nodeName: "graphNodes",
-						linkName: "graphLinks",
-						nameClass: "graphElement",
-						sqlData: data.sqlData,
-						documentData: data.documentData,
-						graphData: data.graphData,
-						treeKey: 80,
-						relationalKey: 90,
-						graphKey: 100
-					})
-					break
-				default:
-					const answer = await ml.compile(this.state.query)
-					this.setState(state => {
-						const newAnswer = answer.data.replace('\n-', '').trim()
-						const newAnswers = [...state.queryAnswers, newAnswer]
-						return { queryAnswers: newAnswers }
-					})
-					break
-			}
-		} else if (this.state.acceptSourceFunction === true) {
-			const value = this.state.query
-			this.setState({ sourceFunction: value }, () => {
-				console.log(this.state.sourceFunction)
-				console.log(this.state.targetFunction)
-			})
-		} else {
-			const value2 = this.state.query
-			console.log(this.state.query)
-			this.setState({ targetFunction: value2 }, () => {
-				console.log(this.state.targetFunction)
-				console.log(this.state.sourceFunction)
-			})
+		switch (this.state.query) {
+			case "Select FirstName, LastName from Person where id = \"933\"":
+				data = await DemoDataParser.loadData("sql")
+				this.setState({
+					nodeName: "sqlNodes",
+					linkName: "sqlLinks",
+					nameClass: "sqlElement",
+					sqlData: data.sqlData,
+					documentData: data.documentData,
+					graphData: data.graphData,
+					treeKey: 10,
+					relationalKey: 20,
+					graphKey: 40
+				})
+				break
+			case ".//invoice[personId=\"10995116278711\"]/orderline":
+				data = await DemoDataParser.loadData("document")
+				this.setState({
+					nodeName: "documentNodes",
+					linkName: "documentLinks",
+					nameClass: "documentElement",
+					sqlData: data.sqlData,
+					documentData: data.documentData,
+					graphData: data.graphData,
+					treeKey: 50,
+					relationalKey: 60,
+					graphKey: 70
+				})
+				break
+			case "MATCH (a:Person {name: 'Jennifer'})-[r:WORK_FOR]->(b:University)":
+				data = await DemoDataParser.loadData("graph")
+				this.setState({
+					nodeName: "graphNodes",
+					linkName: "graphLinks",
+					nameClass: "graphElement",
+					sqlData: data.sqlData,
+					documentData: data.documentData,
+					graphData: data.graphData,
+					treeKey: 80,
+					relationalKey: 90,
+					graphKey: 100
+				})
+				break
+			default:
+				const answer = await ml.compile(this.state.query)
+				this.setState(state => {
+					const newAnswer = answer.data.replace('\n-', '').trim()
+					const newAnswers = [...state.queryAnswers, newAnswer]
+					return { queryAnswers: newAnswers }
+				})
+				break
 		}
 		this.setState({ query: "" })
 	}
 
 	handleQueryChange = (event) => {
 		this.setState({ query: event.target.value })
+	}
+
+	handleSourceFunctionChange = (event) => {
+		this.setState({ sourceFunction: event.target.value })
+	}
+
+	handleTargetFunctionChange = (event) => {
+		this.setState({ targetFunction: event.target.value })
+	}
+
+	handleSourceTargetSubmit = (event) => {
+		event.preventDefault()
+		if (this.state.targetFunction !== undefined && this.state.sourceFunction !== undefined) {
+			this.setState({ mlSchemaData: { source: this.state.sourceFunction, target: this.state.targetFunction } })
+		}
 	}
 
 	selectQuery = (id) => {
@@ -152,19 +153,15 @@ class App extends Component {
 	}
 
 	toggleDropdown() {
-		this.setState({ activeDropdown: true, queryMode: "Defined queries", acceptSourceFunction: false, acceptTargetFunction: false })
+		this.setState({ activeDropdown: true, queryMode: "Defined queries", acceptFunctions: false })
 	}
 
-	handleSourceFunction() {
-		this.setState({ activeDropdown: false, queryMode: "Source function", acceptSourceFunction: true, acceptTargetFunction: false })
-	}
-
-	handleTargetFunction() {
-		this.setState({ activeDropdown: false, queryMode: "Target function", acceptSourceFunction: false, acceptTargetFunction: true })
+	handleFunctionDefinition() {
+		this.setState({ activeDropdown: false, queryMode: "Source and target function", acceptFunctions: true })
 	}
 
 	handleMLcompiler() {
-		this.setState({ activeDropdown: false, queryMode: "ML code compiler", acceptSourceFunction: false, acceptTargetFunction: false })
+		this.setState({ activeDropdown: false, queryMode: "ML code compiler", acceptFunctions: false })
 	}
 
 	render() {
@@ -175,30 +172,33 @@ class App extends Component {
 				<NavigationBarComponent />
 				<Container fluid='true'>
 					<Row style={style.basicComponentsStyle}>
-						<Col>
-							<h4 align="right">Query Input</h4>
-
+						<Col xl = {1}>
+							<h4 align="right">Input</h4>
 						</Col>
-						<Col>
+						<Col xl = {2}>
 							<Dropdown style={{ marginTop: "4px" }}>
 								<Dropdown.Toggle variant="light" id="dropdown-query-mode">
 									{this.state.queryMode === "" ? "Query mode" : this.state.queryMode}
 								</Dropdown.Toggle>
 								<Dropdown.Menu>
 									<Dropdown.Item action="true" variant="primary" onClick={() => this.toggleDropdown()}>Defined queries</Dropdown.Item>
-									<Dropdown.Item action="true" variant="primary" onClick={() => this.handleSourceFunction()}>Source function</Dropdown.Item>
-									<Dropdown.Item action="true" variant="primary" onClick={() => this.handleTargetFunction()}>Target function</Dropdown.Item>
+									<Dropdown.Item action="true" variant="primary" onClick={() => this.handleFunctionDefinition()}>Source and target</Dropdown.Item>
 									<Dropdown.Item action="true" variant="primary" onClick={() => this.handleMLcompiler()}>ML code compiler</Dropdown.Item>
 								</Dropdown.Menu>
 							</Dropdown>
 						</Col>
-						<Col xl={6} style={{ align: "left" }}>
-							<Form onSubmit={this.handleQuery} inline>
-								<Form.Control as="textarea" rows="1" placeholder="Enter query or choose defined query" value={this.state.query} onChange={this.handleQueryChange} style={{ width: "80%", marginRight: "5px" }} />
+						<Col xl={5} style={{ align: "left" }}>
+							{!this.state.acceptFunctions && <Form onSubmit={this.handleQuery} inline>
+								<Form.Control as="textarea" rows="1" placeholder="Enter query or choose defined query" value={this.state.query} onChange={this.handleQueryChange} style={{ width: "90%", marginRight: "5px" }} />
 								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
-							</Form>
+							</Form>}
+							{this.state.acceptFunctions && <Form onSubmit={this.handleSourceTargetSubmit} inline>
+								<Form.Control as="textarea" rows="1" placeholder="Enter source function" value={this.state.sourceFunction} onChange={this.handleSourceFunctionChange} style={{ width: "45%", marginRight: "5px" }} />
+								<Form.Control as="textarea" rows="1" placeholder="Enter target function" value={this.state.targetFunction} onChange={this.handleTargetFunctionChange} style={{ width: "45%", marginRight: "5px" }} />
+								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
+							</Form>}
 						</Col>
-						<Col>
+						<Col xl = {2}>
 							{this.state.activeDropdown && <Dropdown style={{ marginTop: "4px" }}>
 								<Dropdown.Toggle variant="dark" id="dropdown-predefined-queries">
 									Defined queries
@@ -210,17 +210,21 @@ class App extends Component {
 								</Dropdown.Menu>
 							</Dropdown>}
 						</Col>
-						<Col>
+						<Col xl = {2}>
 							<FileSubmitComponent />
+						</Col>
+						<Col>
+						<NotificationComponent/>
 						</Col>
 					</Row>
 					<Row>
 						<Col xl={6}>
-							<SchemaComponent width = {this.state.width} height = {this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData} sourceFunction={this.state.sourceFunction} targetFunction={this.state.targetFunction} />
+							<SchemaComponent width={this.state.width} height={this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData}
+								schemaVisible={this.state.schemaVisible} mlSchemaData={this.state.mlSchemaData} />
 						</Col>
 						<Col xl={6}>
 							<MLQueryComponent answers={this.state.queryAnswers} />
-							<ResultComponent width = {this.state.width} height = {this.state.height} sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
+							<ResultComponent width={this.state.width} height={this.state.height} sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
 								graphData={this.state.graphData} graphKey={this.state.graphKey} nodeName={this.state.nodeName} linkName={this.state.linkName} nameClass={this.state.className} />
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
