@@ -22,7 +22,7 @@ class Tree extends Component {
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-100))
             .force('link', forceLink(this.props.data.links).distance(80))
-            .force('center', forceCenter().x(scaledwith/2).y(scaledheight/1.5))
+            .force('center', forceCenter().x(scaledwith/2).y(scaledheight/1.8))
             .force('collide', forceCollide([5]).iterations([5]))
 
         function dragStarted(d) {

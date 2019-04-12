@@ -4,7 +4,7 @@ import Edge from './Edge'
 import { select, selectAll } from 'd3-selection'
 import { event } from 'd3-selection'
 import { drag } from 'd3-drag'
-import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide } from 'd3-force'
+import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
 
 class Graph extends Component {
     constructor(props) {
@@ -47,10 +47,12 @@ class Graph extends Component {
         this.d3Graph = select(this.graphRef.current)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
-            .force('charge', forceManyBody().strength(-50))
+            .force('charge', forceManyBody().strength(-150))
             .force('link', forceLink(this.props.data.links).distance(100))
-            .force('center', forceCenter().x(scaledwidth/2).y(scaledheigth/2))
+            .force('center', forceCenter().x(scaledwidth / 2).y(scaledheigth / 2))
             .force('collide', forceCollide([10]).iterations([10]))
+            .force("xAxis", forceX(scaledwidth / 2).strength(0.05))
+            .force("yAxis", forceY(scaledheigth / 2).strength(0.05))
 
         function dragStarted(d) {
             if (!event.active) force.alphaTarget(0.3).restart()

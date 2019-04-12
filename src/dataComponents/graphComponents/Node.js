@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { select } from 'd3-selection'
 import { scaleOrdinal } from 'd3-scale'
 import { schemeCategory10 } from 'd3-scale-chromatic'
-import { arc } from 'd3'
+import { arc } from 'd3-shape'
 import store from '../../store'
 
 const color = scaleOrdinal(schemeCategory10)
