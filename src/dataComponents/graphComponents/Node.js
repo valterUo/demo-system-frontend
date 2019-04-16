@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { select } from 'd3-selection'
 import { scaleOrdinal } from 'd3-scale'
+import { transition } from 'd3-transition' // eslint-disable-line
 import { schemeCategory10 } from 'd3-scale-chromatic'
 import { arc } from 'd3-shape'
 import store from '../../store'
@@ -13,6 +14,7 @@ const updateNode = (selection) => {
 
 const enterNode = (selection) => {
     const pi = 3.1415
+    const outerRadius = 45
 
     selection.select('circle')
         .attr('r', 10)
@@ -23,12 +25,12 @@ const enterNode = (selection) => {
     selection.select('text')
         .attr('dy', '.35em')
         .style('transform', 'translateX(-50%,-50%')
-
+    
     selection.select('g')
         .select(".addEdge")
         .attr("d", arc()
             .innerRadius(10)
-            .outerRadius(25)
+            .outerRadius(outerRadius)
             .startAngle(0)
             .endAngle(pi / 2)
         )
@@ -37,13 +39,13 @@ const enterNode = (selection) => {
         .attr('fill', '#69b3a2')
 
     selection.select(".addEdgeLabel")
-        .attr("y", -9)
+        .attr("transform", "translate(10, -30)")
 
     selection.select('g')
         .select(".removeNode")
         .attr("d", arc()
             .innerRadius(10)
-            .outerRadius(25)
+            .outerRadius(outerRadius)
             .startAngle(pi / 2)
             .endAngle(pi)
         )
@@ -52,13 +54,13 @@ const enterNode = (selection) => {
         .attr('fill', '#69b3a2')
 
     selection.select(".removeNodeLabel")
-        .attr("transform", "translate(5, 15)")
+        .attr("transform", "translate(7, 5)")
 
     selection.select('g')
         .select(".removeEdges")
         .attr("d", arc()
             .innerRadius(10)
-            .outerRadius(25)
+            .outerRadius(outerRadius)
             .startAngle(pi)
             .endAngle(1.5 * pi)
         )
@@ -67,13 +69,13 @@ const enterNode = (selection) => {
         .attr('fill', '#69b3a2')
 
     selection.select(".removeEdgesLabel")
-        .attr("transform", "translate(-21, 15)")
+        .attr("transform", "translate(-27, 11)")
 
     selection.select('g')
         .select(".addNodeStartingFromThisNode")
         .attr("d", arc()
             .innerRadius(10)
-            .outerRadius(25)
+            .outerRadius(outerRadius)
             .startAngle(1.5 * pi)
             .endAngle(2 * pi)
         )
@@ -82,7 +84,7 @@ const enterNode = (selection) => {
         .attr('fill', '#69b3a2')
 
     selection.select(".addNodeStartingFromThisNodeLabel")
-        .attr("transform", "translate(-21, -9)")
+        .attr("transform", "translate(-30, -30)")
 
 }
 
@@ -129,10 +131,11 @@ class Node extends Component {
 
     showNodeHandlingButtons() {
         if (this.props.editableGraph) {
-            if (this.d3Node.select(".nodeHandlingButtons").attr("display") === "none") {
-                this.d3Node.select(".nodeHandlingButtons").attr("display", "block")
+            if (this.d3Node.select(".nodeHandlingButtons").attr("visibility") === "hidden") {
+                this.d3Node.select(".nodeHandlingButtons").attr("visibility", "visible").transition().duration(500).attr("opacity", 1)
             } else {
-                this.d3Node.select(".nodeHandlingButtons").attr("display", "none")
+                this.d3Node.select(".nodeHandlingButtons").transition().duration(500).attr("opacity", 0)
+                setTimeout(() => { this.d3Node.select(".nodeHandlingButtons").attr("visibility", "hidden") }, 501)
                 store.dispatch({type: 'DELETE_NODE_MODEL'})
             }
         }
@@ -148,6 +151,7 @@ class Node extends Component {
 
     handleAddEdge() {
         console.log(this.props.data)
+        this.showNodeHandlingButtons()
     }
 
     handleRemoveNode() {
@@ -184,26 +188,34 @@ class Node extends Component {
                 <circle onMouseEnter={this.handle.bind(this)} onMouseLeave={this.handleColorChangeBack.bind(this)} onClick={this.showNodeHandlingButtons.bind(this)} />
                 <text>{this.props.data.name}</text>
 
-                <g className="nodeHandlingButtons" display="none">
+                <g className="nodeHandlingButtons" display = "block" visibility = "hidden" opacity = "0" >
                     <g className = "addEdgeElement" onClick={this.handleAddEdge.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addEdgeElement")} 
                     onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addEdgeElement")}>
                         <path className="addEdge" />
-                        <text className="addEdgeLabel">+e</text>
+                        <foreignObject className="addEdgeLabel" width = "30" height = "30">
+                        <i className='fas fa-external-link-alt' style={{"fontSize": "18px"}}></i>
+                        </foreignObject>
                     </g>
                     <g className = "removeNodeElement" onClick={this.handleRemoveNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeNodeElement")} 
                     onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeNodeElement")}>
                         <path className="removeNode" />
-                        <text className="removeNodeLabel">-n</text>
+                        <foreignObject className = "removeNodeLabel" width = "30" height = "30">
+                        <i className="material-icons" style={{"fontSize": "28px"}}>delete_forever</i>
+                        </foreignObject>
                     </g>
                     <g className = "removeEdgesElement" onClick={this.handleRemoveEdges.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeEdgesElement")} 
                     onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeEdgesElement")}>
                         <path className="removeEdges" />
-                        <text className="removeEdgesLabel">-e</text>
+                        <foreignObject className = "removeEdgesLabel" width = "30" height = "30">
+                        <i className='fas fa-unlink' style={{"fontSize": "18px"}}></i>
+                        </foreignObject>
                     </g>
                     <g className = "addNodeStartingFromThisNodeElement" onClick={this.handleAddNodeStartingFromThisNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addNodeStartingFromThisNodeElement")} 
                     onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addNodeStartingFromThisNodeElement")}>
                         <path className="addNodeStartingFromThisNode" />
-                        <text className="addNodeStartingFromThisNodeLabel">+n</text>
+                        <foreignObject className = "addNodeStartingFromThisNodeLabel" width = "26" height = "23">
+                        <i className='fas fa-plus-circle' style={{"fontSize": "22px"}}></i>
+                        </foreignObject>  
                     </g>
                 </g>
             </g>

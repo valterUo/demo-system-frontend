@@ -4,7 +4,7 @@ import Multiedge from './MultiEdge'
 import { select, selectAll } from 'd3-selection'
 import { event } from 'd3-selection'
 import { drag } from 'd3-drag'
-import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide } from 'd3-force'
+import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
 
 class Graph extends Component {
     constructor(props) {
@@ -13,8 +13,8 @@ class Graph extends Component {
     }
 
     componentDidMount() {
-        const scaledwith = 0.44*this.props.width
-        const scaledheight = 0.44*this.props.height
+        const scaledwidth = 0.44*this.props.width
+        const scaledheigth = 0.44*this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -104,8 +104,10 @@ class Graph extends Component {
         const force = forceSimulation().nodes(this.props.data.nodes)
             .force('charge', forceManyBody().strength(-50))
             .force('link', forceLink(this.props.data.links).distance(200))
-            .force('center', forceCenter().x(scaledwith / 2).y(scaledheight / 2))
+            .force('center', forceCenter().x(scaledwidth / 2).y(scaledheigth / 2))
             .force('collide', forceCollide([10]).iterations([10]))
+            .force("xAxis", forceX(scaledwidth / 2).strength(0.01))
+            .force("yAxis", forceY(scaledheigth / 2).strength(0.01))
 
         function dragStarted(d) {
             if (!event.active) force.alphaTarget(0.3).restart()

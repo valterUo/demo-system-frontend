@@ -1,20 +1,31 @@
 import React, { Component } from 'react'
 import Node from './Node'
 import Edge from './Edge'
-import { select, selectAll } from 'd3-selection'
-import { event } from 'd3-selection'
+import { select, selectAll, mouse, event } from 'd3-selection'
 import { drag } from 'd3-drag'
+import { line } from 'd3-shape'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
+let ptdata = []
+
+function drawPath(data, selection) {
+    selection.selectAll("#dynamicPath").remove()
+    selection.selectAll("#dynamicLine")
+        .data([data])
+        .append("path")
+        .attr("id", "dynamicPath")
+        .attr("class", "lineClass").attr('stroke-width', "1.5px").attr("stroke", "#000").attr("fill", "none")
+        .attr("d", line().x(function (d) { return d[0] }).y(function (d) { return d[1] }))
+}
 
 class Graph extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.graphRef = React.createRef()
     }
 
     componentDidMount() {
-        const scaledwidth = 0.44*this.props.width
-        const scaledheigth = 0.44*this.props.height
+        const scaledwidth = 0.44 * this.props.width
+        const scaledheigth = 0.44 * this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -82,25 +93,44 @@ class Graph extends Component {
             this.d3Graph.call(updateGraph)
         })
 
-    }
+        this.d3Graph.on("mousemove", function () {
+            var pt = mouse(this)
+            var selection = select(this)
+            tickLine(pt, ptdata, selection)
+        }).on('click', function () {
+            var coords = mouse(this)
+            if (ptdata.length === 0) {
+                ptdata.push(coords)
+            } else if (ptdata.length === 1) {
+                ptdata = []
+            }
+        })
 
-    handleClick() {
-        //console.log("SVG clicked!")
+        function tickLine(point, ptdata, selection) {
+            if (ptdata.length > 0) {
+                ptdata.push(point)
+                drawPath(ptdata, selection)
+                if (ptdata.length >= 2) {
+                    ptdata.pop()
+                }
+            }
+        }
+
     }
 
     render() {
-        const scaledwidth = 0.44*this.props.width
-        const scaledheigth = 0.44*this.props.height
+        const scaledwidth = 0.44 * this.props.width
+        const scaledheigth = 0.44 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
-                <Node data={node} name={node.name} key={this.props.nodeName + node.id} nodeName={this.props.nodeName} editableGraph = {this.props.editableGraph} />)
+                <Node data={node} name={node.name} key={this.props.nodeName + node.id} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (
                 <Edge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
-            <svg key = {this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth} onClick = {this.handleClick}>
+            <svg key={this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth}>
                 <defs>
                     <marker id="triangle"
                         refX="21" refY="6"
@@ -115,6 +145,7 @@ class Graph extends Component {
                 <g>
                     {nodes}
                 </g>
+                <g id = "dynamicLine"></g>
             </svg>
         </div>
         )
