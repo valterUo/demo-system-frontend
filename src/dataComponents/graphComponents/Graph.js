@@ -5,7 +5,8 @@ import { select, selectAll, mouse, event } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { line } from 'd3-shape'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
-let ptdata = []
+import store from '../../store'
+let ptdata =[]
 
 function drawPath(data, selection) {
     selection.selectAll("#dynamicPath").remove()
@@ -20,6 +21,7 @@ function drawPath(data, selection) {
 class Graph extends Component {
     constructor(props) {
         super(props)
+        this.state = { acceptEdgeDrawing: false }
         this.graphRef = React.createRef()
     }
 
@@ -91,22 +93,31 @@ class Graph extends Component {
 
         force.on('tick', () => {
             this.d3Graph.call(updateGraph)
-        })
+        })   
+    }
 
+    componentDidUpdate() {
+        let value = this.state.acceptEdgeDrawing
         this.d3Graph.on("mousemove", function () {
-            var pt = mouse(this)
-            var selection = select(this)
-            tickLine(pt, ptdata, selection)
+            if (value === true) {
+                var pt = mouse(this)
+                var selection = select(this)
+                console.log(ptdata)
+                tickLine(pt, ptdata, selection)
+            }
         }).on('click', function () {
-            var coords = mouse(this)
-            if (ptdata.length === 0) {
-                ptdata.push(coords)
-            } else if (ptdata.length === 1) {
-                ptdata = []
+            if (value === true) {
+                var coords = mouse(this)
+                if (ptdata.length === 0) {
+                    ptdata.push(coords)
+                } else if (ptdata.length === 1) {
+                    ptdata = []
+                }
             }
         })
 
         function tickLine(point, ptdata, selection) {
+            console.log(ptdata)
             if (ptdata.length > 0) {
                 ptdata.push(point)
                 drawPath(ptdata, selection)
@@ -115,10 +126,17 @@ class Graph extends Component {
                 }
             }
         }
+    }
 
+    handleStoreChange = () => {
+        //console.log("store: ", store.getState().edgeDrawing.acceptEdgeDrawing)
+        if (store.getState().edgeDrawing.acceptEdgeDrawing !== this.state.acceptEdgeDrawing) {
+            this.setState({ acceptEdgeDrawing: store.getState().edgeDrawing.acceptEdgeDrawing })
+        }
     }
 
     render() {
+        store.subscribe(this.handleStoreChange)
         const scaledwidth = 0.44 * this.props.width
         const scaledheigth = 0.44 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
@@ -145,7 +163,7 @@ class Graph extends Component {
                 <g>
                     {nodes}
                 </g>
-                <g id = "dynamicLine"></g>
+                <g id="dynamicLine"></g>
             </svg>
         </div>
         )

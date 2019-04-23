@@ -91,7 +91,6 @@ const enterNode = (selection) => {
 class Node extends Component {
     constructor(props) {
         super(props)
-        this.state = { hovered: false }
         this.nodeRef = React.createRef()
     }
 
@@ -151,6 +150,8 @@ class Node extends Component {
 
     handleAddEdge() {
         console.log(this.props.data)
+        store.dispatch({ type: 'ACCEPT_EDGE_DRAWING', acceptEdgeDrawing: true })
+        store.dispatch({ type: 'ADD_STARTING_EDGE', startingEdge: this.props.data })
         this.showNodeHandlingButtons()
     }
 

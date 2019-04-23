@@ -19,6 +19,7 @@ import ResultComponent from './components/ResultComponent'
 import MLQueryComponent from './components/MLQueryComponent'
 import ml from './services/metaLanguageCompilerService'
 import NotificationComponent from './components/NotificationComponent'
+import QueryComponent from './components/QueryComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -217,6 +218,9 @@ class App extends Component {
 						<NotificationComponent/>
 						</Col>
 					</Row>
+					<Row style={style.basicComponentsStyle}>
+						<QueryComponent/>
+						</Row>
 					<Row>
 						<Col xl={6}>
 							<SchemaComponent width={this.state.width} height={this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData}

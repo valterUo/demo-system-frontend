@@ -5,6 +5,7 @@ import queriedDataReducer from './reducers/queriedDataReducer'
 import schemaDataReducer from './reducers/schemaDataReducer'
 import addNodeReducer from './reducers/addNodeReducer'
 import notificationReducer from './reducers/notificationReducer'
+import newEdgeReducerReducer from './reducers/newEdgeReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 const reducer = combineReducers({
@@ -12,7 +13,8 @@ const reducer = combineReducers({
 	queriedDemoData: queriedDataReducer,
 	schemaData: schemaDataReducer,
 	nodeModelData: addNodeReducer,
-	notification: notificationReducer
+	notification: notificationReducer,
+	edgeDrawing: newEdgeReducerReducer
 })
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))

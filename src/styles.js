@@ -53,4 +53,13 @@ const basicComponentsStyle = {
 	align: "middle"
 }
 
-export default { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle }
+const queryBox = {
+	backgroundColor: "#ffffff",
+	borderStyle: "solid",
+	borderRadius: "5px",
+	borderColor: "#d9d9d9",
+	borderWidth: "1px",
+	width: "100%"
+}
+
+export default { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle, queryBox }
