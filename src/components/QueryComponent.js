@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col'
 import Dropdown from 'react-bootstrap/Dropdown'
 import OneParameterDropdownMenu from './dropdownComponents/OneParameterDropdownMenu'
 import TwoParametersDropdownMenu from './dropdownComponents/TwoParametersDropdownMenu'
+import { initializeDropdown } from './dropdownComponents/InitializeDropDowns'
 
 
 class QueryComponent extends Component {
@@ -44,6 +45,18 @@ class QueryComponent extends Component {
     console.log(this.state.query)
   }
 
+  buildQueryAndChangeDropdown = (relationName, parameters) => {
+    this.setState((prevState) => {
+      const oldMenu = prevState.dropdownMenu
+      const menucomponent = initializeDropdown(relationName, parameters, this.handleParameters)
+      oldMenu.unshift(menucomponent)
+      return {
+        query: prevState.query + relationName + "( ",
+        dropdownMenu: oldMenu
+      }
+    })
+  }
+
   handleNextRelationSelection = (relation) => {
     this.setState((prevState) => ({
       previousQuery: prevState.query,
@@ -51,175 +64,49 @@ class QueryComponent extends Component {
     }))
     switch (relation) {
       case 'CONTAINS':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <TwoParametersDropdownMenu parameters1={["var1"]} parameters2={["var2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={false} showFirstDropDown={"block"} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "CONTAINS( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, [["var1"], [["var2"]]])
         return true
       case 'KNOWS':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <TwoParametersDropdownMenu parameters1={["var1"]} parameters2={["var2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={false} showFirstDropDown={"block"} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "KNOWS( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, [["var1"], [["var2"]]])
         return true
       case 'CAN_PAY_PRODUCT':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <TwoParametersDropdownMenu parameters1={["var1"]} parameters2={["var2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={false} showFirstDropDown={"block"} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "CAN_PAY_PRODUCT( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, [["var1"], [["var2"]]])
         return true
       case 'CAN_PAY_ORDER':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <TwoParametersDropdownMenu parameters1={["var1"]} parameters2={["var2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={false} showFirstDropDown={"block"} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "CAN_PAY_ORDER( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, [["var1"], [["var2"]]])
         return true
       case '≤':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <TwoParametersDropdownMenu key="inequality" parameters1={["var1", "constant", "Price"]} parameters2={["var2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={false} showFirstDropDown={"block"} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "≤( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, [["var1", "constant", "Price"], [["var2"]]])
         return true
       case '=':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <TwoParametersDropdownMenu parameters1={["var1"]} parameters2={["var2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={false} showFirstDropDown={"block"} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "=( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, [["var1"], [["var2"]]])
         return true
       case 'Ordered':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Ordered( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Product_id':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Product_id( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Customer_name':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Customer_name( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Product_name':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Product_name( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Order_no':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Order_no( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Price':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["PriceVar1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Price( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["PriceVar1"])
         return true
       case 'Credit_limit':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Credit_limit( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Customer_id':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Customer_id( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       case 'Name':
-        this.setState((prevState) => {
-          const newMenu = prevState.dropdownMenu
-          const menucomponent = <OneParameterDropdownMenu parameters={["var1"]} handleParameters={this.handleParameters} acceptDropdown={false} />
-          newMenu.unshift(menucomponent)
-          return {
-            query: prevState.query + "Name( ",
-            dropdownMenu: newMenu
-          }
-        })
+        this.buildQueryAndChangeDropdown(relation, ["var1"])
         return true
       default:
         return false
@@ -228,10 +115,11 @@ class QueryComponent extends Component {
 
   handleParameters = (parameter, index, max_index) => {
     const value = this.handleNextRelationSelection(parameter)
+    let array = this.state.dropdownMenu
+    const element = array.shift()
+
     if (value && index < max_index) {
-      let array = this.state.dropdownMenu
-      if (array[0].type.name === "TwoParametersDropdownMenu") {
-        const element = array.shift()
+      if (element.type.name === "TwoParametersDropdownMenu") {
         const newElement = <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
           handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
         array.unshift(newElement)
@@ -242,64 +130,42 @@ class QueryComponent extends Component {
         console.log("Error!")
       }
     } else if (value && index === max_index) {
-      let array = this.state.dropdownMenu
-      const firstElement = array.shift()
       array.shift()
-      array.unshift(firstElement)
+      array.unshift(element)
       this.setState({
         dropdownMenu: array
       })
     } else {
       if (index < max_index) {
-        this.setState((prevState) => ({
-          query: prevState.query + parameter
-        }))
-        let array = this.state.dropdownMenu
-        if (array[0].type.name === "OneParameterDropdownMenu") {
+        if (element.type.name === "OneParameterDropdownMenu") {
           array.shift()
         } else {
-          const element = array.shift()
           const newElement = <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
             handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
           array.unshift(newElement)
         }
-        this.setState({
+        this.setState((prevState) => ({
+          query: prevState.query + parameter,
           dropdownMenu: array
-        })
+        }))
       } else if (index === max_index) {
-        let array = this.state.dropdownMenu
-        const element = array.shift()
-        if(element.type.name === "TwoParametersDropdownMenu") {
-        if(array.length === 0) {
-          console.log("one comma")
-        this.setState((prevState) => ({
-          query:  prevState.query + ", " + parameter + ") ",
-          dropdownMenu: array,
-          acceptAND: true
-        }))
-      } else {
-        this.setState((prevState) => ({
-          query: prevState.query + parameter + ") ",
-          dropdownMenu: array,
-          acceptAND: true
-        }))
-      }
-    } else {
-      if(array.length === 0) {
-        console.log("one comma")
-      this.setState((prevState) => ({
-        query:  prevState.query + parameter + ") ",
-        dropdownMenu: array,
-        acceptAND: true
-      }))
-    } else {
-      this.setState((prevState) => ({
-        query: prevState.query + parameter + ") ",
-        dropdownMenu: array,
-        acceptAND: true
-      }))
-    }
-    }
+        let tempQuery = this.state.query + parameter + ") "
+        if (element.type.name === "TwoParametersDropdownMenu") {
+          tempQuery = this.state.query + ", " + parameter + ") "
+        }
+        if (array.length === 0) {
+          this.setState((prevState) => ({
+            query: tempQuery,
+            dropdownMenu: array,
+            acceptAND: true
+          }))
+        } else {
+          this.setState((prevState) => ({
+            query: prevState.query + parameter + ") ",
+            dropdownMenu: array,
+            acceptAND: false
+          }))
+        }
       }
     }
   }
@@ -307,7 +173,7 @@ class QueryComponent extends Component {
   render() {
     const mainDropdownMenu = <Dropdown style={{ paddingLeft: "1px", marginTop: '-7px' }}>
       <Dropdown.Toggle variant="link" id="dropdown-query-options" disabled={this.state.acceptAND}>
-        Next element
+        Add predicate
 </Dropdown.Toggle>
       <Dropdown.Menu>
         {this.state.acceptedRelations.map((relation, i) => {
@@ -330,10 +196,10 @@ class QueryComponent extends Component {
               {this.state.dropdownMenu.length === 0 ? mainDropdownMenu : this.state.dropdownMenu.map((element, i) => {
                 if (i === 0) {
                   if (element.type.name === "OneParameterDropdownMenu") {
-                    return <OneParameterDropdownMenu parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
+                    return <OneParameterDropdownMenu key={element.key} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
                   } else {
                     return <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-                      handleParameters={this.handleParameters} acceptFirstDropdown={true} acceptSecondDropdown={element.props["acceptSecondDropdown"]} 
+                      handleParameters={this.handleParameters} acceptFirstDropdown={true} acceptSecondDropdown={element.props["acceptSecondDropdown"]}
                       showFirstDropDown={element.props["showFirstDropDown"]} />
                   }
                 }

@@ -6,14 +6,14 @@ class TwoParametersDropdownMenu extends Component {
 
     render() {
         return <ButtonGroup>
-            <Dropdown className = "firsDropdown" style={{ marginTop: '-7px', marginLeft: "4px", display: this.props.showFirstDropDown }}>
-                <Dropdown.Toggle variant="link" id="dropdown-parameter1-options" style={{ paddingRight: "0px", paddingLeft: "0px" }} 
-                disabled = {!this.props.acceptFirstDropdown}>
+            <Dropdown className="firsDropdown" style={{ marginTop: '-7px', marginLeft: "4px", display: this.props.showFirstDropDown }}>
+                <Dropdown.Toggle variant="link" id="dropdown-parameter1-options" style={{ paddingRight: "0px", paddingLeft: "0px" }}
+                    disabled={!this.props.acceptFirstDropdown}>
                     Parameter
     </Dropdown.Toggle>
                 <Dropdown.Menu>
                     {this.props.parameters1.map((parameter, i) => <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, 1, 2)}>
-                    { parameter }
+                        {parameter}
                     </Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown>
@@ -24,8 +24,8 @@ class TwoParametersDropdownMenu extends Component {
     </Dropdown.Toggle>
                 <Dropdown.Menu >
                     {this.props.parameters2.map((parameter, i) => <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, 2, 2)}>
-                    { parameter }
-                    </Dropdown.Item> )}
+                        {parameter}
+                    </Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown> )
         </ButtonGroup>
