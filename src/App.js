@@ -28,7 +28,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "",
 			sqlData: undefined, documentData: undefined, graphData: undefined, nodeName: undefined, linkName: undefined,
 			nameClass: undefined, treeKey: undefined, relationalKey: undefined, graphKey: undefined, queryAnswers: [], activeDropdown: false, sourceFunction: undefined, targetFunction: undefined,
-			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: ""
+			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: ""
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -237,10 +237,6 @@ class App extends Component {
 						</Col>
 					</Row>
 				</Container>
-				{/*<footer style={{ position: "fixed", bottom: "0", width: "100%" }}>
-					<hr style={{ color: "black", borderWidth: "1px", borderStyle: "inset" }}></hr>
-					<p>Category Theory in Multi-model Databases</p>
-				</footer>*/}
 			</Container>
 
 		)
