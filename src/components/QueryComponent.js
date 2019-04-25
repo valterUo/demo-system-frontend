@@ -16,10 +16,12 @@ class QueryComponent extends Component {
     super(props)
     this.state = {
       query: "", acceptOneRelationParameter: false, acceptTwoRelationParameters: false, acceptSecondParameter: false, acceptAND: false,
-      acceptedRelations: ["CONTAINS", "KNOWS", "CAN_PAY_PRODUCT", "CAN_PAY_ORDER", "Ordered", "Product_id", 
-        "Customer_name", "Product_name", "Order_no", "Price", "Credit_limit", "Customer_id", "Name", "≤", "="], parameters1: [], parameters2: [], dropdownMenu: [], savedConstants: [], savedVariables: []
+      acceptedRelations: ["CONTAINS", "KNOWS", "CAN_PAY_PRODUCT", "CAN_PAY_ORDER", "Ordered", "Product_id",
+        "Customer_name", "Product_name", "Order_no", "Price", "Credit_limit", "Customer_id", "Name", "≤", "="], parameters1: [], parameters2: [], dropdownMenu: [],
+      savedConstants: [], savedVariables: []
     }
     this.currentConstant = ""
+    this.commaParanthesisList = []
   }
 
   addAnd = () => {
@@ -30,11 +32,11 @@ class QueryComponent extends Component {
   }
 
   emptyQuery = () => {
-    this.setState((prevState) => ({
+    this.setState({
       query: "",
       acceptAND: false,
       dropdownMenu: []
-    }))
+    })
   }
 
   submitQuery = () => {
@@ -44,9 +46,8 @@ class QueryComponent extends Component {
   buildQueryAndChangeDropdown = (relationName, parameters) => {
     const constants = this.state.savedConstants
     const variables = this.state.savedVariables
-    console.log(constants)
     let newParameters
-    if(typeof parameters[0] === "string") {
+    if (typeof parameters[0] === "string") {
       newParameters = parameters.concat(constants, variables)
     } else {
       newParameters = parameters.map(parameter => parameter.concat(constants, variables))
@@ -55,6 +56,11 @@ class QueryComponent extends Component {
       const oldMenu = prevState.dropdownMenu
       const menucomponent = initializeDropdown(relationName, newParameters, this.handleParameters)
       oldMenu.unshift(menucomponent)
+      if (menucomponent.type.name === "TwoParametersDropdownMenu") {
+        this.commaParanthesisList.push(") ", ", ")
+      } else {
+        this.commaParanthesisList.push(") ")
+      }
       return {
         query: prevState.query + relationName + "( ",
         dropdownMenu: oldMenu
@@ -85,44 +91,51 @@ class QueryComponent extends Component {
               handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
           }
           oldMenu.unshift(newElement)
-          if(element.type.name === "OneParameterDropdownMenu") {
+          if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
+            console.log("elemenent defined 1")
             return {
-              query: prevState.query + constant + ") ",
+              query: prevState.query + constant + this.commaParanthesisList.pop(),
               dropdownMenu: oldMenu,
               savedConstants: oldConstants
             }
           }
+          console.log("elemenent defined 2")
+          let paranthesis
+          this.commaParanthesisList.map(element => paranthesis += element)
+          this.commaParanthesisList = []
           return {
-            query: prevState.query + constant,
+            query: prevState.query + constant + paranthesis,
             dropdownMenu: oldMenu,
             savedConstants: oldConstants
           }
         } else {
+          console.log("element not defined")
+          let paranthesis
+          this.commaParanthesisList.map(element => paranthesis += element)
+          this.commaParanthesisList = []
           return {
-            query: prevState.query + constant + ") ",
+            query: prevState.query + constant + paranthesis,
             dropdownMenu: [],
             acceptAND: true,
             savedConstants: oldConstants
           }
         }
-      }, () => console.log(this.state.savedConstants))
+      })
     }
   }
 
   createNewConstant = () => {
+    let paranthesis = ""
+    if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
+      paranthesis = ", "
+    } else {
+      this.commaParanthesisList.map(element => paranthesis += element)
+    }
+
     let constantInputElement =
-      <Form key = "constantInputForm" name="constantInput">
-        <Form.Control key="constantInput" type="text" size='sm' placeholder="Constant" ref={input => this.currentConstant = input} onKeyDown={this.handleConstantInput.bind(this)} />
+      <Form inline key="constantInputForm" name="constantInput" style={{ paddingLeft: "3px", paddingRight: "3px", marginBottom: "4px" }}>
+        <Form.Control key="constantInput" type="text" size='sm' placeholder="Constant" ref={input => this.currentConstant = input} onKeyDown={this.handleConstantInput.bind(this)} />{paranthesis}
       </Form>
-    console.log(this.state.dropdownMenu[0])
-    if(this.state.dropdownMenu[0].props["acceptSecondDropdown"] || this.state.dropdownMenu[0].type.name === "OneParameterDropdownMenu") {
-      constantInputElement =
-      <Form key = "constantInputForm" name="constantInput">
-        <div style={{display:"inline-block"}}>
-        <Form.Control key="constantInput" type="text" size='sm' placeholder="Constant" ref={input => this.currentConstant = input} onKeyDown={this.handleConstantInput.bind(this)} /> )
-        </div>
-      </Form>
-      }
 
     this.setState((prevState) => {
       let oldMenu = prevState.dropdownMenu
@@ -158,7 +171,7 @@ class QueryComponent extends Component {
         this.buildQueryAndChangeDropdown(relation, [["var1", "New constant", "Price", "Credit_limit", "Customer_id"], ["var2", "New constant", "Price", "Credit_limit", "Customer_id"]])
         return true
       case '=':
-        this.buildQueryAndChangeDropdown(relation, [["Price, Credit_limit, Customer_id", "New constant"], ["Price, Credit_limit, Customer_id", "New constant"]])
+        this.buildQueryAndChangeDropdown(relation, [["Price", "Credit_limit", "Customer_id", "New constant"], ["Price", "Credit_limit", "Customer_id", "New constant"]])
         return true
       case 'Ordered':
         this.buildQueryAndChangeDropdown(relation, ["Order", "New constant"])
@@ -194,25 +207,21 @@ class QueryComponent extends Component {
   }
 
   handleParameters = (parameter, index, max_index) => {
+    const value = this.handleNextRelationSelection(parameter)
+    let array = this.state.dropdownMenu
+    const element = array.shift()
+    const newElement = <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+      handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
 
     if (parameter === "New constant") {
       this.createNewConstant()
     }
 
-    const value = this.handleNextRelationSelection(parameter)
-    let array = this.state.dropdownMenu
-    const element = array.shift()
-    
     if (value && index < max_index) {
-
-      if (element.type.name === "TwoParametersDropdownMenu") {
-        const newElement = <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-          handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
-        array.unshift(newElement)
-        this.setState({
-          dropdownMenu: array
-        })
-      }
+      array.unshift(newElement)
+      this.setState({
+        dropdownMenu: array
+      })
 
     } else if (value && index === max_index) {
       array.shift()
@@ -223,12 +232,9 @@ class QueryComponent extends Component {
     } else {
 
       if (index < max_index) {
-
         if (element.type.name === "OneParameterDropdownMenu") {
           array.shift()
         } else {
-          const newElement = <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-            handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
           array.unshift(newElement)
         }
 
@@ -239,42 +245,56 @@ class QueryComponent extends Component {
           }))
         } else {
           this.setState((prevState) => ({
-            query: prevState.query + parameter,
+            query: prevState.query + parameter + this.commaParanthesisList.pop(),
             dropdownMenu: array
           }))
         }
 
       } else if (index === max_index) {
-        
-        let tempQuery = this.state.query + parameter + ") "
+        let tempQuery
+        if (parameter === "New constant") {
+          tempQuery = this.state.query
+        } else {
 
-        if (element.type.name === "TwoParametersDropdownMenu") {
-          tempQuery = this.state.query + ", " + parameter + ") "
-          if (parameter === "New constant") {
-            tempQuery = this.state.query + ", "
+          tempQuery = this.state.query + parameter
+
+          if (this.commaParanthesisList.length > 0) {
+            tempQuery = tempQuery + this.commaParanthesisList.pop()
+          }
+
+          if (element.type.name === "TwoParametersDropdownMenu") {
+            if (this.commaParanthesisList.length > 0) {
+              tempQuery = tempQuery + this.commaParanthesisList.pop()
+            }
+            if (parameter === "New constant") {
+              if (this.commaParanthesisList.length > 0) {
+                tempQuery = this.state.query + this.commaParanthesisList.pop()
+              }
+            }
+          }
+
+          if (element.type.name === "OneParameterDropdownMenu") {
+            if (this.commaParanthesisList.length > 0) {
+              tempQuery = tempQuery + this.commaParanthesisList.pop()
+            }
           }
         }
 
-        if (element.type.name === "OneParameterDropdownMenu") {
-          if (parameter === "New constant") {
-            tempQuery = this.state.query
-          }
-        }
-      
+        this.setState({
+          query: tempQuery,
+          dropdownMenu: array
+        })
+
         if (array.length === 0) {
           this.setState({
-            query: tempQuery,
-            dropdownMenu: array,
             acceptAND: true
           })
-
         } else {
-          this.setState((prevState) => ({
-            query: tempQuery,
-            dropdownMenu: array,
+          this.setState({
             acceptAND: false
-          }))
+          })
         }
+
       }
     }
   }
@@ -300,7 +320,7 @@ class QueryComponent extends Component {
         </Col>
         <Col>
           <Row style={style.basicComponentsStyle}>
-            <Row style={{ marginLeft: "10px", marginTop: "5px" }}>
+            <Row style={{ marginLeft: "10px", marginTop: "5px", fontFamily: "Lucida Console, Monaco, monospace" }}>
               {this.state.query}
               {this.state.dropdownMenu.length === 0 ? mainDropdownMenu : this.state.dropdownMenu.map((element, i) => {
                 if (i === 0) {
