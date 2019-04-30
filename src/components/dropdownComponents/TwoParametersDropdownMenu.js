@@ -6,7 +6,7 @@ class TwoParametersDropdownMenu extends Component {
 
     render() {
         let acceptFirstDropdown = true
-        if(this.props.showFirstDropDown === "none") {
+        if (this.props.showFirstDropDown === "none") {
             acceptFirstDropdown = false
         }
         return <ButtonGroup>
@@ -16,19 +16,18 @@ class TwoParametersDropdownMenu extends Component {
                     Parameter
     </Dropdown.Toggle>
                 <Dropdown.Menu>
-                    {this.props.parameters1.map((parameter, i) => <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, 1, 2)}>
+                    {this.props.parameters1.map((parameter, i) => <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, 1, 2, this.props.context)}>
                         {parameter}
                     </Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown>
-            {console.log(this.props.showFirstDropDown)}
             {this.props.showFirstDropDown === "none" ? " " : ", "}
-  <Dropdown style={{ marginTop: '-7px' }}>
+            <Dropdown style={{ marginTop: '-7px' }}>
                 <Dropdown.Toggle variant="link" id="dropdown-parameter2-options" style={{ paddingRight: "0px" }} disabled={!this.props.acceptSecondDropdown}>
                     Parameter
     </Dropdown.Toggle>
                 <Dropdown.Menu >
-                    {this.props.parameters2.map((parameter, i) => <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, 2, 2)}>
+                    {this.props.parameters2.map((parameter, i) => <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, 2, 2, this.props.context)}>
                         {parameter}
                     </Dropdown.Item>)}
                 </Dropdown.Menu>
