@@ -44,8 +44,7 @@ class QueryComponent extends Component {
   }
 
   buildQueryAndChangeDropdown = (relationName, parameters) => {
-    const constants = this.state.savedConstants
-    const variables = this.state.savedVariables
+    const constants = this.state.savedConstants, variables = this.state.savedVariables
     let newParameters
     if (typeof parameters[0] === "string") {
       newParameters = parameters.concat(constants, variables)
@@ -68,53 +67,41 @@ class QueryComponent extends Component {
     })
   }
 
-  handleConstantInputChange = (event) => {
+  handleFreeInputChange = (event) => {
     this.currentConstant = this.currentConstant + event.target.value
   }
 
-  handleConstantInput = (event) => {
+  handleFreeInput = (event) => {
     if (event.keyCode === 13) {
       event.preventDefault()
       const constant = this.currentConstant.value
+      let paranthesis = "", result = []
       this.setState((prevState) => {
         let oldMenu = prevState.dropdownMenu
         oldMenu.shift()
         const element = oldMenu.shift()
-        let oldConstants = prevState.savedConstants
+        let oldConstants = prevState.savedConstants, newElement
         oldConstants.push(constant)
-        let newElement
         if (element !== undefined) {
-          console.log("1.0")
           if (element.type.name === "OneParameterDropdownMenu") {
-            console.log("1.1.1")
             newElement = <OneParameterDropdownMenu key={element.key} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
           } else if (element.type.name === "TwoParametersDropdownMenu") {
-            console.log("1.1.2")
             newElement = <TwoParametersDropdownMenu key={element.key} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
               handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
           }
           oldMenu.unshift(newElement)
           if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
-            if (this.commaParanthesisList.length > 0) {
-              console.log("1.2.1.1")
-              return {
-                query: prevState.query + constant + this.commaParanthesisList.pop(),
-                dropdownMenu: oldMenu,
-                savedConstants: oldConstants
-              }
-            } else {
-              console.log("1.2.1.2")
-              return {
-                query: prevState.query + constant,
-                dropdownMenu: oldMenu,
-                savedConstants: oldConstants
-              }
+            return {
+              query: prevState.query + constant + this.commaParanthesisList.pop(),
+              dropdownMenu: oldMenu,
+              savedConstants: oldConstants
             }
           }
-          console.log("1.2.1")
-          let paranthesis = ""
-          let result = []
-          this.commaParanthesisList.some(element => { if (element === ", ") { paranthesis += element; result.push(element); return true } else { paranthesis += element; result.push(element); return false } })
+          this.commaParanthesisList.some(element => {
+              paranthesis += element
+              result.push(element)
+              return element === ", "
+          })
           this.commaParanthesisList = this.commaParanthesisList.filter((element, i) => result[i] !== element)
           return {
             query: prevState.query + constant + paranthesis,
@@ -122,9 +109,6 @@ class QueryComponent extends Component {
             savedConstants: oldConstants
           }
         } else {
-          console.log("2.0")
-          console.log(this.commaParanthesisList)
-          let paranthesis = ""
           this.commaParanthesisList.map(element => paranthesis += element)
           this.commaParanthesisList = []
           return {
@@ -143,20 +127,23 @@ class QueryComponent extends Component {
     if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
       paranthesis = ", "
     } else {
-      this.commaParanthesisList.some(element => { if (element === ", ") { paranthesis += element; return true } else { paranthesis += element; return false } })
+      this.commaParanthesisList.some(element => {
+          paranthesis += element
+          return element === ", "
+      })
     }
 
     let constantInputElement =
       <Form inline key="constantInputForm" name="constantInput" style={{ paddingLeft: "3px", paddingRight: "3px", marginBottom: "4px" }}>
-        <Form.Control key="constantInput" type="text" size='sm' placeholder="Constant" ref={input => this.currentConstant = input} onKeyDown={this.handleConstantInput.bind(this)} />{paranthesis}
+        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentConstant = input} onKeyDown={this.handleFreeInput.bind(this)} />{paranthesis}
       </Form>
 
     this.setState((prevState) => {
       let oldMenu = prevState.dropdownMenu
       const element = oldMenu.shift()
-      if(element.type.name === "TwoParametersDropdownMenu" && element.props["acceptSecondDropdown"] === false) {
-        const newElement = <TwoParametersDropdownMenu key={element.key} context = {element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-        handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
+      if (element.type.name === "TwoParametersDropdownMenu" && element.props["acceptSecondDropdown"] === false) {
+        const newElement = <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+          handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
         oldMenu.unshift(newElement)
       }
       oldMenu.unshift(constantInputElement)
@@ -164,7 +151,6 @@ class QueryComponent extends Component {
         dropdownMenu: oldMenu
       }
     })
-
   }
 
   handleNextRelationSelection = (relation) => {
@@ -246,19 +232,20 @@ class QueryComponent extends Component {
         parameters.push("test const")
         break
     }
-    const constElement = <OneParameterDropdownMenu key={constant} context = {constant} parameters={parameters} handleParameters={this.handleParameters} acceptDropdown={true} />
+    const constElement = <OneParameterDropdownMenu key={constant} context={constant} parameters={parameters} handleParameters={this.handleParameters} acceptDropdown={true} />
     this.setState((prevState) => {
       let menu = prevState.dropdownMenu
       const element = menu.shift()
-      if(element.type.name === "TwoParametersDropdownMenu" && element.props["acceptSecondDropdown"] === false) {
-      const newElement = <TwoParametersDropdownMenu key={element.key} context = {element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-        handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
+      if (element.type.name === "TwoParametersDropdownMenu" && element.props["acceptSecondDropdown"] === false) {
+        const newElement = <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+          handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
         menu.unshift(newElement)
       }
       menu.unshift(constElement)
       return {
-      dropdownMenu: menu
-    }})
+        dropdownMenu: menu
+      }
+    })
   }
 
   handleVariables = (variable, context) => {
@@ -281,24 +268,25 @@ class QueryComponent extends Component {
         parameters.push("test var")
         break
     }
-    const varElement = <OneParameterDropdownMenu key={variable} context = {variable} parameters={parameters} handleParameters={this.handleParameters} acceptDropdown={true} />
+    const varElement = <OneParameterDropdownMenu key={variable} context={variable} parameters={parameters} handleParameters={this.handleParameters} acceptDropdown={true} />
     this.setState((prevState) => {
       let menu = prevState.dropdownMenu
       const element = menu.shift()
-      if(element.type.name === "TwoParametersDropdownMenu" && element.props["acceptSecondDropdown"] === false) {
-      const newElement = <TwoParametersDropdownMenu key={element.key} context = {element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-        handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
+      if (element.type.name === "TwoParametersDropdownMenu" && element.props["acceptSecondDropdown"] === false) {
+        const newElement = <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+          handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
         menu.unshift(newElement)
       }
       menu.unshift(varElement)
       return {
-      dropdownMenu: menu
-    }})
+        dropdownMenu: menu
+      }
+    })
   }
 
   handleParameters = (parameter, index, max_index, context) => {
     if (parameter.includes("constant")) {
-      if(parameter.includes("Integer") || parameter.includes("String")) {
+      if (parameter.includes("Integer") || parameter.includes("String")) {
         this.createFreeInput()
       } else {
         this.handleConstants(parameter, context)
@@ -309,7 +297,7 @@ class QueryComponent extends Component {
       const value = this.handleNextRelationSelection(parameter)
       let array = this.state.dropdownMenu
       const element = array.shift()
-      const newElement = <TwoParametersDropdownMenu key={element.key} context = {element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+      const newElement = <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
         handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
 
       if (value && index < max_index) {
@@ -317,7 +305,6 @@ class QueryComponent extends Component {
         this.setState({
           dropdownMenu: array
         })
-
       } else if (value && index === max_index) {
         array.shift()
         this.setState({
@@ -330,52 +317,29 @@ class QueryComponent extends Component {
           } else {
             array.unshift(newElement)
           }
-          if (parameter === "New constant") {
-            this.setState((prevState) => ({
-              query: prevState.query,
-              dropdownMenu: array
-            }))
-          } else {
-            this.setState((prevState) => ({
-              query: prevState.query + parameter + this.commaParanthesisList.pop(),
-              dropdownMenu: array
-            }))
-          }
+          this.setState((prevState) => ({
+            query: prevState.query + parameter + this.commaParanthesisList.pop(),
+            dropdownMenu: array
+          }))
         } else if (index === max_index) {
-          let tempQuery
-          if (parameter === "New constant") {
-            tempQuery = this.state.query
+          let tempQuery = this.state.query + parameter, result = [], paranthesis = ""
+          if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
+            paranthesis = ", "
+            this.commaParanthesisList.pop()
           } else {
-            tempQuery = this.state.query + parameter
-            let paranthesis = ""
-            let result = []
-            this.commaParanthesisList.some(element => { 
-              if (element === ", ") { 
-                paranthesis += element 
-                result.push(element)
-                return true 
-              } else { 
-                paranthesis += element 
-                result.push(element)
-                return false 
-              }
-            })
-            this.commaParanthesisList = this.commaParanthesisList.filter((element, i) => result[i] !== element)
-            tempQuery += paranthesis
-          }
+          this.commaParanthesisList.some(element => {
+            paranthesis += element
+            result.push(element)
+            return element === ", "
+          })
+          this.commaParanthesisList = this.commaParanthesisList.filter((element, i) => result[i] !== element)
+        }
+          tempQuery += paranthesis
           this.setState({
             query: tempQuery,
-            dropdownMenu: array
+            dropdownMenu: array,
+            acceptAND: array.length === 0
           })
-          if (array.length === 0) {
-            this.setState({
-              acceptAND: true
-            })
-          } else {
-            this.setState({
-              acceptAND: false
-            })
-          }
         }
       }
     }
@@ -407,9 +371,9 @@ class QueryComponent extends Component {
               {this.state.dropdownMenu.length === 0 ? mainDropdownMenu : this.state.dropdownMenu.map((element, i) => {
                 if (i === 0) {
                   if (element.type.name === "OneParameterDropdownMenu") {
-                    return <OneParameterDropdownMenu key={element.key} context = {element.props["context"]} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
+                    return <OneParameterDropdownMenu key={element.key} context={element.props["context"]} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
                   } else if (element.type.name === "TwoParametersDropdownMenu") {
-                    return <TwoParametersDropdownMenu key={element.key} context = {element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+                    return <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
                       handleParameters={this.handleParameters} acceptFirstDropdown={true} acceptSecondDropdown={element.props["acceptSecondDropdown"]}
                       showFirstDropDown={element.props["showFirstDropDown"]} />
                   }
