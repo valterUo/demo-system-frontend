@@ -5,10 +5,12 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import Dropdown from 'react-bootstrap/Dropdown'
+import MainDropdownMenu from './dropdownComponents/MainDropdownMenu'
 import OneParameterDropdownMenu from './dropdownComponents/OneParameterDropdownMenu'
 import TwoParametersDropdownMenu from './dropdownComponents/TwoParametersDropdownMenu'
+import QueryReturnDropdown from './dropdownComponents/QueryReturnDropdown'
 import { initializeDropdown } from './dropdownComponents/InitializeDropDowns'
+import SchemaInfoForDropdowns from './dropdownComponents/SchemaInfoForDropdowns.json'
 
 
 class QueryComponent extends Component {
@@ -16,11 +18,10 @@ class QueryComponent extends Component {
     super(props)
     this.state = {
       query: "", acceptOneRelationParameter: false, acceptTwoRelationParameters: false, acceptSecondParameter: false, acceptAND: false,
-      acceptedRelations: ["CONTAINS", "KNOWS", "CAN_PAY_PRODUCT", "CAN_PAY_ORDER", "Ordered", "Product_id",
-        "Customer_name", "Product_name", "Order_no", "Price", "Credit_limit", "Customer_id", "Name", "≤", "="], parameters1: [], parameters2: [], dropdownMenu: [],
-      savedConstants: [], savedVariables: []
+      acceptedRelations: SchemaInfoForDropdowns.all, parameters1: [], parameters2: [], dropdownMenu: [],
+      savedConstants: [], savedVariables: [], returnValue: "Return "
     }
-    this.currentConstant = ""
+    this.currentInput = ""
     this.commaParanthesisList = []
   }
 
@@ -40,11 +41,11 @@ class QueryComponent extends Component {
   }
 
   submitQuery = () => {
-    console.log(this.state.query)
+    console.log(this.state.query + "\n" +  this.state.returnValue)
   }
 
   buildQueryAndChangeDropdown = (relationName, parameters) => {
-    const constants = this.state.savedConstants, variables = this.state.savedVariables
+    const constants = this.state.savedConstants, variables = this.state.savedVariables.map(element => element.variable)
     let newParameters
     if (typeof parameters[0] === "string") {
       newParameters = parameters.concat(constants, variables)
@@ -68,20 +69,35 @@ class QueryComponent extends Component {
   }
 
   handleFreeInputChange = (event) => {
-    this.currentConstant = this.currentConstant + event.target.value
+    this.currentInput = this.currentInput + event.target.value
   }
 
-  handleFreeInput = (event) => {
+  handleFreeInput = (inputType, type, event) => {
     if (event.keyCode === 13) {
       event.preventDefault()
-      const constant = this.currentConstant.value
-      let paranthesis = "", result = []
+      const inputValue = this.currentInput.value
+      let paranthesis = "", result = [], tempInput
+
       this.setState((prevState) => {
-        let oldMenu = prevState.dropdownMenu
+        if (inputType === "constant") {
+          tempInput = prevState.savedConstants
+          tempInput.push(inputValue)
+          return {
+            savedConstants: tempInput
+          }
+        } else if (inputType === "variable") {
+          tempInput = prevState.savedVariables
+          tempInput.push({ "variable": inputValue, "type": type.split(' ')[0] })
+          return {
+            savedVariables: tempInput
+          }
+        }
+      })
+
+      this.setState((prevState) => {
+        let oldMenu = prevState.dropdownMenu, newElement
         oldMenu.shift()
         const element = oldMenu.shift()
-        let oldConstants = prevState.savedConstants, newElement
-        oldConstants.push(constant)
         if (element !== undefined) {
           if (element.type.name === "OneParameterDropdownMenu") {
             newElement = <OneParameterDropdownMenu key={element.key} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
@@ -92,52 +108,47 @@ class QueryComponent extends Component {
           oldMenu.unshift(newElement)
           if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
             return {
-              query: prevState.query + constant + this.commaParanthesisList.pop(),
-              dropdownMenu: oldMenu,
-              savedConstants: oldConstants
+              query: prevState.query + inputValue + this.commaParanthesisList.pop(),
+              dropdownMenu: oldMenu
             }
           }
           this.commaParanthesisList.some(element => {
-              paranthesis += element
-              result.push(element)
-              return element === ", "
+            paranthesis += element
+            result.push(element)
+            return element === ", "
           })
           this.commaParanthesisList = this.commaParanthesisList.filter((element, i) => result[i] !== element)
           return {
-            query: prevState.query + constant + paranthesis,
-            dropdownMenu: oldMenu,
-            savedConstants: oldConstants
+            query: prevState.query + inputValue + paranthesis,
+            dropdownMenu: oldMenu
           }
         } else {
           this.commaParanthesisList.map(element => paranthesis += element)
           this.commaParanthesisList = []
           return {
-            query: prevState.query + constant + paranthesis,
+            query: prevState.query + inputValue + paranthesis,
             dropdownMenu: [],
-            acceptAND: true,
-            savedConstants: oldConstants
+            acceptAND: true
           }
         }
       })
     }
   }
 
-  createFreeInput = () => {
+  createFreeInput = (inputType, type) => {
     let paranthesis = ""
     if (this.commaParanthesisList[this.commaParanthesisList.length - 1] === ", ") {
       paranthesis = ", "
     } else {
       this.commaParanthesisList.some(element => {
-          paranthesis += element
-          return element === ", "
+        paranthesis += element
+        return element === ", "
       })
     }
-
-    let constantInputElement =
+    let inputElement =
       <Form inline key="constantInputForm" name="constantInput" style={{ paddingLeft: "3px", paddingRight: "3px", marginBottom: "4px" }}>
-        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentConstant = input} onKeyDown={this.handleFreeInput.bind(this)} />{paranthesis}
+        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentInput = input} onKeyDown={this.handleFreeInput.bind(this, inputType, type)} />{paranthesis}
       </Form>
-
     this.setState((prevState) => {
       let oldMenu = prevState.dropdownMenu
       const element = oldMenu.shift()
@@ -146,7 +157,7 @@ class QueryComponent extends Component {
           handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
         oldMenu.unshift(newElement)
       }
-      oldMenu.unshift(constantInputElement)
+      oldMenu.unshift(inputElement)
       return {
         dropdownMenu: oldMenu
       }
@@ -162,21 +173,21 @@ class QueryComponent extends Component {
 
     switch (relation) {
       case 'CONTAINS':
-        this.buildQueryAndChangeDropdown(relation, [["CAN_PAY_ORDER", "Order constant", "Order variable"], ["CAN_PAY_ORDER", "Product constant", "Product variable"]])
+        this.buildQueryAndChangeDropdown(relation, [["Order constant", "Order variable"], ["Product constant", "Product variable"]])
         return true
       case 'KNOWS':
-        this.buildQueryAndChangeDropdown(relation, [["CAN_PAY_ORDER", "KNOWS", "Customer constant", "Customer variable"], ["CAN_PAY_ORDER", "KNOWS", "Customer constant", "Customer variable"]])
+        this.buildQueryAndChangeDropdown(relation, [["Customer constant", "Customer variable"], ["Customer constant", "Customer variable"]])
         return true
       case 'CAN_PAY_PRODUCT':
         this.buildQueryAndChangeDropdown(relation, [["Product constant", "Product variable"], ["Customer constant", "Customer variable"]])
         return true
       case 'CAN_PAY_ORDER':
-        this.buildQueryAndChangeDropdown(relation, [["Order constant", "Customer variable"], ["Customer constant", "Customer variable"]])
+        this.buildQueryAndChangeDropdown(relation, [["Order constant", "Order variable"], ["Customer constant", "Customer variable"]])
         return true
-      case '≤':
+      case 'COMPARE':
         this.buildQueryAndChangeDropdown(relation, [["Price", "Credit_limit", "Customer_id", "Integer constant", "Integer variable"], ["Price", "Credit_limit", "Customer_id", "Integer constant", "Integer variable"]])
         return true
-      case '=':
+      case 'EQUALS':
         this.buildQueryAndChangeDropdown(relation, [["Price", "Credit_limit", "Customer_id", "Customer_name", "Integer constant", "Integer variable", "String constant", "String variable"],
         ["Price", "Credit_limit", "Customer_id", "Customer_name", "Integer constant", "Integer variable", "String constant", "String variable"]])
         return true
@@ -204,9 +215,6 @@ class QueryComponent extends Component {
       case 'Customer_id':
         this.buildQueryAndChangeDropdown(relation, ["Customer constant", "Customer variable"])
         return true
-      case 'Name':
-        this.buildQueryAndChangeDropdown(relation, ["Customer constant", "Customer variable"])
-        return true
       default:
         return false
     }
@@ -217,7 +225,7 @@ class QueryComponent extends Component {
     // eslint-disable-next-line default-case
     switch (constant) {
       case 'Customer constant':
-        parameters.push("test const")
+        parameters.push("Mary", "John", "William")
         break
       case 'Product constant':
         parameters.push("test const")
@@ -287,19 +295,18 @@ class QueryComponent extends Component {
   handleParameters = (parameter, index, max_index, context) => {
     if (parameter.includes("constant")) {
       if (parameter.includes("Integer") || parameter.includes("String")) {
-        this.createFreeInput()
+        this.createFreeInput("constant", parameter)
       } else {
-        this.handleConstants(parameter, context)
+        this.handleConstants(parameter)
       }
     } else if (parameter.includes("variable")) {
-      this.createFreeInput()
+      this.createFreeInput("variable", parameter)
     } else {
       const value = this.handleNextRelationSelection(parameter)
       let array = this.state.dropdownMenu
       const element = array.shift()
       const newElement = <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
         handleParameters={this.handleParameters} acceptFirstDropdown={false} acceptSecondDropdown={true} showFirstDropDown={"none"} />
-
       if (value && index < max_index) {
         array.unshift(newElement)
         this.setState({
@@ -327,13 +334,13 @@ class QueryComponent extends Component {
             paranthesis = ", "
             this.commaParanthesisList.pop()
           } else {
-          this.commaParanthesisList.some(element => {
-            paranthesis += element
-            result.push(element)
-            return element === ", "
-          })
-          this.commaParanthesisList = this.commaParanthesisList.filter((element, i) => result[i] !== element)
-        }
+            this.commaParanthesisList.some(element => {
+              paranthesis += element
+              result.push(element)
+              return element === ", "
+            })
+            this.commaParanthesisList = this.commaParanthesisList.filter((element, i) => result[i] !== element)
+          }
           tempQuery += paranthesis
           this.setState({
             query: tempQuery,
@@ -345,18 +352,17 @@ class QueryComponent extends Component {
     }
   }
 
-  render() {
-    const mainDropdownMenu = <Dropdown style={{ paddingLeft: "1px", marginTop: '-7px' }}>
-      <Dropdown.Toggle variant="link" id="dropdown-query-options" disabled={this.state.acceptAND}>
-        Add predicate
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {this.state.acceptedRelations.map((relation, i) => {
-          return <Dropdown.Item key={i} action="true" onClick={this.handleNextRelationSelection.bind(this, relation)}>{relation}</Dropdown.Item>
-        })}
-      </Dropdown.Menu>
-    </Dropdown>
+  selectReturnValue = (value) => {
+    this.setState((prevState) => {
+      let prevValue = prevState.returnValue
+      prevValue += value
+      return {
+        returnValue: prevValue
+      }
+    }, () => console.log(this.state.returnValue))
+  }
 
+  render() {
     return (<Container style={{ margin: "5px" }} fluid="true">
       <Row style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
         <Col xl={1}>
@@ -366,21 +372,26 @@ class QueryComponent extends Component {
         </Col>
         <Col>
           <Row style={style.basicComponentsStyle}>
-            <Row style={{ marginLeft: "10px", marginTop: "5px", fontFamily: "Lucida Console, Monaco, monospace" }}>
-              {this.state.query}
-              {this.state.dropdownMenu.length === 0 ? mainDropdownMenu : this.state.dropdownMenu.map((element, i) => {
-                if (i === 0) {
-                  if (element.type.name === "OneParameterDropdownMenu") {
-                    return <OneParameterDropdownMenu key={element.key} context={element.props["context"]} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
-                  } else if (element.type.name === "TwoParametersDropdownMenu") {
-                    return <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
-                      handleParameters={this.handleParameters} acceptFirstDropdown={true} acceptSecondDropdown={element.props["acceptSecondDropdown"]}
-                      showFirstDropDown={element.props["showFirstDropDown"]} />
-                  }
-                }
-                return element
-              })}
-            </Row>
+            <Col>
+              <Row style={{ marginLeft: "10px", marginTop: "5px", fontFamily: "Lucida Console, Monaco, monospace" }}>
+                {this.state.query}
+                {this.state.dropdownMenu.length === 0 ?
+                  <MainDropdownMenu acceptedRelations={this.state.acceptedRelations} handleNextRelationSelection={this.handleNextRelationSelection} acceptAND={this.state.acceptAND} />
+                  : this.state.dropdownMenu.map((element, i) => {
+                    if (i === 0) {
+                      if (element.type.name === "OneParameterDropdownMenu") {
+                        return <OneParameterDropdownMenu key={element.key} context={element.props["context"]} parameters={element.props["parameters"]} handleParameters={this.handleParameters} acceptDropdown={true} />
+                      } else if (element.type.name === "TwoParametersDropdownMenu") {
+                        return <TwoParametersDropdownMenu key={element.key} context={element.props["context"]} parameters1={element.props["parameters1"]} parameters2={element.props["parameters2"]}
+                          handleParameters={this.handleParameters} acceptFirstDropdown={true} acceptSecondDropdown={element.props["acceptSecondDropdown"]}
+                          showFirstDropDown={element.props["showFirstDropDown"]} />
+                      }
+                    }
+                    return element
+                  })}
+              </Row>
+              <QueryReturnDropdown savedVariables={this.state.savedVariables} selectReturnValue = {this.selectReturnValue} />
+            </Col>
           </Row>
         </Col>
       </Row>

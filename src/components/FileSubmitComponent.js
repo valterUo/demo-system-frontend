@@ -11,12 +11,6 @@ class FileSubmitComponent extends Component {
         this.file = React.createRef()
     }
 
-    componentDidUpdate() {
-        if(this.file.current.files[0] !== undefined) {
-            Notification.notify("File " + this.file.current.files[0].name + " selected!", "success")
-        }
-    }
-
     handleFileSubmit = async (event) => {
         event.preventDefault()
         const name = this.file.current.files[0].name
