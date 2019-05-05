@@ -8,7 +8,7 @@ class QueryReturnDropdown extends Component {
     constructor(props) {
         super(props)
         this.state = {
-         returnValues: [], selectedValue: undefined
+         initialText: "", returnValues: [], selectedValue: undefined
         }
       }
 
@@ -25,7 +25,8 @@ class QueryReturnDropdown extends Component {
         tempReturnValues.push(variableElement.variable)
         element.leavingArrows.map(element => tempReturnValues.push(element + "(" + variableElement.variable + ")"))
         this.setState({
-            returnValues: tempReturnValues
+            returnValues: tempReturnValues,
+            initialText: "Choose attribute of " + variableElement.variable
         })
     }
 
@@ -42,7 +43,7 @@ class QueryReturnDropdown extends Component {
             renderedContent = <ButtonGroup>
             <Dropdown style={{ marginTop: '-7px' }}>
                 <Dropdown.Toggle variant="link" id="dropdown-QueryReturnDropdown-options" style={{ paddingRight: "0px", paddingLeft: "0px" }}>
-                    Choose variable or its attribute
+                    {this.state.initialText === "" ? "Choose variable or its attribute" : this.state.initialText }
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                     {this.state.returnValues.length === 0 ? this.props.savedVariables.map((variableElement, i) => {

@@ -19,7 +19,7 @@ class QueryComponent extends Component {
     this.state = {
       query: "", acceptOneRelationParameter: false, acceptTwoRelationParameters: false, acceptSecondParameter: false, acceptAND: false,
       acceptedRelations: SchemaInfoForDropdowns.all, parameters1: [], parameters2: [], dropdownMenu: [],
-      savedConstants: [], savedVariables: [], returnValue: "Return "
+      savedConstants: new Set([]), savedVariables: new Set([]), returnValue: "Return "
     }
     this.currentInput = ""
     this.commaParanthesisList = []
@@ -36,16 +36,22 @@ class QueryComponent extends Component {
     this.setState({
       query: "",
       acceptAND: false,
-      dropdownMenu: []
+      dropdownMenu: [],
+      savedVariables: new Set([]),
+      savedConstants: new Set([]),
+      selectReturnValue: "Return "
     })
+    this.commaParanthesisList = []
   }
 
   submitQuery = () => {
-    console.log(this.state.query + "\n" +  this.state.returnValue)
+    console.log(this.state.query + "\n" + this.state.returnValue)
   }
 
   buildQueryAndChangeDropdown = (relationName, parameters) => {
-    const constants = this.state.savedConstants, variables = this.state.savedVariables.map(element => element.variable)
+    let constants = [], variables = []
+    this.state.savedConstants.forEach(element => constants.push(element))
+    this.state.savedVariables.forEach(element => variables.push(element.variable))
     let newParameters
     if (typeof parameters[0] === "string") {
       newParameters = parameters.concat(constants, variables)
@@ -62,7 +68,7 @@ class QueryComponent extends Component {
         this.commaParanthesisList.push(") ")
       }
       return {
-        query: prevState.query + relationName + "( ",
+        query: prevState.query + relationName + "(",
         dropdownMenu: oldMenu
       }
     })
@@ -81,13 +87,21 @@ class QueryComponent extends Component {
       this.setState((prevState) => {
         if (inputType === "constant") {
           tempInput = prevState.savedConstants
-          tempInput.push(inputValue)
+          tempInput.add(inputValue)
           return {
             savedConstants: tempInput
           }
         } else if (inputType === "variable") {
           tempInput = prevState.savedVariables
-          tempInput.push({ "variable": inputValue, "type": type.split(' ')[0] })
+          let containsElement = false
+          tempInput.forEach(element => {
+            if (element.variable === inputValue && element.type === type.split(' ')[0]) {
+              containsElement = true
+            }
+          })
+          if (!containsElement) {
+            tempInput.add({ "variable": inputValue, "type": type.split(' ')[0] })
+          }
           return {
             savedVariables: tempInput
           }
@@ -359,7 +373,7 @@ class QueryComponent extends Component {
       return {
         returnValue: prevValue
       }
-    }, () => console.log(this.state.returnValue))
+    })
   }
 
   render() {
@@ -390,7 +404,7 @@ class QueryComponent extends Component {
                     return element
                   })}
               </Row>
-              <QueryReturnDropdown savedVariables={this.state.savedVariables} selectReturnValue = {this.selectReturnValue} />
+              <QueryReturnDropdown savedVariables={[...this.state.savedVariables]} selectReturnValue={this.selectReturnValue} />
             </Col>
           </Row>
         </Col>

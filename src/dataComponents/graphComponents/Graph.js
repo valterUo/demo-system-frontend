@@ -102,7 +102,7 @@ class Graph extends Component {
             if (value === true) {
                 var pt = mouse(this)
                 var selection = select(this)
-                console.log(ptdata)
+                //console.log(selection._groups[0])
                 tickLine(pt, ptdata, selection)
             }
         }).on('click', function () {
@@ -117,7 +117,6 @@ class Graph extends Component {
         })
 
         function tickLine(point, ptdata, selection) {
-            console.log(ptdata)
             if (ptdata.length > 0) {
                 ptdata.push(point)
                 drawPath(ptdata, selection)
