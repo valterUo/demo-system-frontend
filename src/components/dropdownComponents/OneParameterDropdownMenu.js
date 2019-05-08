@@ -17,7 +17,7 @@ class OneParameterDropdownMenu extends Component {
                         </Dropdown.Item>
                     })}
                 </Dropdown.Menu>
-            </Dropdown> )
+            </Dropdown>
   </ButtonGroup>
     }
 }

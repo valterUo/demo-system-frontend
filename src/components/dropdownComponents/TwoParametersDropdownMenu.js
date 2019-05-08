@@ -31,7 +31,7 @@ class TwoParametersDropdownMenu extends Component {
                         {parameter}
                     </Dropdown.Item>)}
                 </Dropdown.Menu>
-            </Dropdown> )
+            </Dropdown>
         </ButtonGroup>
     }
 }

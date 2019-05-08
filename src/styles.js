@@ -62,4 +62,10 @@ const queryBox = {
 	width: "100%"
 }
 
-export default { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle, queryBox }
+const queryButtonStyle = { 
+	marginLeft: "5px", 
+	marginRigth: "5px" 
+}
+
+
+export default { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle, queryBox, queryButtonStyle }
