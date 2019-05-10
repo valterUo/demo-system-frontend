@@ -19,7 +19,7 @@ import ResultComponent from './components/ResultComponent'
 import MLQueryComponent from './components/MLQueryComponent'
 import ml from './services/metaLanguageCompilerService'
 import NotificationComponent from './components/NotificationComponent'
-import QueryComponent from './components/QueryComponent'
+import NewQueryComponent from './components/NewQueryComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -218,8 +218,8 @@ class App extends Component {
 						<NotificationComponent/>
 						</Col>
 					</Row>
-					<Row style={style.basicComponentsStyle}>
-						<QueryComponent/>
+						<Row style={style.basicComponentsStyle}>
+						<NewQueryComponent/>
 						</Row>
 					<Row>
 						<Col xl={6}>

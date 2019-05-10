@@ -10,7 +10,7 @@ class MainDropdownMenu extends Component {
         </Dropdown.Toggle>
             <Dropdown.Menu>
                 {this.props.acceptedRelations.map((relation, i) => {
-                    return <Dropdown.Item key={i} action="true" onClick={this.props.handleNextRelationSelection.bind(this, relation)}>{relation}</Dropdown.Item>
+                    return <Dropdown.Item key={i} action="true" onClick={this.props.handleNextRelationSelection.bind(this, relation, this.props.buildQueryAndChangeDropdown)}>{relation}</Dropdown.Item>
                 })}
             </Dropdown.Menu>
         </Dropdown>

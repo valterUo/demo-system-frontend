@@ -67,5 +67,21 @@ const queryButtonStyle = {
 	marginRigth: "5px" 
 }
 
+const queryTextStyle = { 
+	marginLeft: "10px", 
+	marginTop: "5px", 
+	fontFamily: "Lucida Console, Monaco, monospace" 
+}
 
-export default { backgroundColorStyle, headerBackGroundColorStyle, fileInputStyle, fileInputLabelStyle, componentMarginalStyle, basicComponentsStyle, queryBox, queryButtonStyle }
+
+export default { 
+	backgroundColorStyle, 
+	headerBackGroundColorStyle, 
+	fileInputStyle, 
+	fileInputLabelStyle, 
+	componentMarginalStyle, 
+	basicComponentsStyle, 
+	queryBox, 
+	queryButtonStyle,
+	queryTextStyle 
+	}
