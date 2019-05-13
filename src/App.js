@@ -20,6 +20,7 @@ import MLQueryComponent from './components/MLQueryComponent'
 import ml from './services/metaLanguageCompilerService'
 import NotificationComponent from './components/NotificationComponent'
 import NewQueryComponent from './components/NewQueryComponent'
+import DataUploadComponent from './components/DataUploadComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -173,10 +174,10 @@ class App extends Component {
 				<NavigationBarComponent />
 				<Container fluid='true'>
 					<Row style={style.basicComponentsStyle}>
-						<Col xl = {1}>
+						<Col xl={1}>
 							<h4 align="right">Input</h4>
 						</Col>
-						<Col xl = {2}>
+						<Col xl={2}>
 							<Dropdown style={{ marginTop: "4px" }}>
 								<Dropdown.Toggle variant="light" id="dropdown-query-mode">
 									{this.state.queryMode === "" ? "Query mode" : this.state.queryMode}
@@ -199,7 +200,7 @@ class App extends Component {
 								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
 							</Form>}
 						</Col>
-						<Col xl = {2}>
+						<Col xl={2}>
 							{this.state.activeDropdown && <Dropdown style={{ marginTop: "4px" }}>
 								<Dropdown.Toggle variant="dark" id="dropdown-predefined-queries">
 									Defined queries
@@ -211,16 +212,19 @@ class App extends Component {
 								</Dropdown.Menu>
 							</Dropdown>}
 						</Col>
-						<Col xl = {2}>
+						<Col xl={2}>
 							<FileSubmitComponent />
 						</Col>
 						<Col>
-						<NotificationComponent/>
+							<NotificationComponent />
 						</Col>
 					</Row>
-						<Row style={style.basicComponentsStyle}>
-						<NewQueryComponent/>
-						</Row>
+					<Row style={style.basicComponentsStyle}>
+						<DataUploadComponent />
+					</Row>
+					<Row style={style.basicComponentsStyle}>
+						<NewQueryComponent />
+					</Row>
 					<Row>
 						<Col xl={6}>
 							<SchemaComponent width={this.state.width} height={this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData}
