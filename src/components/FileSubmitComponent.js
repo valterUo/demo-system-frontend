@@ -12,9 +12,10 @@ class FileSubmitComponent extends Component {
     }
 
     handleFileSubmit = async (event) => {
+        console.log(this.file)
         event.preventDefault()
         const name = this.file.current.files[0].name
-        await FileSender.sendFiles(this.file.current.files[0], name)
+        await FileSender.sendFiles(this.file.current.files[0], name, "files")
         Notification.notify("File " + name + " uploaded!", "success")
     }
 

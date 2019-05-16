@@ -44,6 +44,7 @@ export const handleNextSelection = (relation, buildQueryAndChangeDropdown) => {
         buildQueryAndChangeDropdown(relation, ["Ordered", "Customer constant", "Customer variable"])
         return true
       default:
+        buildQueryAndChangeDropdown(relation, [])
         return false
     }
   }

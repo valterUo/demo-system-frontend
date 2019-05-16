@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import style from '../styles'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -33,13 +34,18 @@ class NewQueryComponent extends Component {
     })
   }
 
-  submitQuery = () => {
+  submitQuery = async () => {
     console.log(this.state.query + "\n" + this.state.returnValue)
+    var headers = {
+      'Content-Type': 'text/plain'
+    }
+      const answer = await axios.post('http://localhost:3001/ml', this.state.query  + "(T'', G'', E'', sq');", { headers: headers })
+      console.log(answer)
   }
 
   printDropdownMenu = () => {
     if (this.state.dropdownMenu.length === 0) {
-      return <MainDropdownMenu acceptedRelations={this.state.acceptedRelations} handleNextRelationSelection={handleNextSelection} acceptAND={this.state.acceptAND} buildQueryAndChangeDropdown = {this.buildQueryAndChangeDropdown} />
+      return <MainDropdownMenu acceptedRelations={this.state.acceptedRelations} handleNextRelationSelection={handleNextSelection} acceptAND={this.state.acceptAND} buildQueryAndChangeDropdown={this.buildQueryAndChangeDropdown} />
     } else {
       return this.state.dropdownMenu.map((element, i) => {
         return <div key={i}>{element}</div>
@@ -49,19 +55,28 @@ class NewQueryComponent extends Component {
 
   buildQueryAndChangeDropdown = (relation, parameters) => {
     let tempDropdown = []
-    if (typeof parameters[0] === "object") { //two place predicate
-      const element1 = <div>&nbsp;<NewOneParameterDropdownMenu relation={relation} parameters={parameters[0]} location={[1, 2]} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
-      const element2 = <div>&nbsp;{relation}&nbsp;</div>
-      const element3 = <NewOneParameterDropdownMenu relation={relation} parameters={parameters[1]} location={[2, 2]} acceptDropdown={true} handleParameters={this.handleParameters} />
-      tempDropdown.push(element1, element2, element3)
-    } else { // one place predicate
-      const element1 = <div>{ relation }</div> 
-      const element2 = <div>&nbsp; <NewOneParameterDropdownMenu relation={relation} parameters={parameters} location={[1, 1]} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
-      tempDropdown.push(element1, element2)
+    if (parameters[0] === undefined) {
+      this.setState((prevState) => {
+        return {
+          query: prevState.query + relation
+        }
+      }
+      )
+    } else {
+      if (typeof parameters[0] === "object") { //two place predicate
+        const element1 = <div>&nbsp;<NewOneParameterDropdownMenu relation={relation} parameters={parameters[0]} location={[1, 2]} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
+        const element2 = <div>&nbsp;{relation}&nbsp;</div>
+        const element3 = <NewOneParameterDropdownMenu relation={relation} parameters={parameters[1]} location={[2, 2]} acceptDropdown={true} handleParameters={this.handleParameters} />
+        tempDropdown.push(element1, element2, element3)
+      } else { // one place predicate
+        const element1 = <div>{relation}</div>
+        const element2 = <div>&nbsp; <NewOneParameterDropdownMenu relation={relation} parameters={parameters} location={[1, 1]} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
+        tempDropdown.push(element1, element2)
+      }
+      this.setState({
+        dropdownMenu: tempDropdown
+      })
     }
-    this.setState({
-      dropdownMenu: tempDropdown
-    })
   }
 
   handleConstants = (parameter, location, relation) => {
@@ -85,7 +100,7 @@ class NewQueryComponent extends Component {
         parameters.push("test const")
         break
     }
-    const element = <div><NewOneParameterDropdownMenu location = {location} relation={relation} parameters={parameters} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
+    const element = <div><NewOneParameterDropdownMenu location={location} relation={relation} parameters={parameters} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
     this.changeDropdownElement(element, location)
   }
 
@@ -93,9 +108,9 @@ class NewQueryComponent extends Component {
     let inputType = parameter.split(' ')[0]
     let inputElement =
       <Form inline key="constantInputForm" name="constantInput" style={{ paddingLeft: "3px", paddingRight: "3px", marginBottom: "4px" }}>
-        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentInput = input} onKeyDown={this.handleFreeInput.bind(this, inputType, location, relation)}/>
+        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentInput = input} onKeyDown={this.handleFreeInput.bind(this, inputType, location, relation)} />
       </Form>
-       this.changeDropdownElement(inputElement, location)
+    this.changeDropdownElement(inputElement, location)
   }
 
   handleFreeInput = (inputType, location, relation, event) => {
@@ -104,7 +119,7 @@ class NewQueryComponent extends Component {
       const inputValue = this.currentInput.value
       let newVariables = new Set(this.state.savedVariables)
       newVariables.add({ "variable": inputValue, "type": inputType.split(' ')[0] })
-      if(location[0] === location[1]) {
+      if (location[0] === location[1]) {
         this.setState((prevState) => {
           let tempMenu = prevState.dropdownMenu
           tempMenu.shift()
@@ -163,9 +178,9 @@ class NewQueryComponent extends Component {
   changeDropdownElement = (element, location) => {
     this.setState((prevState) => {
       let tempMenu = prevState.dropdownMenu
-      if(location[0] === location[1]) {
-          tempMenu.pop()
-          tempMenu.push(element)
+      if (location[0] === location[1]) {
+        tempMenu.pop()
+        tempMenu.push(element)
       } else {
         tempMenu.shift()
         tempMenu.unshift(element)
