@@ -32,12 +32,8 @@ class Graph extends Component {
                         dx = x2 - x1,
                         dy = y2 - y1,
                         dr = 0
-                        // Set dr to 0 for straight edges.
-                        // Set dr to Math.sqrt(dx * dx + dy * dy) for a simple curve.
-                        // Assuming a simple curve, decrease dr to space curves.
-                        // There's probably a better decay function that spaces things nice and evenly. 
-                        if(d.count !== 1){
-                            dr = Math.sqrt(dx * dx + dy * dy)
+                        if(d.count > 1){
+                            dr = (1/d.count - 1)*Math.sqrt(dx * dx + dy * dy)
                         }
 
                     let  drx = dr,
@@ -49,7 +45,7 @@ class Graph extends Component {
                     if (x1 === x2 && y1 === y2) {
                         xRotation = -45
                         largeArc = 1
-                        //sweep = 0
+                        sweep = 0
                         drx = 30
                         dry = 20
                         x2 = x2 + 1
@@ -157,7 +153,7 @@ class Graph extends Component {
                         refX="21" refY="6"
                         markerWidth="100" markerHeight="100"
                         orient="auto" markerUnits="userSpaceOnUse">
-                        <path d="M 0 0 12 6 0 12 3 6" fill="black" />
+                        <path d="M 0 0 12 6 0 12 3 6" fill="grey" />
                     </marker>
                 </defs>
                 <g>

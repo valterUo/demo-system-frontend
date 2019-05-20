@@ -23,7 +23,8 @@ const enterNode = (selection) => {
         .style('stroke-width', '1')
 
     selection.select('text')
-        .attr('dy', '.35em')
+        .attr('dy', '.4em')
+        .attr('dx', '.8em')
         .style('transform', 'translateX(-50%,-50%')
     
     selection.select('g')

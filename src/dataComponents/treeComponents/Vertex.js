@@ -17,8 +17,9 @@ const enterNode = (selection) => {
         .style('stroke', 'black')
         .style('stroke-width', '1')
 
-    selection.select('text')
-        .attr('dy', '.35em')
+        selection.select('text')
+        .attr('dy', '.4em')
+        .attr('dx', '.8em')
         .style('transform', 'translateX(-50%,-50%')
 }
 

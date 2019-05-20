@@ -1,21 +1,19 @@
 {
     "nodes": [
-        {"name": "Person", "id": 0},
+        {"name": "Customer", "id": 0},
         {"name": "Int", "id": 1},
-        {"name": "Prod", "id": 2},
+        {"name": "Product", "id": 2},
         {"name": "Order", "id": 3},
-        {"name": "Str", "id": 4}
+        {"name": "String", "id": 4}
     ], 
     "links": [
         {"source": 0, "target": 0, "name": "Knows", "count": 1},
         {"source": 0, "target": 1, "name": "Customer_id", "count": 1},
-        {"source": 0, "target": 1, "name": "Credit_limits", "count": 2},
-        {"source": 0, "target": 4, "name": "Person_name", "count": 1},
-        {"source": 1, "target": 2, "name": "l1", "count": 1},
-        {"source": 1, "target": 3, "name": "l2", "count": 1},
-        {"source": 1, "target": 4, "name": "Key_val", "count": 1},
-        {"source": 2, "target": 1, "name": "Price", "count": 2},
+        {"source": 0, "target": 1, "name": "Credit_limit", "count": 2},
+        {"source": 0, "target": 4, "name": "Name", "count": 1},
+        {"source": 2, "target": 1, "name": "Price", "count": 1},
         {"source": 2, "target": 4, "name": "Product_id", "count": 1},
-        {"source": 2, "target": 4, "name": "Product_name", "count": 2},
-        {"source": 3, "target": 4, "name": "Order_no", "count": 1}
+        {"source": 2, "target": 4, "name": "Name", "count": 2},
+        {"source": 3, "target": 4, "name": "Order_no", "count": 1},
+        {"source": 3, "target": 1, "name": "Ordered", "count": 1}
         ]}

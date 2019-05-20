@@ -5,49 +5,16 @@ import { select } from 'd3-selection'
 const enterLink = (selection) => {
 
     selection.select('path')
-        .attr('stroke-width', 3)
-        .style('stroke', 'black')
-        .style('opacity', '.1')
+        .attr('stroke-width', 1)
+        .style('stroke', 'grey')
+        //.style('opacity', '.5')
         .attr("fill", "none")
         .attr("marker-end", "url(#triangle)")
 
     selection.select('text')
-        .attr('dy', '.35em')
+        //.attr('dy', '.35em')
         .style('transform', 'translateX(-50%,-50%')
         .attr("text-anchor", "middle")
-}
-
-const updateLink = (selection) => {
-    selection.attr("d", function (d) {
-        let x1 = d.source.x,
-            y1 = d.source.y,
-            x2 = d.target.x,
-            y2 = d.target.y,
-            dx = x2 - x1,
-            dy = y2 - y1,
-            dr = 0
-            if(d.count !== 1){
-                dr = Math.sqrt(dx * dx + dy * dy)
-            }
-
-        let drx = dr,
-            dry = dr,
-            xRotation = 0,
-            largeArc = 0,
-            sweep = 1
-
-        if (x1 === x2 && y1 === y2) {
-            xRotation = -45
-            largeArc = 1
-            //sweep = 0
-            drx = 30
-            dry = 20
-            x2 = x2 + 1
-            y2 = y2 + 1 
-        }
-
-        return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
-    })
 }
 
 class MultiEdge extends Component {
@@ -64,7 +31,14 @@ class MultiEdge extends Component {
 
     componentDidUpdate() {
         this.d3Link.datum(this.props.data)
-            .call(updateLink)
+    }
+
+    handleMouseEntering = () => {
+
+    }
+
+    handleMouseExiting = () => {
+        
     }
 
     handle(e) {
@@ -86,7 +60,7 @@ class MultiEdge extends Component {
     render() {
         if (this.props.data.name !== undefined) {
             return (
-                <g ref={this.edgeRef} className={this.props.linkName}>
+                <g ref={this.edgeRef} className={this.props.linkName} onMouseEnter={() => this.handleMouseEntering} onMouseLeave={() => this.handleMouseExiting}>
                     <path onClick={this.handle.bind(this)} />
                     <text>{this.props.data.name}</text>
                 </g>
@@ -94,7 +68,7 @@ class MultiEdge extends Component {
         }
         else {
             return (
-                <g ref={this.edgeRef} className={this.props.linkName}>
+                <g ref={this.edgeRef} className={this.props.linkName} onMouseEnter={() => this.handleMouseEntering} onMouseLeave={() => this.handleMouseExiting}>
                     <path onClick={this.handle.bind(this)} />
                 </g>
             )
