@@ -13,8 +13,8 @@ class Graph extends Component {
     }
 
     componentDidMount() {
-        const scaledwidth = 0.44*this.props.width
-        const scaledheigth = 0.44*this.props.height
+        const scaledwidth = 0.44 * this.props.width
+        const scaledheigth = 0.44 * this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -32,60 +32,34 @@ class Graph extends Component {
                         dx = x2 - x1,
                         dy = y2 - y1,
                         dr = 0
-                        if(d.count > 1){
-                            dr = (1/d.count - 1)*Math.sqrt(dx * dx + dy * dy)
-                        }
+                    if (d.count > 1) {
+                        dr = (1 / d.count - 1) * Math.sqrt(dx * dx + dy * dy)
+                    }
 
-                    let  drx = dr,
+                    let drx = dr,
                         dry = dr,
                         xRotation = 0,
                         largeArc = 0,
                         sweep = 1
 
                     if (x1 === x2 && y1 === y2) {
-                        xRotation = -45
+                        xRotation = 45
                         largeArc = 1
                         sweep = 0
-                        drx = 30
-                        dry = 20
+                        drx = 60
+                        dry = 40
                         x2 = x2 + 1
-                        y2 = y2 + 1 
+                        y2 = y2 + 1
                     }
 
                     return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
                 })
 
-            selection.select('text')
-                .attr("x", function (d) {
-                    let x1 = d.source.x,
-                        y1 = d.source.y,
-                        x2 = d.target.x,
-                        y2 = d.target.y,
-                        dx = x2 - x1
+            selection.select("text").attr("dy", -5)
+            selection.select("textPath")
+                .style("text-anchor", "middle")
+                .attr("startOffset", "50%")
 
-                        if(d.count !== 1) {
-                            return ((d.source.x + d.target.x + dx/2) / 2)
-                        }
-                        if (x1 === x2 && y1 === y2) {
-                            return ((d.source.x + d.target.x + 80) / 2)
-                        }
-                    return ((d.source.x + d.target.x) / 2)
-                })
-                .attr("y", function (d) {
-                    let x1 = d.source.x,
-                        y1 = d.source.y,
-                        x2 = d.target.x,
-                        y2 = d.target.y,
-                        dy = y2 - y1
-
-                        if(d.count !== 1) {
-                            return ((d.source.y + d.target.y + dy/2) / 2)
-                        }
-                        if (x1 === x2 && y1 === y2) {
-                            return ((d.source.y + d.target.y - 60) / 2)
-                        }
-                    return ((d.source.y + d.target.y) / 2)
-                })
         }
 
         const updateMultiGraph = (selection) => {
@@ -98,7 +72,7 @@ class Graph extends Component {
         this.d3Graph = select(this.graphRef.current)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
-            .force('charge', forceManyBody().strength(-50))
+            .force('charge', forceManyBody().strength(-70))
             .force('link', forceLink(this.props.data.links).distance(200))
             .force('center', forceCenter().x(scaledwidth / 2).y(scaledheigth / 2))
             .force('collide', forceCollide([10]).iterations([10]))
@@ -136,11 +110,11 @@ class Graph extends Component {
     }
 
     render() {
-        const scaledwith = 0.44*this.props.width
-        const scaledheight = 0.44*this.props.height
+        const scaledwith = 0.44 * this.props.width
+        const scaledheight = 0.44 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
-                <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} editableGraph = {this.props.editableGraph} />)
+                <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (

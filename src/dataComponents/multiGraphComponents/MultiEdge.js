@@ -1,25 +1,22 @@
 import React, { Component } from 'react'
 import { select } from 'd3-selection'
-//import store from '../../store'
 
 const enterLink = (selection) => {
 
     selection.select('path')
-        .attr('stroke-width', 1)
+        .attr('stroke-width', 2)
         .style('stroke', 'grey')
-        //.style('opacity', '.5')
         .attr("fill", "none")
         .attr("marker-end", "url(#triangle)")
 
     selection.select('text')
-        //.attr('dy', '.35em')
         .style('transform', 'translateX(-50%,-50%')
         .attr("text-anchor", "middle")
 }
 
 class MultiEdge extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.edgeRef = React.createRef()
     }
 
@@ -34,35 +31,34 @@ class MultiEdge extends Component {
     }
 
     handleMouseEntering = () => {
-
+        console.log("mouse entered")
+        this.d3Link.select("text")
+            .attr("visibility", "visible")
+        this.d3Link.select('path')
+            .attr('stroke-width', 5)
+            .style('stroke', '#666666')
+            .attr("fill", "none")
     }
 
     handleMouseExiting = () => {
-        
+        this.d3Link.select("text")
+            .attr("visibility", "hidden")
+        this.d3Link.select('path')
+            .attr('stroke-width', 2)
+            .style('stroke', 'grey')
+            .attr("fill", "none")
     }
 
     handle(e) {
         console.log(this.props + ' been clicked')
-        /*let jsonData = this.props.data
-        let filteredData = []
-        for (const key in jsonData) {
-            if (key !== "index") {
-                const val = jsonData[key]
-                filteredData.push({"key": key, "value": val})
-            }
-            else {
-                break
-            }
-        }
-        store.dispatch({ type: 'ADD_DATA', data: filteredData })*/
     }
 
     render() {
         if (this.props.data.name !== undefined) {
             return (
-                <g ref={this.edgeRef} className={this.props.linkName} onMouseEnter={() => this.handleMouseEntering} onMouseLeave={() => this.handleMouseExiting}>
-                    <path onClick={this.handle.bind(this)} />
-                    <text>{this.props.data.name}</text>
+                <g ref={this.edgeRef} className={this.props.linkName} onMouseEnter={this.handleMouseEntering.bind(this)} onMouseLeave={this.handleMouseExiting.bind(this)}>
+                    <path id={this.props.data.name} onClick={this.handle.bind(this)} />
+                    <text visibility="hidden"><textPath href={"#" + this.props.data.name} style={{ textAnchor: "middle" }} >{this.props.data.name}</textPath></text>
                 </g>
             )
         }
