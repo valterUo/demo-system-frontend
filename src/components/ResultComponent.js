@@ -14,7 +14,11 @@ class ResultComponent extends Component {
         return <Row style={style.basicComponentsStyle}>
         <Col>
             <h4>Result:</h4>
-            {(this.props.sqlData !== undefined && this.props.documentData !== undefined && this.props.graphData !== undefined) &&
+            {this.props.graphData !== undefined &&
+            <Graph key={this.props.graphKey} data={this.props.graphData} width={this.props.width} height={this.props.height} nodeName={this.props.nodeName + 'Graph'} linkName={this.props.linkName + 'Graph'} 
+                        nameClass={this.props.nameClass + 'Graph'} editableGraph={false} />
+                        }
+            {/*(this.props.sqlData !== undefined && this.props.documentData !== undefined && this.props.graphData !== undefined) &&
                 <Tabs defaultActiveKey="rel" id="uncontrolled-tab-example">
                     <Tab eventKey="rel" title="Relational output">
                         <RelationalTabs width = {this.props.width} height = {this.props.height} key={this.props.relationalKey} tables={this.props.sqlData} />
@@ -27,7 +31,7 @@ class ResultComponent extends Component {
                         nameClass={this.props.nameClass + 'Graph'} editableGraph={false} />
                     </Tab>
                 </Tabs>
-            }
+            */}
         </Col>
     </Row>
     }

@@ -10,10 +10,10 @@
         {"source": 0, "target": 0, "name": "Knows", "count": 1},
         {"source": 0, "target": 1, "name": "Customer_id", "count": 1},
         {"source": 0, "target": 1, "name": "Credit_limit", "count": 2},
-        {"source": 0, "target": 4, "name": "Name", "count": 1},
+        {"source": 0, "target": 4, "name": "Customer_name", "count": 1},
         {"source": 2, "target": 1, "name": "Price", "count": 1},
         {"source": 2, "target": 4, "name": "Product_id", "count": 1},
-        {"source": 2, "target": 4, "name": "Name", "count": 2},
+        {"source": 2, "target": 4, "name": "Product_name", "count": 2},
         {"source": 3, "target": 4, "name": "Order_no", "count": 1},
         {"source": 3, "target": 1, "name": "Ordered", "count": 1}
         ]}

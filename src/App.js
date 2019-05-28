@@ -20,6 +20,7 @@ import ml from './services/metaLanguageCompilerService'
 import NotificationComponent from './components/NotificationComponent'
 import NewQueryComponent from './components/NewQueryComponent'
 import DataUploadComponent from './components/DataUploadComponent'
+import QueryAnswerParser from './services/queryAnswerParser'
 
 class App extends Component {
 	constructor(props) {
@@ -50,12 +51,19 @@ class App extends Component {
 		event.preventDefault()
 
 		const answer = await ml.compile(this.state.query)
+		if (answer.data.includes("customer")) {
+			this.setState(state => {
+				let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"])
+				return {
+					graphData: data
+				}
+			})
+		} 
 		this.setState(state => {
 			const newAnswer = answer.data.replace('\n-', '').trim()
 			const newAnswers = [...state.queryAnswers, newAnswer]
 			return { queryAnswers: newAnswers }
 		})
-
 		this.setState({ query: "" })
 	}
 
@@ -153,8 +161,8 @@ class App extends Component {
 						</Col>
 						<Col xl={6}>
 							<MLQueryComponent answers={this.state.queryAnswers} />
-							<ResultComponent width={this.state.width} height={this.state.height} sqlData={this.state.sqlData} relationalKey={this.state.relationalKey} documentData={this.state.documentData} treeKey={this.state.treeKey}
-								graphData={this.state.graphData} graphKey={this.state.graphKey} nodeName={this.state.nodeName} linkName={this.state.linkName} nameClass={this.state.className} />
+							<ResultComponent width={this.state.width} height={this.state.height}
+								graphData={this.state.graphData} graphKey={"resultKey"} nodeName={"resultNodes"} linkName={"resultLinks"} nameClass={"resultClass"} />
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>

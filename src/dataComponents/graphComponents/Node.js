@@ -26,7 +26,7 @@ const enterNode = (selection) => {
         .attr('dy', '.4em')
         .attr('dx', '.8em')
         .style('transform', 'translateX(-50%,-50%')
-    
+
     selection.select('g')
         .select(".addEdge")
         .attr("d", arc()
@@ -119,7 +119,7 @@ class Node extends Component {
                 break
             }
         }
-        if(JSON.stringify(store.getState().nodeData.data) !== JSON.stringify(filteredData)){
+        if (JSON.stringify(store.getState().nodeData.data) !== JSON.stringify(filteredData)) {
             store.dispatch({ type: 'ADD_NODE_DATA', data: filteredData })
         }
         this.d3Node.select("circle").style("fill", "#FCBC34")
@@ -136,7 +136,7 @@ class Node extends Component {
             } else {
                 this.d3Node.select(".nodeHandlingButtons").transition().duration(500).attr("opacity", 0)
                 setTimeout(() => { this.d3Node.select(".nodeHandlingButtons").attr("visibility", "hidden") }, 501)
-                store.dispatch({type: 'DELETE_NODE_MODEL'})
+                store.dispatch({ type: 'DELETE_NODE_MODEL' })
             }
         }
     }
@@ -190,34 +190,34 @@ class Node extends Component {
                 <circle onMouseEnter={this.handle.bind(this)} onMouseLeave={this.handleColorChangeBack.bind(this)} onClick={this.showNodeHandlingButtons.bind(this)} />
                 <text>{this.props.data.name}</text>
 
-                <g className="nodeHandlingButtons" display = "block" visibility = "hidden" opacity = "0" >
-                    <g className = "addEdgeElement" onClick={this.handleAddEdge.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addEdgeElement")} 
-                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addEdgeElement")}>
+                <g className="nodeHandlingButtons" display="block" visibility="hidden" opacity="0" >
+                    <g className="addEdgeElement" onClick={this.handleAddEdge.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addEdgeElement")}
+                        onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addEdgeElement")}>
                         <path className="addEdge" />
-                        <foreignObject className="addEdgeLabel" width = "30" height = "30">
-                        <i className='fas fa-external-link-alt' style={{"fontSize": "18px"}}></i>
+                        <foreignObject className="addEdgeLabel" width="30" height="30">
+                            <i className='fas fa-external-link-alt' style={{ "fontSize": "18px" }}></i>
                         </foreignObject>
                     </g>
-                    <g className = "removeNodeElement" onClick={this.handleRemoveNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeNodeElement")} 
-                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeNodeElement")}>
+                    <g className="removeNodeElement" onClick={this.handleRemoveNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeNodeElement")}
+                        onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeNodeElement")}>
                         <path className="removeNode" />
-                        <foreignObject className = "removeNodeLabel" width = "30" height = "30">
-                        <i className="material-icons" style={{"fontSize": "28px"}}>delete_forever</i>
+                        <foreignObject className="removeNodeLabel" width="30" height="30">
+                            <i className="material-icons" style={{ "fontSize": "28px" }}>delete_forever</i>
                         </foreignObject>
                     </g>
-                    <g className = "removeEdgesElement" onClick={this.handleRemoveEdges.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeEdgesElement")} 
-                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeEdgesElement")}>
+                    <g className="removeEdgesElement" onClick={this.handleRemoveEdges.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("removeEdgesElement")}
+                        onMouseLeave={() => this.changeNodeHandlingButtonColorExit("removeEdgesElement")}>
                         <path className="removeEdges" />
-                        <foreignObject className = "removeEdgesLabel" width = "30" height = "30">
-                        <i className='fas fa-unlink' style={{"fontSize": "18px"}}></i>
+                        <foreignObject className="removeEdgesLabel" width="30" height="30">
+                            <i className='fas fa-unlink' style={{ "fontSize": "18px" }}></i>
                         </foreignObject>
                     </g>
-                    <g className = "addNodeStartingFromThisNodeElement" onClick={this.handleAddNodeStartingFromThisNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addNodeStartingFromThisNodeElement")} 
-                    onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addNodeStartingFromThisNodeElement")}>
+                    <g className="addNodeStartingFromThisNodeElement" onClick={this.handleAddNodeStartingFromThisNode.bind(this)} onMouseEnter={() => this.changeNodeHandlingButtonColorEnter("addNodeStartingFromThisNodeElement")}
+                        onMouseLeave={() => this.changeNodeHandlingButtonColorExit("addNodeStartingFromThisNodeElement")}>
                         <path className="addNodeStartingFromThisNode" />
-                        <foreignObject className = "addNodeStartingFromThisNodeLabel" width = "26" height = "23">
-                        <i className='fas fa-plus-circle' style={{"fontSize": "22px"}}></i>
-                        </foreignObject>  
+                        <foreignObject className="addNodeStartingFromThisNodeLabel" width="26" height="23">
+                            <i className='fas fa-plus-circle' style={{ "fontSize": "22px" }}></i>
+                        </foreignObject>
                     </g>
                 </g>
             </g>
