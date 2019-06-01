@@ -49,11 +49,10 @@ class App extends Component {
 
 	handleQuery = async (event) => {
 		event.preventDefault()
-
 		const answer = await ml.compile(this.state.query)
 		if (answer.data.includes("customer")) {
 			this.setState(state => {
-				let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"])
+				let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"], "graph")
 				return {
 					graphData: data
 				}
@@ -144,7 +143,7 @@ class App extends Component {
 						<Col xl={2}>
 							<FileSubmitComponent />
 						</Col>
-						<Col>
+						<Col xl = {2}>
 							<NotificationComponent />
 						</Col>
 					</Row>

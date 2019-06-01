@@ -13,7 +13,7 @@ class NewOneParameterDropdownMenu extends Component {
   </Dropdown.Toggle>
                     <Dropdown.Menu>
                         {this.props.parameters.map((parameter, i) => {
-                            return <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, this.props.location, this.props.relation)}>
+                            return <Dropdown.Item key={i} action="true" onClick={this.props.handleParameters.bind(this, parameter, this.props.location, this.props.relation, this.props.type)}>
                                 {parameter}
                             </Dropdown.Item>
                         })}
