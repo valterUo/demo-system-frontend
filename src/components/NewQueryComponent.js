@@ -12,6 +12,8 @@ import SchemaInfoForDropdowns from './dropdownComponents/SchemaInfoForDropdowns.
 import QueryLineButtons from './dropdownComponents/QueryLineButtons'
 import NewOneParameterDropdownMenu from './dropdownComponents/NewOneParameterDropdownMenu'
 import { handleNextSelection } from './dropdownComponents/HandleNextSelection'
+import store from '../store'
+import QueryAnswerParser from '../services/queryAnswerParser'
 
 class NewQueryComponent extends Component {
   constructor(props) {
@@ -93,7 +95,26 @@ class NewQueryComponent extends Component {
     const query = await axios.post('http://localhost:3001/ml', smlQuery, { headers: headers })
     console.log(query)
     const answer = await axios.post('http://localhost:3001/ml', 'PRINTMULT_MULT_SET(x);', { headers: headers })
-    console.log(answer)
+    if (answer.data.includes("empty_set")) {
+      store.dispatch({ type: 'ADD_NOTIFICATION', message: "Answer is empty.", variant: "warning" })
+      setTimeout(() => store.dispatch({ type: 'DELETE_NOTIFICATION' }), 5000)
+    } else {
+      let attributes
+      switch (this.state.userChooseModel) {
+        case "graph":
+          attributes = ["id", "name", "Credit limit"]
+          break
+        case "tree":
+          attributes = ["id", "id", "name"]
+          break
+        case "sql":
+          attributes = [""]
+          break
+      }
+      const parsedAnswer = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), attributes, this.state.userChooseModel)
+      store.dispatch({ type: 'ADD_DATA', data: parsedAnswer, model: this.state.userChooseModel, key: "" })
+      console.log(answer)
+    }
   }
 
   printDropdownMenu = () => {
@@ -133,6 +154,13 @@ class NewQueryComponent extends Component {
     }
   }
 
+  handleQueryModelChange = (model) => {
+    console.log(model)
+    this.setState({
+      userChooseModel: model
+    })
+  }
+
   handleConstants = (parameter, location, relation) => {
     console.log(parameter, location, relation)
     let parameters = []
@@ -167,7 +195,7 @@ class NewQueryComponent extends Component {
         parameters.push("test const")
         break
     }
-    const element = <div><NewOneParameterDropdownMenu type = {parameter.split(' ')[0]} location={location} relation={relation} parameters={parameters} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
+    const element = <div><NewOneParameterDropdownMenu type={parameter.split(' ')[0]} location={location} relation={relation} parameters={parameters} acceptDropdown={true} handleParameters={this.handleParameters} /></div>
     this.changeDropdownElement(element, location)
   }
 
@@ -175,8 +203,8 @@ class NewQueryComponent extends Component {
     let inputType = parameter.split(' ')[0]
     let inputElement =
       <Form inline key="constantInputForm" name="constantInput" style={{ paddingLeft: "3px", paddingRight: "3px", marginBottom: "4px" }}>
-        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentInput = input} 
-        onKeyDown={this.handleFreeInput.bind(this, inputType, location, relation)} />
+        <Form.Control key="constantInput" type="text" size='sm' placeholder="" ref={input => this.currentInput = input}
+          onKeyDown={this.handleFreeInput.bind(this, inputType, location, relation)} />
       </Form>
     this.changeDropdownElement(inputElement, location)
   }
@@ -236,7 +264,7 @@ class NewQueryComponent extends Component {
             predicate: relation,
             secondParameter: parameter,
             secondType: [type, "CONSTANT"],
-            query: prevState.query + relation + " " + parameter,
+            query: prevState.query + relation + " (" + parameter + ")",
             dropdownMenu: tempMenu,
             acceptAND: true
           }
@@ -248,7 +276,7 @@ class NewQueryComponent extends Component {
           return {
             firstParameter: parameter,
             firstType: [type, "CONSTANT"],
-            query: prevState.query + parameter + " ",
+            query: prevState.query + " (" + parameter + ") ",
             dropdownMenu: tempMenu
           }
         })
@@ -302,7 +330,7 @@ class NewQueryComponent extends Component {
           </Row>
         </Col>
       </Row>
-      <QueryLineButtons addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} />
+      <QueryLineButtons addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleQueryModelChange={this.handleQueryModelChange} />
     </Container>
   }
 }

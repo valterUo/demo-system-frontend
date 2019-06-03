@@ -1,8 +1,10 @@
+/* eslint-disable array-callback-return */
 const queryAnswerParser = (inputString, schema, model) => {
+    inputString = inputString.split(" ").join("")
+    inputString = inputString.split("\n").join("")
+    let nodes = [], links = []
     if (model === "graph") {
-        inputString = inputString.split(" ").join("")
         inputString = inputString.split(/[()]/)
-        let nodes = [], links = []
         inputString = inputString.filter(element => {
             if (element !== "" && element !== "\n") {
                 return element
@@ -45,6 +47,52 @@ const queryAnswerParser = (inputString, schema, model) => {
         nodeList = nodeList.map(node => JSON.parse(node))
         return {
             nodes: nodeList,
+            links: links
+        }
+    } else if ( model === "tree") {
+        inputString = inputString.split(/[{}]/)
+        inputString = inputString.filter(element => {
+            if (element !== "") {
+                return element
+            }
+        })
+        inputString = inputString.map(element => {
+            element = element.split(/[(),]/)
+            return element
+        })
+        inputString = inputString.map(element => {
+            let cutTail = true
+            element = element.filter(subelement => {
+                if(cutTail) {
+                    if(subelement === "") {
+                        cutTail = false
+                    } else {
+                        return subelement
+                    }
+                }
+            })
+            return element
+        })
+        let rootIndex
+        inputString.map(element => {
+            for (let i = 0; i < element.length; i++) {
+                if(i === 0) {
+                    let root = {name: element[0], id: element[1]}
+                    nodes.push(root)
+                    rootIndex = nodes.length - 1
+                    i += 1
+                } else {
+                    let newNode = {type: element[i], id: element[i+1], name: element[i+2]}
+                    nodes.push(newNode)
+                    let newLink = {source: rootIndex, target: nodes.length - 1}
+                    links.push(newLink)
+                    i += 2
+                }
+            }
+            return element
+        })
+        return {
+            nodes: nodes,
             links: links
         }
     }

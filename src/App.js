@@ -28,7 +28,7 @@ class App extends Component {
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "", nodeName: undefined, linkName: undefined,
 			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined,
-			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: ""
+			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: ""
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -54,10 +54,10 @@ class App extends Component {
 			this.setState(state => {
 				let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"], "graph")
 				return {
-					graphData: data
+					queryResultData: data
 				}
 			})
-		} 
+		}
 		this.setState(state => {
 			const newAnswer = answer.data.replace('\n-', '').trim()
 			const newAnswers = [...state.queryAnswers, newAnswer]
@@ -97,6 +97,13 @@ class App extends Component {
 				schemaKey: store.getState().schemaData.key
 			})
 		}
+		if (store.getState().queriedDemoData.key !== this.state.queryResultKey) {
+			this.setState({
+				queryResultData: store.getState().queriedDemoData.data,
+				queryResultKey: store.getState().queriedDemoData.key,
+				queryResultModel: store.getState().queriedDemoData.model
+			})
+		}
 	}
 
 	handleFunctionDefinition() {
@@ -129,7 +136,7 @@ class App extends Component {
 								</Dropdown.Menu>
 							</Dropdown>
 						</Col>
-						<Col xl={5} style={{ align: "left" }}>
+						<Col xl={7} style={{ align: "left" }}>
 							{!this.state.acceptFunctions && <Form onSubmit={this.handleQuery} inline>
 								<Form.Control as="textarea" rows="1" placeholder="Enter query or choose defined query" value={this.state.query} onChange={this.handleQueryChange} style={{ width: "90%", marginRight: "5px" }} />
 								<Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
@@ -143,10 +150,8 @@ class App extends Component {
 						<Col xl={2}>
 							<FileSubmitComponent />
 						</Col>
-						<Col xl = {2}>
-							<NotificationComponent />
-						</Col>
 					</Row>
+					<NotificationComponent />
 					<Row style={style.basicComponentsStyle}>
 						<DataUploadComponent />
 					</Row>
@@ -160,8 +165,10 @@ class App extends Component {
 						</Col>
 						<Col xl={6}>
 							<MLQueryComponent answers={this.state.queryAnswers} />
-							<ResultComponent width={this.state.width} height={this.state.height}
-								graphData={this.state.graphData} graphKey={"resultKey"} nodeName={"resultNodes"} linkName={"resultLinks"} nameClass={"resultClass"} />
+
+							<ResultComponent width={this.state.width} height={this.state.height} queryResultData={this.state.queryResultData} resultModel={this.state.queryResultModel}
+								resultKey={"resultKey" + this.state.queryResultKey} nodeName={"resultNodes" + this.state.queryResultKey} linkName={"resultLinks" + this.state.queryResultKey} nameClass={"resultClass" + this.state.queryResultKey} />
+
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>

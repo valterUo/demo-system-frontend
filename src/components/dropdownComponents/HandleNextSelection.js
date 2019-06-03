@@ -4,7 +4,7 @@ export const handleNextSelection = (relation, buildQueryAndChangeDropdown) => {
         buildQueryAndChangeDropdown(relation, [["Order constant", "Order variable"], ["Product constant", "Product variable"]])
         return true
       case 'KNOWS':
-        buildQueryAndChangeDropdown(relation, [["Ordered", "Customer constant", "Customer variable"], ["Ordered", "Customer constant", "Customer variable"]])
+        buildQueryAndChangeDropdown(relation, [["Customer constant", "Customer variable"], ["Customer constant", "Customer variable"]])
         return true
       case 'GEQ':
         buildQueryAndChangeDropdown(relation, [["Price", "Credit_limit", "Customer_id", "Integer constant", "Integer variable"], 

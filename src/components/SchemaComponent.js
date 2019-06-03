@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import MultiGraph from '../dataComponents/multiGraphComponents/MultiGraph'
 import Graph from '../dataComponents/graphComponents/Graph'
-import CategoryComponent from '../components/CategoryComponent'
 import data from '../exampleData/schema.json'
 
 class SchemaComponent extends Component {
