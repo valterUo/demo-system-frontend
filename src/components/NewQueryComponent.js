@@ -34,7 +34,8 @@ class NewQueryComponent extends Component {
 
   emptyQuery = () => {
     this.setState({
-      query: "", acceptAND: false, savedVariables: new Set([]), returnValue: "Return ", dropdownMenu: []
+      query: "", acceptAND: false, acceptedRelations: SchemaInfoForDropdowns.relations, savedVariables: new Set([]), returnValue: "Return ", dropdownMenu: [], predicate: "",
+      firstParameter: "", secondParameter: "", firstType: "", secondType: ""
     })
   }
 
@@ -95,7 +96,7 @@ class NewQueryComponent extends Component {
     const query = await axios.post('http://localhost:3001/ml', smlQuery, { headers: headers })
     console.log(query)
     const answer = await axios.post('http://localhost:3001/ml', 'PRINTMULT_MULT_SET(x);', { headers: headers })
-    if (answer.data.includes("empty_set")) {
+    if (answer.data.includes("empty_set") || answer.data.includes("Error")) {
       store.dispatch({ type: 'ADD_NOTIFICATION', message: "Answer is empty.", variant: "warning" })
       setTimeout(() => store.dispatch({ type: 'DELETE_NOTIFICATION' }), 5000)
     } else {
@@ -112,7 +113,7 @@ class NewQueryComponent extends Component {
           break
       }
       const parsedAnswer = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), attributes, this.state.userChooseModel)
-      store.dispatch({ type: 'ADD_DATA', data: parsedAnswer, model: this.state.userChooseModel, key: "" })
+      store.dispatch({ type: 'ADD_DATA', data: parsedAnswer, model: this.state.userChooseModel, key: this.state.model + "Key" })
       console.log(answer)
     }
   }
@@ -186,7 +187,8 @@ class NewQueryComponent extends Component {
           '"896h", "Jewelry", 5000')
         break
       case 'Order constant':
-        parameters.push("Not supported yet")
+        parameters.push('"77idy65", [product("5467y", "Pen", 2:int), product("5698r", "Car", 9999:int)]', 
+        '"34e5e79", [product("2343f", "Toy", 66:int), product("3424g", "Book", 40:int)]')
         break
       case 'Integer constant':
         parameters.push("test const")
