@@ -187,8 +187,8 @@ class NewQueryComponent extends Component {
           '"896h", "Jewelry", 5000')
         break
       case 'Order constant':
-        parameters.push('"77idy65", [product("5467y", "Pen", 2:int), product("5698r", "Car", 9999:int)]', 
-        '"34e5e79", [product("2343f", "Toy", 66:int), product("3424g", "Book", 40:int)]')
+        parameters.push('"77idy65", [product("5467y", "Pen", 2:int), product("5698r", "Car", 9999:int)]',
+          '"34e5e79", [product("2343f", "Toy", 66:int), product("3424g", "Book", 40:int)]')
         break
       case 'Integer constant':
         parameters.push("test const")
@@ -332,7 +332,7 @@ class NewQueryComponent extends Component {
           </Row>
         </Col>
       </Row>
-      <QueryLineButtons addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleQueryModelChange={this.handleQueryModelChange} />
+      <QueryLineButtons handleCoreLanguage = {this.props.handleCoreLanguage} addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleQueryModelChange={this.handleQueryModelChange} />
     </Container>
   }
 }

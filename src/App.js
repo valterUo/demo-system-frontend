@@ -14,13 +14,16 @@ import FileSubmitComponent from './components/FileSubmitComponent'
 import NavigationBarComponent from './components/NavigationBarComponent'
 import SchemaComponent from './components/SchemaComponent'
 import style from './styles'
-import ResultComponent from './components/ResultComponent'
 import MLQueryComponent from './components/MLQueryComponent'
-import ml from './services/metaLanguageCompilerService'
+import smlCompiler from './services/metaLanguageCompilerService'
+import haskellCompiler from './services/haskellCompilerService'
 import NotificationComponent from './components/NotificationComponent'
+import Notification from './actions/NotificationAction'
 import NewQueryComponent from './components/NewQueryComponent'
-import DataUploadComponent from './components/DataUploadComponent'
 import QueryAnswerParser from './services/queryAnswerParser'
+import RelationalTabs from './dataComponents/relationalComponents/relationalTabs'
+//import DataUploadComponent from './components/DataUploadComponent'
+//import ResultComponent from './components/ResultComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -28,7 +31,7 @@ class App extends Component {
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "", nodeName: undefined, linkName: undefined,
 			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined,
-			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: ""
+			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: "", coreLanguage: "SML", relationalResult: undefined, relationalKey: "initialKey"
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -49,21 +52,40 @@ class App extends Component {
 
 	handleQuery = async (event) => {
 		event.preventDefault()
-		const answer = await ml.compile(this.state.query)
-		if (answer.data.includes("customer")) {
+		if (this.state.coreLanguage === "SML") {
+			console.log(this.state.query)
+			const answer = await smlCompiler.compile(this.state.query)
+			if (answer.data.includes("customer")) {
+				this.setState(state => {
+					let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"], "graph")
+					return {
+						queryResultData: data
+					}
+				})
+			}
 			this.setState(state => {
-				let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"], "graph")
-				return {
-					queryResultData: data
-				}
+				const newAnswer = answer.data.replace('\n-', '').trim()
+				const newAnswers = [...state.queryAnswers, newAnswer]
+				return { queryAnswers: newAnswers }
 			})
+		} else if (this.state.coreLanguage === "Haskell") {
+			const answer = await haskellCompiler.compile(this.state.query)
+			if (answer === null) {
+				Notification.notify("Result is empty.", "warning")
+				this.setState({ relationalResult: undefined, relationalKey: "initialKey" })
+			} else {
+				const relationalTables = haskellCompiler.JSONtoRelationalTables(answer)
+				let result = {}
+				result["data"] = relationalTables
+				result["eventKey"] = JSON.stringify(answer[0])
+				result["title"] = "Title"
+				this.setState({ relationalResult: [result], relationalKey: JSON.stringify(answer[0]) + answer.length })
+			}
 		}
-		this.setState(state => {
-			const newAnswer = answer.data.replace('\n-', '').trim()
-			const newAnswers = [...state.queryAnswers, newAnswer]
-			return { queryAnswers: newAnswers }
-		})
-		this.setState({ query: "" })
+	}
+
+	handleCoreLanguageChange = (language) => {
+		this.setState({ coreLanguage: language })
 	}
 
 	handleQueryChange = (event) => {
@@ -152,11 +174,11 @@ class App extends Component {
 						</Col>
 					</Row>
 					<NotificationComponent />
-					<Row style={style.basicComponentsStyle}>
+					{/*<Row style={style.basicComponentsStyle}>
 						<DataUploadComponent />
-					</Row>
+					</Row>*/}
 					<Row style={style.basicComponentsStyle}>
-						<NewQueryComponent />
+						<NewQueryComponent handleCoreLanguage={this.handleCoreLanguageChange} />
 					</Row>
 					<Row>
 						<Col xl={6}>
@@ -166,9 +188,15 @@ class App extends Component {
 						<Col xl={6}>
 							<MLQueryComponent answers={this.state.queryAnswers} />
 
-							<ResultComponent width={this.state.width} height={this.state.height} queryResultData={this.state.queryResultData} resultModel={this.state.queryResultModel}
-								resultKey={"resultKey" + this.state.queryResultKey} nodeName={"resultNodes" + this.state.queryResultKey} linkName={"resultLinks" + this.state.queryResultKey} nameClass={"resultClass" + this.state.queryResultKey} />
+							{/*<ResultComponent width={this.state.width} height={this.state.height} queryResultData={this.state.queryResultData} resultModel={this.state.queryResultModel}
+								resultKey={"resultKey" + this.state.queryResultKey} nodeName={"resultNodes" + this.state.queryResultKey} linkName={"resultLinks" + this.state.queryResultKey} nameClass={"resultClass" + this.state.queryResultKey} />*/}
 
+							<Row style={style.basicComponentsStyle}>
+								<Col>
+									<h4>Result:</h4>
+									<RelationalTabs width={this.state.width} height={this.state.height} key={this.state.relationalKey} tables={this.state.relationalResult} />
+								</Col>
+							</Row>
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>
