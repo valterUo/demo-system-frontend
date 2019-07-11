@@ -2,13 +2,8 @@ import axios from 'axios'
 
 const compile = async (command) => {
     const answer = await axios.post('http://localhost:3002/query', command, { headers: {'Content-Type': 'text/plain'} })
-    console.log(answer)
-    //console.log(parseJSONList(answer.data))
-    if(answer.data.indexOf(']') === answer.data.indexOf('[') + 1) {
-        return null
-    } else {
-        return parseJSONList(answer.data)
-    }
+    console.log(answer.data)
+    return answer.data
 }
 
 const parseJSONList = (listString) => {
@@ -40,4 +35,13 @@ const JSONtoRelationalTables = (jsonDataList) => {
     return data
 }
 
-export default { compile, JSONtoRelationalTables }
+const parseJSONStringtoD3js = (jsonString) => {
+    let n = jsonString.lastIndexOf('}')
+    jsonString = jsonString.substring(0, n !== -1 ? n : jsonString.length)
+    jsonString = jsonString + '}"'
+    let obj = JSON.parse(JSON.parse(jsonString))
+    obj["nodes"] = obj["nodes"].map(node => JSON.parse(node))
+    return obj
+}
+
+export default { compile, JSONtoRelationalTables, parseJSONStringtoD3js, parseJSONList }

@@ -102,7 +102,6 @@ class Graph extends Component {
             if (value === true) {
                 var pt = mouse(this)
                 var selection = select(this)
-                //console.log(selection._groups[0])
                 tickLine(pt, ptdata, selection)
             }
         }).on('click', function () {
@@ -128,7 +127,6 @@ class Graph extends Component {
     }
 
     handleStoreChange = () => {
-        //console.log("store: ", store.getState().edgeDrawing.acceptEdgeDrawing)
         if (store.getState().edgeDrawing.acceptEdgeDrawing !== this.state.acceptEdgeDrawing) {
             this.setState({ acceptEdgeDrawing: store.getState().edgeDrawing.acceptEdgeDrawing })
         }
@@ -140,7 +138,7 @@ class Graph extends Component {
         const scaledheigth = 0.44 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
-                <Node data={node} name={node.name} key={this.props.nodeName + node.id} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
+                <Node data={node} name={node.name} key={this.props.nodeName + node[Object.keys(node)[0]]} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (

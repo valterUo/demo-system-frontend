@@ -155,13 +155,6 @@ class NewQueryComponent extends Component {
     }
   }
 
-  handleQueryModelChange = (model) => {
-    console.log(model)
-    this.setState({
-      userChooseModel: model
-    })
-  }
-
   handleConstants = (parameter, location, relation) => {
     console.log(parameter, location, relation)
     let parameters = []
@@ -332,7 +325,7 @@ class NewQueryComponent extends Component {
           </Row>
         </Col>
       </Row>
-      <QueryLineButtons handleCoreLanguage = {this.props.handleCoreLanguage} addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleQueryModelChange={this.handleQueryModelChange} />
+      <QueryLineButtons handleCoreLanguage = {this.props.handleCoreLanguage} addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleQueryModelChange={this.props.handleQueryModelChange} />
     </Container>
   }
 }
