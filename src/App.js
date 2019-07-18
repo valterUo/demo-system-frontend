@@ -33,7 +33,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "", nodeName: undefined, linkName: undefined,
 			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined,
 			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: "",
-			coreLanguage: "SML", relationalResult: undefined, relationalKey: "initialKey", graphResult: undefined, graphKey: "initialGraphKey"
+			coreLanguage: "SML", relationalResult: undefined, relationalKey: "initialRelationalKey", graphResult: undefined, graphKey: "initialGraphKey"
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -71,32 +71,37 @@ class App extends Component {
 				return { queryAnswers: newAnswers }
 			})
 		} else if (this.state.coreLanguage === "Haskell") {
-			let answer = await haskellCompiler.compile(this.state.query)
-			if (answer.indexOf(']') === answer.indexOf('[') + 1) {
-				Notification.notify("Result is empty.", "warning")
-				this.setState({ relationalResult: undefined, relationalKey: "initialKey" })
-			} else {
-				if (this.state.queryResultModel === "table") {
-					answer = haskellCompiler.parseJSONList(answer)
+			if (this.state.queryResultModel === "table") {
+				let answer = await haskellCompiler.compileRelationalQuery(this.state.query)
+				console.log(answer)
+				answer = haskellCompiler.parseJSONList(answer)
+				if (answer.length === 0) {
+					Notification.notify("Result is empty.", "warning")
+					this.setState({ relationalResult: undefined, relationalKey: "initialRelationalKey" })
+				}
+				else {
 					const relationalTables = haskellCompiler.JSONtoRelationalTables(answer)
-					let result = {}
-					result["data"] = relationalTables
-					result["eventKey"] = JSON.stringify(answer[0])
-					result["title"] = "Title"
 					this.setState({
-						relationalResult: [result],
+						relationalResult: relationalTables,
 						relationalKey: JSON.stringify(answer[0]) + answer.length,
 						graphData: undefined,
 						graphKey: "initialGraphKey"
 					})
-				} else if (this.state.queryResultModel === "graph") {
-					let graphData = haskellCompiler.parseJSONStringtoD3js(answer)
+				}
+			} else if (this.state.queryResultModel === "graph") {
+				let answer = await haskellCompiler.compileGraphQuery(this.state.query)
+				console.log(answer)
+				let graphData = haskellCompiler.parseJSONStringtoD3js(answer)
+				if (graphData["links"].length === 0 && graphData["nodes"].length === 0) {
+					Notification.notify("Result is empty.", "warning")
+					this.setState({ graphResult: undefined, graphKey: "initialGraphKey" })
+				} else {
 					console.log(graphData)
 					this.setState({
 						graphResult: graphData,
 						graphKey: JSON.stringify(graphData["nodes"][0]) + answer.length,
 						relationalResult: undefined,
-						relationalKey: "initialKey"
+						relationalKey: "initialRelationalKey"
 					}, () => { console.log(this.state.graphResult) })
 				}
 			}

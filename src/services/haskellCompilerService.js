@@ -1,38 +1,46 @@
 import axios from 'axios'
 
-const compile = async (command) => {
-    const answer = await axios.post('http://localhost:3002/query', command, { headers: {'Content-Type': 'text/plain'} })
-    console.log(answer.data)
+const compileRelationalQuery = async (command) => {
+    const answer = await axios.post('http://localhost:3002/query', "wrapListToJSON $ " + command, { headers: { 'Content-Type': 'text/plain' } })
+    return answer.data
+}
+
+const compileGraphQuery = async (command) => {
+    const answer = await axios.post('http://localhost:3002/query', "encode $ constructD3Graph (" + command + ") customerId customerGraph", { headers: { 'Content-Type': 'text/plain' } })
     return answer.data
 }
 
 const parseJSONList = (listString) => {
-    let n = listString.indexOf(']')
-    listString = listString.substring(1, n !== -1 ? n : listString.length)
-    if(listString.indexOf('","') !== -1) {
-        listString = listString.split('","')
-        listString = listString.map((element, index) => {
-            if(index === 0) {
-                return element + '"'
-            } else if (index === listString.length - 1) {
-                return '"' + element
-            } else {
-                return '"' + element + '"'
-            }
-        })
-    } else {
-        listString = [listString]
-    }
-    return listString.map(stringElement => JSON.parse(JSON.parse(stringElement)))
+    let n = listString.indexOf('*')
+    listString = listString.substring(0, n !== -1 ? n : listString.length)
+    listString = JSON.parse(JSON.parse(listString))
+    return listString["result"]
 }
 
 const JSONtoRelationalTables = (jsonDataList) => {
     let data = []
+    let subdata = []
     let attributes = Object.keys(jsonDataList[0])
     data.push(attributes)
-    jsonDataList.map(element => data.push(Object.values(element)))
-    console.log(data)
-    return data
+    jsonDataList.map(element => {
+        let elements = Object.values(element)
+        elements.map(element2 => {
+            if(typeof element2 === "object") {
+                subdata = JSONtoRelationalTables(element2)
+            }
+            return element2
+        })
+        data.push(Object.values(element))
+        return element
+    })
+    let result = {}
+	result["data"] = data
+	result["eventKey"] = JSON.stringify(data[0])
+	result["title"] = "Title"
+    let returndata = [result]
+    subdata.map(e => returndata.push(e))
+    console.log(returndata)
+    return returndata
 }
 
 const parseJSONStringtoD3js = (jsonString) => {
@@ -44,4 +52,4 @@ const parseJSONStringtoD3js = (jsonString) => {
     return obj
 }
 
-export default { compile, JSONtoRelationalTables, parseJSONStringtoD3js, parseJSONList }
+export default { compileRelationalQuery, compileGraphQuery, JSONtoRelationalTables, parseJSONStringtoD3js, parseJSONList }
