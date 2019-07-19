@@ -10,7 +10,7 @@ class StatBox extends Component {
         }
 
         return <div className= "col">
-            <h4> Node: </h4>
+            <h4> Node </h4>
             <div>
                 {dataBlock}
             </div>

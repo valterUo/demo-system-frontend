@@ -9,17 +9,15 @@ class ResultComponent extends Component {
 
     render() {
         let renderedElement = null
-        if (this.props.relationalResult !== undefined || this.props.graphResult !== undefined) {
-            if (this.props.queryResultModel === "table") {
-                renderedElement = <RelationalTabs width={this.props.width} height={this.props.height} key={this.props.relationalKey} tables={this.props.relationalResult} />
-            } else if (this.props.queryResultModel === "graph") {
-                renderedElement = <Graph key={this.props.graphKey} data={this.props.graphResult} width={this.props.width} height={this.props.height} nodeName={'GraphNodes'} linkName={'GraphLinks'}
-                    nameClass={'GraphClassName'} editableGraph={false} />
-            }
+        if (this.props.queryResultModel === "table" && this.props.relationalResult !== undefined) {
+            renderedElement = <RelationalTabs width={this.props.width} height={this.props.height} key={this.props.relationalKey} tables={this.props.relationalResult} />
+        } else if (this.props.queryResultModel === "graph" && this.props.graphResult !== undefined) {
+            renderedElement = <Graph key={this.props.graphKey} data={this.props.graphResult} width={this.props.width} height={this.props.height} nodeName={'GraphNodes'} linkName={'GraphLinks'}
+                nameClass={'GraphClassName'} editableGraph={false} />
         }
         return <Row style={style.basicComponentsStyle}>
             <Col>
-                <h4>Result:</h4>
+                <h4>Result</h4>
                 {renderedElement}
             </Col>
         </Row>

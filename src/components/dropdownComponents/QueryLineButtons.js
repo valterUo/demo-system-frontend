@@ -11,14 +11,14 @@ class QueryLineButtons extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      queryModel: "", coreLanguage: "SML"
+      queryModel: "", coreLanguage: "Haskell"
     }
     this.handleLanguageChange = this.handleLanguageChange.bind(this)
   }
 
-  handleQueryModel = (model) => {
+  handleDataModel = (model) => {
     console.log(model)
-    this.props.handleQueryModelChange(model.toLowerCase())
+    this.props.handleDataModelChange(model.toLowerCase())
     this.setState({
       queryModel: model
     })
@@ -42,9 +42,9 @@ class QueryLineButtons extends Component {
       </div>
       <div style={style.queryButtonStyle}>
         <ButtonToolbar >
-          <ToggleButtonGroup type="radio" name="core-language-options" defaultValue = {"SML"}>
+          <ToggleButtonGroup type="radio" name="core-language-options" defaultValue = {"Haskell"}>
+          <ToggleButton variant="dark" value={"Haskell"} checked = {this.state.coreLanguage === "Haskell"} onChange={this.handleLanguageChange}>Haskell</ToggleButton>
             <ToggleButton variant="dark" value={"SML"} checked = {this.state.coreLanguage === "SML"} onChange={this.handleLanguageChange}>SML</ToggleButton>
-            <ToggleButton variant="dark" value={"Haskell"} checked = {this.state.coreLanguage === "Haskell"} onChange={this.handleLanguageChange}>Haskell</ToggleButton>
           </ToggleButtonGroup>
         </ButtonToolbar>
       </div>
@@ -54,9 +54,9 @@ class QueryLineButtons extends Component {
             {this.state.queryModel === "" ? "Select return model" : this.state.queryModel}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="1" onClick={() => this.handleQueryModel("Table")}>Table</Dropdown.Item>
-            <Dropdown.Item eventKey="2" onClick={() => this.handleQueryModel("Tree")}>Tree</Dropdown.Item>
-            <Dropdown.Item eventKey="3" onClick={() => this.handleQueryModel("Graph")}>Graph</Dropdown.Item>
+            <Dropdown.Item eventKey="1" onClick={() => this.handleDataModel("Table")}>Table</Dropdown.Item>
+            <Dropdown.Item eventKey="2" onClick={() => this.handleDataModel("Tree")}>Tree</Dropdown.Item>
+            <Dropdown.Item eventKey="3" onClick={() => this.handleDataModel("Graph")}>Graph</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

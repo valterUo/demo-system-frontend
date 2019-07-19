@@ -325,7 +325,7 @@ class NewQueryComponent extends Component {
           </Row>
         </Col>
       </Row>
-      <QueryLineButtons handleCoreLanguage = {this.props.handleCoreLanguage} addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleQueryModelChange={this.props.handleQueryModelChange} />
+      <QueryLineButtons handleCoreLanguage={this.props.handleCoreLanguage} addAnd={this.addAnd} emptyQuery={this.emptyQuery} submitQuery={this.submitQuery} acceptAND={this.state.acceptAND} handleDataModelChange={this.props.handleDataModelChange} />
     </Container>
   }
 }

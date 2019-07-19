@@ -50,7 +50,9 @@ const basicComponentsStyle = {
 	marginBottom: "12px",
 	marginRight: "0px",
 	marginLeft: "0px",
-	align: "middle"
+	align: "middle",
+	paddingTop: "5px",
+	paddingBottom: "5px"
 }
 
 const queryBox = {
