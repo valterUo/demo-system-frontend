@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { select } from 'd3-selection'
-//import store from '../../store'
 
 const enterLink = (selection) => {
 
-    selection.select('line')
-        .attr('stroke-width', 3)
-        .style('stroke', 'black')
-        .style('opacity', '.1')
+    selection.select('path')
+        .attr('stroke-width', 2)
+        .style('stroke', 'grey')
+        .attr("fill", "none")
         .attr("marker-end", "url(#triangle)")
+    //.attr('stroke-width', 3)
+    //.style('stroke', 'black')
+    //.style('opacity', '.1')
+    //.attr("marker-end", "url(#triangle)")
 
-        selection.select('text')
+    selection.select('text')
         .attr('dy', '.35em')
         .style('transform', 'translateX(-50%,-50%')
         .attr("text-anchor", "middle")
@@ -43,32 +46,21 @@ class Edge extends Component {
 
     handle(e) {
         console.log(this.props + ' been clicked')
-        /*let jsonData = this.props.data
-        let filteredData = []
-        for (const key in jsonData) {
-            if (key !== "index") {
-                const val = jsonData[key]
-                filteredData.push({"key": key, "value": val})
-            }
-            else {
-                break
-            }
-        }
-        store.dispatch({ type: 'ADD_DATA', data: filteredData })*/
     }
 
     render() {
-        if(this.props.data.name !== undefined) {
-        return (
-            <g ref={this.edgeRef} className={this.props.linkName}>
-                <line onClick={this.handle.bind(this)} />
-                <text>{this.props.data.name}</text>
-            </g>
-        ) }
-        else {
-            return(
+        if (this.props.data.name !== undefined) {
+            return (
                 <g ref={this.edgeRef} className={this.props.linkName}>
-                <line onClick={this.handle.bind(this)} />
+                    <path onClick={this.handle.bind(this)} />
+                    <text>{this.props.data.name}</text>
+                </g>
+            )
+        }
+        else {
+            return (
+                <g ref={this.edgeRef} className={this.props.linkName}>
+                    <path onClick={this.handle.bind(this)} />
                 </g>
             )
         }

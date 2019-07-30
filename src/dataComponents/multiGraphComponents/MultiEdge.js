@@ -31,7 +31,6 @@ class MultiEdge extends Component {
     }
 
     handleMouseEntering = () => {
-        console.log("mouse entered")
         this.d3Link.select("text")
             .attr("visibility", "visible")
         this.d3Link.select('path')

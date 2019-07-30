@@ -59,7 +59,6 @@ class Graph extends Component {
             selection.select("textPath")
                 .style("text-anchor", "middle")
                 .attr("startOffset", "50%")
-
         }
 
         const updateMultiGraph = (selection) => {

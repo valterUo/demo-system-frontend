@@ -18,7 +18,10 @@ const enterNode = (selection) => {
 
     selection.select('circle')
         .attr('r', 10)
-        .style('fill', function (d) { return color(d.name) })
+        .style('fill', function (d) {
+            let firstAttribute = Object.keys(d)[0]
+            return color(d[firstAttribute]) 
+        })
         .style('stroke', 'black')
         .style('stroke-width', '1')
 

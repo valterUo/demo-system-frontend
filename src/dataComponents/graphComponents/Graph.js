@@ -6,7 +6,7 @@ import { drag } from 'd3-drag'
 import { line } from 'd3-shape'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
 import store from '../../store'
-let ptdata =[]
+let ptdata = []
 
 function drawPath(data, selection) {
     selection.selectAll("#dynamicPath").remove()
@@ -36,11 +36,28 @@ class Graph extends Component {
         }
 
         const updateEdge = (selection) => {
-            selection.select('line')
-                .attr('x1', (d) => d.source.x)
-                .attr('y1', (d) => d.source.y)
-                .attr('x2', (d) => d.target.x)
-                .attr('y2', (d) => d.target.y)
+            selection.select('path')
+                .attr("d", function (d) {
+                    let x1 = d.source.x,
+                        y1 = d.source.y,
+                        x2 = d.target.x,
+                        y2 = d.target.y,
+                        drx = 0,
+                        dry = 0,
+                        xRotation = 0,
+                        largeArc = 0
+
+                    if (x1 === x2 && y1 === y2) {
+                        xRotation = 45
+                        largeArc = 1
+                        drx = 60 / 2
+                        dry = 40 / 2
+                        x2 = x2 + 1
+                        y2 = y2 + 1
+                    }
+
+                    return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + ", 1 " + x2 + "," + y2;
+                })
 
             selection.select('text')
                 .attr("x", function (d) {
@@ -93,7 +110,7 @@ class Graph extends Component {
 
         force.on('tick', () => {
             this.d3Graph.call(updateGraph)
-        })   
+        })
     }
 
     componentDidUpdate() {
@@ -138,7 +155,7 @@ class Graph extends Component {
         const scaledheigth = 0.44 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
-                <Node data={node} name={node.name} key={this.props.nodeName + node[Object.keys(node)[0]]} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
+                <Node data={node} name={node.name} key={this.props.nodeName + node[Object.keys(node)[0]] + node[Object.keys(node)[1]]} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (
