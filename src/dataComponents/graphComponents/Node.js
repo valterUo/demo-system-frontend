@@ -129,7 +129,10 @@ class Node extends Component {
     }
 
     handleColorChangeBack(e) {
-        this.d3Node.select('circle').style('fill', d => color(d.name))
+        this.d3Node.select('circle').style('fill', function (d) {
+            let firstAttribute = Object.keys(d)[0]
+            return color(d[firstAttribute]) 
+        })
     }
 
     showNodeHandlingButtons() {

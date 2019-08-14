@@ -2,12 +2,24 @@ import axios from 'axios'
 
 const compileRelationalQuery = async (command) => {
     const answer = await axios.post('http://localhost:3002/query', "wrapListToJSON $ " + command, { headers: { 'Content-Type': 'text/plain' } })
-    return answer.data
+    let jsonDataList = parseJSONList(answer.data)
+    if (jsonDataList.length === 0) {
+        return undefined
+    }
+    return JSONtoRelationalTables(jsonDataList)
+}
+
+const compileTreeQuery = async (command) => {
+    const answer = await axios.post('http://localhost:3002/query', "wrapListToJSON $ " + command, { headers: { 'Content-Type': 'text/plain' } })
+    let jsonDataList = parseJSONList(answer.data)
+    if (jsonDataList.length === 0) {
+        return undefined
+    }
+    return parseJSONtoTree(jsonDataList)
 }
 
 const compileGraphQuery = async (command) => {
-    const answer = await axios.post('http://localhost:3002/query', "encode $ constructD3Graph (" + command + ") customerId customerGraph", { headers: { 'Content-Type': 'text/plain' } })
-    console.log(answer)
+    const answer = await axios.post('http://localhost:3002/query', "encode $ createD3Graph $ " + command, { headers: { 'Content-Type': 'text/plain' } })
     let graphData
     if(answer.data.includes("nodes") && answer.data.includes("links")) {
         graphData = parseJSONStringtoD3js(answer.data)
@@ -17,7 +29,6 @@ const compileGraphQuery = async (command) => {
 
 const parseJSONList = (listString) => {
     let m = listString.indexOf('{') - 1
-    console.log(m)
     let n = listString.indexOf('*')
     listString = listString.substring(m !== -1 ? m : 0, n !== -1 ? n : listString.length)
     listString = JSON.parse(JSON.parse(listString))
@@ -50,13 +61,11 @@ const JSONtoRelationalTables = (jsonDataList) => {
 	result["title"] = "Title"
     let returndata = [result]
     subdata.map(e => returndata.push(e))
-    console.log(returndata)
     return returndata
 }
 
 const parseJSONStringtoD3js = (jsonString) => {
     let m = jsonString.indexOf('{') - 1
-    console.log(m)
     let n = jsonString.lastIndexOf('}')
     jsonString = jsonString.substring(m !== -1 ? m : 0, n !== -1 ? n : jsonString.length)
     jsonString = jsonString + '}"'
@@ -65,4 +74,23 @@ const parseJSONStringtoD3js = (jsonString) => {
     return obj
 }
 
-export default { compileRelationalQuery, compileGraphQuery, JSONtoRelationalTables, parseJSONStringtoD3js, parseJSONList }
+const parseChild = (childElement) => {
+    let answer = {name: "", attributes: {}, children: []}
+    Object.keys(childElement).forEach(function(key) {
+        if(Array.isArray(childElement[key])) {
+            answer.name = key
+            childElement[key].map(child => answer.children.push(parseChild(child)))
+        } else {
+            answer.attributes[key] = childElement[key]
+        }
+    })
+    return answer
+}
+
+const parseJSONtoTree = (jsonDataList) => {
+    let answer = {name: "root", attributes: {}, children: []}
+    jsonDataList.map(child => answer.children.push(parseChild(child)))
+    return [answer]
+}
+
+export default { compileRelationalQuery, compileGraphQuery, compileTreeQuery }

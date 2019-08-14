@@ -12,13 +12,11 @@ import NavigationBarComponent from './components/NavigationBarComponent'
 import SchemaComponent from './components/SchemaComponent'
 import style from './styles'
 import MLQueryComponent from './components/MLQueryComponent'
-import smlCompiler from './services/metaLanguageCompilerService'
-import haskellCompiler from './services/haskellCompilerService'
 import NotificationComponent from './components/NotificationComponent'
 import Notification from './actions/NotificationAction'
-import QueryAnswerParser from './services/queryAnswerParser'
 import ResultComponent from './components/ResultComponent'
 import Dropdown from 'react-bootstrap/Dropdown'
+import foldQuery from './services/foldHaskellBasedQueryParser'
 
 class App extends Component {
 	constructor(props) {
@@ -27,7 +25,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "", nodeName: undefined, linkName: undefined,
 			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined,
 			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: "",
-			coreLanguage: "Haskell", relationalResult: undefined, relationalKey: "initialRelationalKey", graphResult: undefined, graphKey: "initialGraphKey"
+			coreLanguage: "Haskell", relationalResult: undefined, relationalKey: "initialRelationalKey", graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey"
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -48,61 +46,73 @@ class App extends Component {
 
 	handleQuery = async (event) => {
 		event.preventDefault()
-		if (this.state.coreLanguage === "SML") {
-			console.log(this.state.query)
-			const answer = await smlCompiler.compile(this.state.query)
-			if (answer.data.includes("customer")) {
-				this.setState(state => {
-					let data = QueryAnswerParser.queryAnswerParser(answer.data.replace('\n-', '').trim(), ["id", "name", "Credit limit"], "graph")
-					return {
-						queryResultData: data
-					}
-				})
-			}
-			this.setState(state => {
-				const newAnswer = answer.data.replace('\n-', '').trim()
-				const newAnswers = [...state.queryAnswers, newAnswer]
-				return { queryAnswers: newAnswers }
-			})
-		} else if (this.state.coreLanguage === "Haskell") {
-			if (this.state.queryResultModel === "table") {
-				let answer = await haskellCompiler.compileRelationalQuery(this.state.query)
-				console.log(answer)
-				answer = haskellCompiler.parseJSONList(answer)
-				if (answer.length === 0) {
-					Notification.notify("Result is empty.", "warning")
-					this.setState({ relationalResult: undefined, relationalKey: "initialRelationalKey" })
-				}
-				else {
-					const relationalTables = haskellCompiler.JSONtoRelationalTables(answer)
+		foldQuery.parseLetInQueryBlock(this.state.query)
+		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
+		const answer = await foldQuery.executeQuery(this.state.query)
+		console.log(answer)
+		switch (answer["model"]) {
+			case "error":
+				Notification.notify(answer["message"], "warning")
+				break
+			case "relational":
+				if (answer["answer"] === undefined) {
+					Notification.notify("Relational result is empty.", "warning")
+					this.initializeRelationalResult()
+				} else {
+					this.initializeGraphResult()
+					this.initializeTreeResult()
 					this.setState({
-						relationalResult: relationalTables,
-						relationalKey: JSON.stringify(answer[0]) + answer.length,
-						graphData: undefined,
-						graphKey: "initialGraphKey"
+						relationalResult: answer["answer"],
+						queryResultModel: "relational",
+						relationalKey: timeStampInMs
 					})
 				}
-			} else if (this.state.queryResultModel === "graph") {
-				let graphData = await haskellCompiler.compileGraphQuery(this.state.query)
-				console.log(graphData)
-				if (graphData !== undefined) {
-					if (graphData["links"].length === 0 && graphData["nodes"].length === 0) {
-						Notification.notify("Result is empty.", "warning")
-						this.setState({ graphResult: undefined, graphKey: "initialGraphKey" })
-					} else {
-						console.log(graphData)
-						this.setState({
-							graphResult: graphData,
-							graphKey: JSON.stringify(graphData["nodes"][0]) + graphData["nodes"].length,
-							relationalResult: undefined,
-							relationalKey: "initialRelationalKey"
-						})
-					}
+				break
+			case "graph":
+				if (answer["answer"] === undefined) {
+					Notification.notify("Graph result is empty.", "warning")
+					this.initializeGraphResult()
 				} else {
-					Notification.notify("The result cannot be expressed as a graph.", "warning")
+					this.initializeRelationalResult()
+					this.initializeTreeResult()
+					this.setState({
+						graphResult: answer["answer"],
+						queryResultModel: "graph",
+						graphKey: timeStampInMs
+					})
 				}
-			}
+				break
+			case "tree":
+				console.log(answer["answer"])
+				if (answer["answer"] === undefined) {
+					Notification.notify("Tree result is empty.", "warning")
+					this.initializeTreeResult()
+				} else {
+					this.initializeRelationalResult()
+					this.initializeGraphResult()
+					this.setState({
+						treeResult: answer["answer"],
+						queryResultModel: "tree",
+						treeKey: timeStampInMs
+					})
+				}
+				break
+			default:
+				Notification.notify("Unknown error! An answer to the query did not follow any model.", "warning")
+				break
 		}
+	}
+
+	initializeGraphResult = () => {
+		this.setState({ graphResult: undefined, graphKey: "initialGraphKey" })
+	}
+
+	initializeRelationalResult = () => {
+		this.setState({ relationalResult: undefined, relationalKey: "initialRelationalKey" })
+	}
+
+	initializeTreeResult = () => {
+		this.setState({ treeResult: undefined, treeKey: "initialTreeKey" })
 	}
 
 	handleCoreLanguageChange = (language) => {
@@ -181,22 +191,17 @@ class App extends Component {
 									Select example query
 								</Dropdown.Toggle>
 								<Dropdown.Menu>
-									<Dropdown.Item eventKey="1" onClick={() => this.handleExampleQuery("evaluatePredicate customers (\\y -> customerId y == 6) $$ ((\\x y -> knows y x), customers) ^=^ (\\x -> creditLimit x > 1000)")}>evaluatePredicate customers (\y -> customerId y == 6) $$ ((\x y -> knows y x), customers) ^=^ (\x -> creditLimit x > 1000)</Dropdown.Item>
-									<Dropdown.Item eventKey="2" onClick={() => this.handleExampleQuery("evaluatePredicate orders (\\y -> orderNumber y == \"3qqqeq9\") $$ ((\\y x -> contains y x), products) ^=^ (\\x -> productPrice x > 50)")}>evaluatePredicate orders (\y -> orderNumber y == "3qqqeq9") $$ ((\y x -> contains y x), products) ^=^ (\x -> productPrice x > 50)</Dropdown.Item>
-									<Dropdown.Item eventKey="3" onClick={() => this.handleExampleQuery("evaluatePredicate orders (\\x -> elem \"Carpet\" (map productName (orderProducts x))) $$ ((\\x y -> ordered x customers == y), customers)")}>evaluatePredicate orders (\x -> elem "Carpet" (map productName (orderProducts x))) $$ ((\x y -> ordered x customers == y), customers)</Dropdown.Item>
-									<Dropdown.Item eventKey="4" onClick={() => this.handleExampleQuery("evaluatePredicate customers (\\y -> customerName y == \"Alice\") $$ ((\\x y -> knows x y), customers)")}>evaluatePredicate customers (\y -> customerName y == "Alice") $$ ((\x y -> knows x y), customers)</Dropdown.Item>
-									<Dropdown.Item eventKey="5" onClick={() => this.handleExampleQuery("evaluatePredicate customers (\\y -> customerName y == \"Alice\") $$ ((\\x y -> knows x y), customers) $$ ((\\x y -> knows x y), customers) $$ ((\\x y -> ordered y customers == x), orders) ^=^ (\\x -> (sum $ map productPrice (orderProducts x)) > 5000)")}>evaluatePredicate customers (\y -> customerName y == "Alice") $$ ((\x y -> knows x y), customers) $$ ((\x y -> knows x y), customers) $$ ((\x y -> ordered y customers == x), orders) ^=^ (\x -> (sum $ map productPrice (orderProducts x)) > 5000)</Dropdown.Item>
-									<Dropdown.Item eventKey="6" onClick={() => this.handleExampleQuery("evaluatePredicate customers (\\y -> True)")}>evaluatePredicate customers (\y -> True)</Dropdown.Item>
+									<Dropdown.Item eventKey="1" onClick={() => this.handleExampleQuery('LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nON customers\nAS graph\nTO relational\nRETURN all\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y) t then [x] else [])\nON customers\nAS graph\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nON k\nAS relational\nTO relational\nRETURN all')}>LET t BE QUERY (\x -> if customerId x == 6 then [x] else []) ON customers AS graph TO relational RETURN all IN LET k BE QUERY (\x -> if any (\y -> knows x y) t then [x] else []) ON customers AS graph TO relational RETURN all IN QUERY (\x xs -> if creditLimit x > 1000 then x:xs else xs) ON k AS relational TO relational RETURN all</Dropdown.Item>
+									<Dropdown.Item eventKey="2" onClick={() => this.handleExampleQuery('LET t BE\nQUERY (\\x xs -> if orderNumber x == "3qqqeq9" then (orderProducts x) ++ xs else xs)\nON orders\nAS tree\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nON t\nAS relational\nTO relational\n RETURN all')}>LET t BE QUERY (\x xs -> if orderNumber x == "3qqqeq9" then (orderProducts x) ++ xs else xs) ON orders AS tree TO relational RETURN all IN QUERY (\x xs -> if productPrice x > 50 then x:xs else xs) ON t AS relational TO relational RETURN all</Dropdown.Item>
+									<Dropdown.Item eventKey="3" onClick={() => this.handleExampleQuery('LET t BE\n QUERY (\\x xs -> if elem "Carpet" (map productName (orderProducts x)) then x:xs else xs)\n ON orders\n AS tree\n TO relational\n RETURN all\nIN\n QUERY (\\x -> if any (\\y -> ordered y == x ) t then Vertex x else empty)\n ON customers\n AS graph\n TO graph\n RETURN all')}>LET t BE QUERY (\x xs -> if elem "Carpet" (map productName (orderProducts x)) then x:xs else xs) ON orders AS tree TO relational RETURN all IN QUERY (\x -> if any (\y -> ordered y == x ) t then Vertex x else empty) ON customers AS graph TO graph RETURN all</Dropdown.Item>
+									<Dropdown.Item eventKey="4" onClick={() => this.handleExampleQuery('LET t BE\n QUERY (\\x -> if customerName x == "Alice" then [x] else [])\n ON customers\n AS graph\n TO relational\n RETURN all\n IN\n QUERY (\\x -> if any (\\y -> knows x y) t then Vertex x else empty)\n ON customers\n AS graph\n TO graph\n RETURN all')}>LET t BE QUERY (\x -> if customerName x == 'Alice' then [x] else []) ON customers AS graph TO relational RETURN all IN QUERY (\x -> if any (\y -> knows x y) t then Vertex x else empty) ON customers AS graph TO graph RETURN all</Dropdown.Item>
+									<Dropdown.Item eventKey="5" onClick={() => this.handleExampleQuery('LET t BE\n QUERY (\\x -> if customerId x == 6 then [x] else [])\n ON customers\n AS graph\n TO relational\n RETURN all\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y) t then [x] else [])\n ON customers\n AS graph\n TO relational\n RETURN all\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y) k then [x] else [])\n ON customers\n AS graph\n TO relational\n RETURN all\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x == y ) h then x:xs else xs)\n ON orders\n AS tree\n TO relational\n RETURN all\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then x:xs else xs)\n ON r\n AS relational\n TO tree\n RETURN all\n')}>Long example</Dropdown.Item>
+									<Dropdown.Item eventKey="6" onClick={() => this.handleExampleQuery("QUERY (\\x -> Vertex x)\n ON customers\n AS graph\n TO graph\n RETURN all")}>QUERY (\x -> Vertex x) ON customers AS graph TO graph RETURN all</Dropdown.Item>
+									<Dropdown.Item eventKey="6" onClick={() => this.handleExampleQuery("QUERY (\\x xs -> x:xs)\n ON orders\n AS tree\n TO relational\n RETURN all")}>QUERY (\x xs -> x:xs) ON orders AS tree TO relational RETURN all</Dropdown.Item>
 								</Dropdown.Menu>
 							</Dropdown>
 						</div>
 					</Row>
-					{/*<Row style={style.basicComponentsStyle}>
-						<DataUploadComponent />
-					</Row>
-					<Row style={style.basicComponentsStyle}>
-						<NewQueryComponent handleCoreLanguage={this.handleCoreLanguageChange} handleDataModelChange={this.handleDataModelChange} />
-					</Row>*/}
 					<Row>
 						<Col xl={6}>
 							<SchemaComponent width={this.state.width} height={this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData}
@@ -206,6 +211,7 @@ class App extends Component {
 							<MLQueryComponent answers={this.state.queryAnswers} />
 							<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
 								relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
+								treeResult = {this.state.treeResult} treeKey = {this.state.treeKey}
 								width={this.state.width} height={this.state.height} />
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />

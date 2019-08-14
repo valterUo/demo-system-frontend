@@ -4,8 +4,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import FreeTextInputQueryLineButtons from './FreeTextInputQueryLineButtons'
-import FileSubmitComponent from '../FileSubmitComponent'
+//import FreeTextInputQueryLineButtons from './FreeTextInputQueryLineButtons'
+//import FileSubmitComponent from '../FileSubmitComponent'
 
 class FreeTextInputQueryComponent extends Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class FreeTextInputQueryComponent extends Component {
                 </Dropdown.Menu>
     </Dropdown>
         </Col>*/}
-            <Col xl={6} style={{ align: "left" }}>
+            <Col xl={10} style={{ align: "left" }}>
                 <Form onSubmit={this.props.handleQuery} inline>
                     <Form.Control as="textarea" rows="2" placeholder="Enter query or choose defined query" value={this.props.query} onChange={this.props.handleQueryChange} style={{ width: "90%", marginRight: "5px" }} />
                     <Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
@@ -42,12 +42,12 @@ class FreeTextInputQueryComponent extends Component {
                     <Button type="submit" variant="dark"> <i className='fas fa-play' style={{ fontSize: '24px', marginTop: "4px" }}></i> </Button>
     </Form>*/}
             </Col>
-            <Col xl={3}>
+            {/*<Col xl={3}>
                 <FreeTextInputQueryLineButtons handleDataModelChange={this.props.handleDataModelChange} handleCoreLanguage={this.props.handleCoreLanguage} />
             </Col>
             <Col xl={2}>
                 <FileSubmitComponent />
-            </Col>
+</Col>*/}
         </Row>
     }
 }
