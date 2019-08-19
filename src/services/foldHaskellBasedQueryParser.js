@@ -46,7 +46,7 @@ const parseMainQueryBlock = (inputString) => {
         .join(";")
         .split("AS")
         .join(";")
-        .split("ON")
+        .split("FROM")
         .join(";")
         .split("RETURN")
         .join(";")
