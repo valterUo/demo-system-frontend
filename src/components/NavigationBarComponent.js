@@ -12,7 +12,7 @@ class NavigationBarComponent extends Component {
             <Navbar.Collapse className="justify-content-end">
                 <a href="https://www.helsinki.fi/en/researchgroups/unified-database-management-systems-udbms"> UDBMS </a>
                 <div>&nbsp; &nbsp;</div>
-                <a href="https://github.com/enorvio/demo-system">
+                <a href="https://github.com/valterUo/demo-system-backend-Haskell">
                     <img width="30" height="30" src={githubimage} alt="githublogo" />
                 </a>
             </Navbar.Collapse>

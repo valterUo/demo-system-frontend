@@ -17,15 +17,16 @@ import Notification from './actions/NotificationAction'
 import ResultComponent from './components/ResultComponent'
 import Dropdown from 'react-bootstrap/Dropdown'
 import foldQuery from './services/foldHaskellBasedQueryParser'
+import PopUpComponent from './components/PopUpComponent'
+import examples from './examples'
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "", nodeName: undefined, linkName: undefined,
-			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined,
-			queryMode: "", width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: "",
-			coreLanguage: "Haskell", relationalResult: undefined, relationalKey: "initialRelationalKey", graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey"
+			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined, width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: "",
+			coreLanguage: "Haskell", relationalResult: undefined, relationalKey: "initialRelationalKey", graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -135,6 +136,10 @@ class App extends Component {
 		this.setState({ queryResultModel: model })
 	}
 
+	togglePopup() {
+		this.setState((prevState) => { return { showPopup: !prevState.showPopup } })
+	}
+
 	handleSourceTargetSubmit = (event) => {
 		event.preventDefault()
 		if (this.state.targetFunction !== undefined && this.state.sourceFunction !== undefined) {
@@ -163,14 +168,6 @@ class App extends Component {
 		}
 	}
 
-	handleFunctionDefinition() {
-		this.setState({ queryMode: "Source and target function", acceptFunctions: true })
-	}
-
-	handleMLcompiler() {
-		this.setState({ queryMode: "ML code compiler", acceptFunctions: false })
-	}
-
 	handleExampleQuery = (exampleQuery) => {
 		this.setState({ query: exampleQuery })
 	}
@@ -182,7 +179,7 @@ class App extends Component {
 			<Container style={{ backgroundColor: "#f1f1f2", minHeight: this.state.height }} fluid='true'>
 				<NavigationBarComponent />
 				<Container fluid='true'>
-					<FreeTextInputQueryComponent handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataModelChange={this.handleDataModelChange} handleCoreLanguage={this.handleCoreLanguageChange} />
+					<FreeTextInputQueryComponent togglePopup = {this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataModelChange={this.handleDataModelChange} handleCoreLanguage={this.handleCoreLanguageChange} />
 					<NotificationComponent />
 					<Row style={style.basicComponentsStyle}>
 						<div style={style.queryButtonStyle}>
@@ -191,13 +188,7 @@ class App extends Component {
 									Select example query
 								</Dropdown.Toggle>
 								<Dropdown.Menu>
-									<Dropdown.Item eventKey="1" onClick={() => this.handleExampleQuery('LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y) t then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nFROM k\nAS relational\nTO relational\nRETURN all')}>LET t BE QUERY (\x -> if customerId x == 6 then [x] else []) ON customers AS graph TO relational RETURN all IN LET k BE QUERY (\x -> if any (\y -> knows x y) t then [x] else []) ON customers AS graph TO relational RETURN all IN QUERY (\x xs -> if creditLimit x > 1000 then x:xs else xs) ON k AS relational TO relational RETURN all</Dropdown.Item>
-									<Dropdown.Item eventKey="2" onClick={() => this.handleExampleQuery('LET t BE\nQUERY (\\x xs -> if orderNumber x == "3qqqeq9" then (orderProducts x) ++ xs else xs)\nFROM orders\nAS tree\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nFROM t\nAS relational\nTO relational\n RETURN all')}>LET t BE QUERY (\x xs -> if orderNumber x == "3qqqeq9" then (orderProducts x) ++ xs else xs) ON orders AS tree TO relational RETURN all IN QUERY (\x xs -> if productPrice x > 50 then x:xs else xs) ON t AS relational TO relational RETURN all</Dropdown.Item>
-									<Dropdown.Item eventKey="3" onClick={() => this.handleExampleQuery('LET t BE\n QUERY (\\x xs -> if elem "Carpet" (map productName (orderProducts x)) then x:xs else xs)\n FROM orders\n AS tree\n TO relational\n RETURN all\nIN\n QUERY (\\x -> if any (\\y -> ordered y == x ) t then Vertex x else empty)\n FROM customers\n AS graph\n TO graph\n RETURN all')}>LET t BE QUERY (\x xs -> if elem "Carpet" (map productName (orderProducts x)) then x:xs else xs) ON orders AS tree TO relational RETURN all IN QUERY (\x -> if any (\y -> ordered y == x ) t then Vertex x else empty) ON customers AS graph TO graph RETURN all</Dropdown.Item>
-									<Dropdown.Item eventKey="4" onClick={() => this.handleExampleQuery('LET t BE\n QUERY (\\x -> if customerName x == "Alice" then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n QUERY (\\x -> if any (\\y -> knows x y) t then Vertex x else empty)\n FROM customers\n AS graph\n TO graph\n RETURN all')}>LET t BE QUERY (\x -> if customerName x == 'Alice' then [x] else []) ON customers AS graph TO relational RETURN all IN QUERY (\x -> if any (\y -> knows x y) t then Vertex x else empty) ON customers AS graph TO graph RETURN all</Dropdown.Item>
-									<Dropdown.Item eventKey="5" onClick={() => this.handleExampleQuery('LET t BE\n QUERY (\\x -> if customerId x == 6 then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y) t then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y) k then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x == y ) h then x:xs else xs)\n FROM orders\n AS tree\n TO relational\n RETURN all\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then x:xs else xs)\n FROM r\n AS relational\n TO tree\n RETURN all\n')}>Long example</Dropdown.Item>
-									<Dropdown.Item eventKey="6" onClick={() => this.handleExampleQuery("QUERY (\\x -> Vertex x)\n FROM customers\n AS graph\n TO graph\n RETURN all")}>QUERY (\x -> Vertex x) ON customers AS graph TO graph RETURN all</Dropdown.Item>
-									<Dropdown.Item eventKey="6" onClick={() => this.handleExampleQuery("QUERY (\\x xs -> x:xs)\n FROM orders\n AS tree\n TO relational\n RETURN all")}>QUERY (\x xs -> x:xs) ON orders AS tree TO relational RETURN all</Dropdown.Item>
+									{examples.examples.map((example, i) => <Dropdown.Item key = {`${i}`} eventKey = {`${i}`} onClick={() => this.handleExampleQuery(example)}>Example {`${i}`}</Dropdown.Item>)}
 								</Dropdown.Menu>
 							</Dropdown>
 						</div>
@@ -211,7 +202,7 @@ class App extends Component {
 							<MLQueryComponent answers={this.state.queryAnswers} />
 							<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
 								relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
-								treeResult = {this.state.treeResult} treeKey = {this.state.treeKey}
+								treeResult={this.state.treeResult} treeKey={this.state.treeKey}
 								width={this.state.width} height={this.state.height} />
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
@@ -220,6 +211,7 @@ class App extends Component {
 						</Col>
 					</Row>
 				</Container>
+				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} /> : null}
 			</Container>
 		)
 	}

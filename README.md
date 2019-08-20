@@ -1,6 +1,6 @@
 # Category theory in multi-model databases
 
-This is the frontend project for the [backend](https://github.com/valterUo/demo-system-frontend).
+This is the frontend project for the [backend](https://github.com/valterUo/demo-system-frontend). Category theoretical backround of this project is described in this unofficial draft [Some Applications of Category Theory to Multi-Model Queries](https://www.overleaf.com/read/kqvkvrhcnmxv).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and it uses [D3.js](https://d3js.org/).
 

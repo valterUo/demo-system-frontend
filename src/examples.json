@@ -1,0 +1,13 @@
+{
+    "examples": [
+        "QUERY (\\x -> Vertex x)\n FROM customers\n AS graph\n TO graph\n RETURN all",
+        "QUERY (\\x xs -> x:xs)\n FROM orders\n AS tree\n TO relational\n RETURN all",
+        "LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y) t then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nFROM k\nAS relational\nTO relational\nRETURN all",
+        "LET t BE\nQUERY (\\x xs -> if orderNumber x == \"3qqqeq9\" then (orderProducts x) ++ xs else xs)\nFROM orders\nAS tree\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nFROM t\nAS relational\nTO relational\n RETURN all",
+        "LET t BE\n QUERY (\\x xs -> if elem \"Carpet\" (map productName (orderProducts x)) then x:xs else xs)\n FROM orders\n AS tree\n TO relational\n RETURN all\nIN\n QUERY (\\x -> if any (\\y -> ordered y == x ) t then Vertex x else empty)\n FROM customers\n AS graph\n TO graph\n RETURN all",
+        "LET t BE\n QUERY (\\x -> if customerName x == \"Alice\" then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n QUERY (\\x -> if any (\\y -> knows x y) t then Vertex x else empty)\n FROM customers\n AS graph\n TO graph\n RETURN all",
+        "LET t BE\n QUERY (\\x -> if customerId x == 6 then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y) t then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y) k then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x == y ) h then x:xs else xs)\n FROM orders\n AS tree\n TO relational\n RETURN all\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then x:xs else xs)\n FROM r\n AS relational\n TO tree\n RETURN all",
+        "QUERY (\\x -> if creditLimit x > 500 then Vertex (customerName x, cityName (located x)) else empty)\nFROM customers\nAS graph\nTO graph\n RETURN all"
+        
+    ]
+}

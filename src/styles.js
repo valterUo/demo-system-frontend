@@ -64,26 +64,59 @@ const queryBox = {
 	width: "100%"
 }
 
-const queryButtonStyle = { 
-	marginLeft: "5px", 
-	marginRigth: "5px" 
+const queryButtonStyle = {
+	marginLeft: "5px",
+	marginRigth: "5px"
 }
 
-const queryTextStyle = { 
-	marginLeft: "10px", 
-	marginTop: "5px", 
-	fontFamily: "Lucida Console, Monaco, monospace" 
+const queryTextStyle = {
+	marginLeft: "10px",
+	marginTop: "5px",
+	fontFamily: "Lucida Console, Monaco, monospace"
 }
 
+const popup = {
+	position: "fixed",
+	width: "100%",
+	height: "100%",
+	top: "0",
+	left: "0",
+	right: "0",
+	bottom: "0",
+	margin: "auto",
+	backgroundColor: "rgba(0,0,0, 0.5)"
+}
 
-export default { 
-	backgroundColorStyle, 
-	headerBackGroundColorStyle, 
-	fileInputStyle, 
-	fileInputLabelStyle, 
-	componentMarginalStyle, 
-	basicComponentsStyle, 
-	queryBox, 
+const popupInner = {
+	position: "absolute",
+	left: "25%",
+	right: "25%",
+	top: "25%",
+	bottom: "25%",
+	margin: "auto",
+	borderRadius: "20px",
+	background: "white"
+}
+
+const infoTextStyle = {
+	paddingRight: "15px",
+	paddingBottom: "15px",
+	paddingLeft: "15px",
+	paddingTop: "15px",
+	fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+}
+
+export default {
+	backgroundColorStyle,
+	headerBackGroundColorStyle,
+	fileInputStyle,
+	fileInputLabelStyle,
+	componentMarginalStyle,
+	basicComponentsStyle,
+	queryBox,
 	queryButtonStyle,
-	queryTextStyle 
-	}
+	queryTextStyle,
+	popup,
+	popupInner,
+	infoTextStyle
+}

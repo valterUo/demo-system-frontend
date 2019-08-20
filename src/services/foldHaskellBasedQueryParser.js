@@ -29,8 +29,10 @@ const parseLetInQueryBlock = (inputString) => {
             }
             return query
         })
-        mainQuery["query"] = parsedSubQueries + mainQuery["query"]
+        if(mainQuery !== undefined && mainQuery !== "Error!") {
+            mainQuery["query"] = parsedSubQueries + mainQuery["query"]
         return mainQuery
+        }
     } else {
         return parseMainQueryBlock(inputString)
     }
@@ -56,7 +58,7 @@ const parseMainQueryBlock = (inputString) => {
     if (queryElements.length !== 5) {
         return {
             "model": "error",
-            "message": "Error! Too less arguments in the query."
+            "message": "Error! Wrong amount of arguments in the query."
         }
     }
     if (queryElements[0][0] !== "(" || queryElements[0][queryElements[0].length - 1] !== ")") {
@@ -121,6 +123,12 @@ const parseMainQueryBlock = (inputString) => {
 
 const executeQuery = async (inputQuery) => {
     const parsedQueryList = parseLetInQueryBlock(inputQuery)
+    if(parsedQueryList === undefined) {
+        return {
+            "model": "error",
+            "message": "The query is not valid."
+        }
+    } else {
     const model = parsedQueryList["model"]
     const query = parsedQueryList["query"]
     console.log(query)
@@ -147,6 +155,7 @@ const executeQuery = async (inputQuery) => {
             "message": "Unexpected error happened. No model was found."
         }
     }
+}
 }
 
 export default {
