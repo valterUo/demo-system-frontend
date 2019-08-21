@@ -26,9 +26,8 @@ class PopUpComponent extends React.Component {
 
                         <p> You can use the schema category to see attributes' names, data model and other information about the data.</p>
 
-                        <p>You can find more information about the theoretical background of the system <a href="https://www.overleaf.com/read/kqvkvrhcnmxv">here</a>.</p>
-
-                        <p> Have fun and thanks for the interest!</p>
+                        <p>You can find more information about the theoretical background of the system <a href="https://www.overleaf.com/read/kqvkvrhcnmxv">here</a>. 
+                        Have fun and thanks for the interest!</p>
                         <Button variant="dark" onClick={this.props.closePopup}>Close</Button>
                     </div>
                 </div>

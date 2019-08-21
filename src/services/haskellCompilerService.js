@@ -47,12 +47,11 @@ const parseJSONList = (listString) => {
     let m = listString.indexOf('{') - 1
     let n = listString.indexOf('*')
     listString = listString.substring(m !== -1 ? m : 0, n !== -1 ? n : listString.length)
-    console.log(listString)
     try {
         listString = JSON.parse(JSON.parse(listString))
         return listString["result"]
     } catch (err) {
-        console.log("Error while parsing the JSON.")
+        console.log("Error while parsing the JSON in list.")
     }
 }
 
@@ -90,9 +89,14 @@ const parseJSONStringtoD3js = (jsonString) => {
     let n = jsonString.lastIndexOf('}')
     jsonString = jsonString.substring(m !== -1 ? m : 0, n !== -1 ? n : jsonString.length)
     jsonString = jsonString + '}"'
-    let obj = JSON.parse(JSON.parse(jsonString))
+    try {
+        let obj = JSON.parse(JSON.parse(jsonString))
     obj["nodes"] = obj["nodes"].map(node => JSON.parse(node))
     return obj
+    } catch (err) {
+        console.log("Error while parsing the JSON in Graph.")
+    }
+    
 }
 
 const parseChild = (childElement) => {

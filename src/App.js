@@ -45,65 +45,6 @@ class App extends Component {
 		this.setState({ width: window.innerWidth, height: window.innerHeight })
 	}
 
-	handleQuery = async (event) => {
-		event.preventDefault()
-		foldQuery.parseLetInQueryBlock(this.state.query)
-		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
-		const answer = await foldQuery.executeQuery(this.state.query)
-		console.log(answer)
-		switch (answer["model"]) {
-			case "error":
-				Notification.notify(answer["message"], "warning")
-				break
-			case "relational":
-				if (answer["answer"] === undefined) {
-					Notification.notify("Relational result is empty.", "warning")
-					this.initializeRelationalResult()
-				} else {
-					this.initializeGraphResult()
-					this.initializeTreeResult()
-					this.setState({
-						relationalResult: answer["answer"],
-						queryResultModel: "relational",
-						relationalKey: timeStampInMs
-					})
-				}
-				break
-			case "graph":
-				if (answer["answer"] === undefined) {
-					Notification.notify("Graph result is empty.", "warning")
-					this.initializeGraphResult()
-				} else {
-					this.initializeRelationalResult()
-					this.initializeTreeResult()
-					this.setState({
-						graphResult: answer["answer"],
-						queryResultModel: "graph",
-						graphKey: timeStampInMs
-					})
-				}
-				break
-			case "tree":
-				console.log(answer["answer"])
-				if (answer["answer"] === undefined) {
-					Notification.notify("Tree result is empty.", "warning")
-					this.initializeTreeResult()
-				} else {
-					this.initializeRelationalResult()
-					this.initializeGraphResult()
-					this.setState({
-						treeResult: answer["answer"],
-						queryResultModel: "tree",
-						treeKey: timeStampInMs
-					})
-				}
-				break
-			default:
-				Notification.notify("Unknown error! An answer to the query did not follow any model.", "warning")
-				break
-		}
-	}
-
 	initializeGraphResult = () => {
 		this.setState({ graphResult: undefined, graphKey: "initialGraphKey" })
 	}
@@ -172,6 +113,65 @@ class App extends Component {
 		this.setState({ query: exampleQuery })
 	}
 
+	handleQuery = async (event) => {
+		event.preventDefault()
+		foldQuery.parseLetInQueryBlock(this.state.query)
+		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
+		const answer = await foldQuery.executeQuery(this.state.query)
+		console.log(answer)
+		switch (answer["model"]) {
+			case "error":
+				Notification.notify(answer["message"], "warning")
+				break
+			case "relational":
+				if (answer["answer"] === undefined) {
+					Notification.notify("Relational result is empty.", "warning")
+					this.initializeRelationalResult()
+				} else {
+					this.initializeGraphResult()
+					this.initializeTreeResult()
+					this.setState({
+						relationalResult: answer["answer"],
+						queryResultModel: "relational",
+						relationalKey: timeStampInMs
+					})
+				}
+				break
+			case "graph":
+				if (answer["answer"] === undefined) {
+					Notification.notify("Graph result is empty.", "warning")
+					this.initializeGraphResult()
+				} else {
+					this.initializeRelationalResult()
+					this.initializeTreeResult()
+					this.setState({
+						graphResult: answer["answer"],
+						queryResultModel: "graph",
+						graphKey: timeStampInMs
+					})
+				}
+				break
+			case "tree":
+				console.log(answer["answer"])
+				if (answer["answer"] === undefined) {
+					Notification.notify("Tree result is empty.", "warning")
+					this.initializeTreeResult()
+				} else {
+					this.initializeRelationalResult()
+					this.initializeGraphResult()
+					this.setState({
+						treeResult: answer["answer"],
+						queryResultModel: "tree",
+						treeKey: timeStampInMs
+					})
+				}
+				break
+			default:
+				Notification.notify("Unknown error! An answer to the query did not follow any model.", "warning")
+				break
+		}
+	}
+
 	render() {
 		store.subscribe(this.handleStoreChange)
 
@@ -179,7 +179,7 @@ class App extends Component {
 			<Container style={{ backgroundColor: "#f1f1f2", minHeight: this.state.height }} fluid='true'>
 				<NavigationBarComponent />
 				<Container fluid='true'>
-					<FreeTextInputQueryComponent togglePopup = {this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataModelChange={this.handleDataModelChange} handleCoreLanguage={this.handleCoreLanguageChange} />
+					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataModelChange={this.handleDataModelChange} handleCoreLanguage={this.handleCoreLanguageChange} />
 					<NotificationComponent />
 					<Row style={style.basicComponentsStyle}>
 						<div style={style.queryButtonStyle}>
@@ -188,7 +188,7 @@ class App extends Component {
 									Select example query
 								</Dropdown.Toggle>
 								<Dropdown.Menu>
-									{examples.examples.map((example, i) => <Dropdown.Item key = {`${i}`} eventKey = {`${i}`} onClick={() => this.handleExampleQuery(example)}>Example {`${i}`}</Dropdown.Item>)}
+									{examples.examples.map((example, i) => <Dropdown.Item key={`${i}`} eventKey={`${i}`} onClick={() => this.handleExampleQuery(example)}>Example {`${i}`}</Dropdown.Item>)}
 								</Dropdown.Menu>
 							</Dropdown>
 						</div>
