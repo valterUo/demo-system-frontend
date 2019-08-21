@@ -3,7 +3,6 @@ import style from '../styles'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import MultiGraph from '../dataComponents/multiGraphComponents/MultiGraph'
-//import Graph from '../dataComponents/graphComponents/Graph'
 import data from '../exampleData/schema.json'
 
 class SchemaComponent extends Component {
@@ -14,18 +13,10 @@ class SchemaComponent extends Component {
         }
     }
 
-    componentDidUpdate(prevState) {
-        if (JSON.stringify(prevState.mlSchemaData) !== JSON.stringify(this.props.mlSchemaData)) {
-            this.setState({
-                schemaVisible: true
-            })
-        }
-    }
-
     render() {
         return <div> <Row style={style.basicComponentsStyle}>
             <Col>
-                <h4>Abstract Categorical Schema</h4>
+                <h4>Schema Category</h4>
                 <MultiGraph id={"SchemaCategoryKey"} data={data} width={this.props.width} height={this.props.height} nodeName={"SchemaCategoryNodes"} linkName={"SchemaCategoryEdges"} nameClass={"SchemaCategoryClass"} editableGraph={false} />
             </Col>
         </Row>

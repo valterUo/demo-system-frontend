@@ -1,32 +1,31 @@
 import React, { Component } from 'react'
 import './App.css'
+import style from './styles'
+import store from './store'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import data3 from './exampleData/data3.json'
 import StatBox from './components/StatBox'
 import NodeDataTextField from './components/NodeDataTextField'
-import store from './store'
 import FreeTextInputQueryComponent from './components/queryComponents/FreeTextInputQueryComponent'
 import NavigationBarComponent from './components/NavigationBarComponent'
 import SchemaComponent from './components/SchemaComponent'
-import style from './styles'
-import MLQueryComponent from './components/MLQueryComponent'
 import NotificationComponent from './components/NotificationComponent'
 import Notification from './actions/NotificationAction'
 import ResultComponent from './components/ResultComponent'
-import Dropdown from 'react-bootstrap/Dropdown'
 import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
-import examples from './examples'
+import ExampleQueryComponent from './components/ExampleQueryComponent'
+
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] }, schemaData: data3, schemaKey: "", nodeName: undefined, linkName: undefined,
-			nameClass: undefined, queryAnswers: [], sourceFunction: undefined, targetFunction: undefined, width: window.innerWidth, height: window.innerHeight, mlSchemaData: {}, notification: "", currentConstant: "", queryResultKey: "", queryResultModel: "",
-			coreLanguage: "Haskell", relationalResult: undefined, relationalKey: "initialRelationalKey", graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false
+			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
+			width: window.innerWidth, height: window.innerHeight, notification: "",
+			queryResultModel: "", relationalResult: undefined, relationalKey: "initialRelationalKey",
+			graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -34,7 +33,6 @@ class App extends Component {
 	componentDidMount() {
 		this.updateWindowDimensions()
 		window.addEventListener('resize', this.updateWindowDimensions)
-		store.dispatch({ type: 'ADD_SCHEMA_DATA', data: data3, key: "" })
 	}
 
 	componentWillUnmount() {
@@ -57,54 +55,18 @@ class App extends Component {
 		this.setState({ treeResult: undefined, treeKey: "initialTreeKey" })
 	}
 
-	handleCoreLanguageChange = (language) => {
-		this.setState({ coreLanguage: language })
-	}
-
 	handleQueryChange = (event) => {
 		this.setState({ query: event.target.value })
-	}
-
-	handleSourceFunctionChange = (event) => {
-		this.setState({ sourceFunction: event.target.value })
-	}
-
-	handleTargetFunctionChange = (event) => {
-		this.setState({ targetFunction: event.target.value })
-	}
-
-	handleDataModelChange = (model) => {
-		this.setState({ queryResultModel: model })
 	}
 
 	togglePopup() {
 		this.setState((prevState) => { return { showPopup: !prevState.showPopup } })
 	}
 
-	handleSourceTargetSubmit = (event) => {
-		event.preventDefault()
-		if (this.state.targetFunction !== undefined && this.state.sourceFunction !== undefined) {
-			this.setState({ mlSchemaData: { source: this.state.sourceFunction, target: this.state.targetFunction } })
-		}
-	}
-
 	handleStoreChange = () => {
 		if (this.state.showedNodeData !== store.getState().nodeData) {
 			this.setState({
 				showedNodeData: store.getState().nodeData
-			})
-		}
-		if (store.getState().schemaData.key !== this.state.schemaKey) {
-			this.setState({
-				schemaData: store.getState().schemaData.schema,
-				schemaKey: store.getState().schemaData.key
-			})
-		}
-		if (store.getState().queriedDemoData.key !== this.state.queryResultKey) {
-			this.setState({
-				queryResultData: store.getState().queriedDemoData.data,
-				queryResultKey: store.getState().queriedDemoData.key,
-				queryResultModel: store.getState().queriedDemoData.model
 			})
 		}
 	}
@@ -179,31 +141,22 @@ class App extends Component {
 			<Container style={{ backgroundColor: "#f1f1f2", minHeight: this.state.height }} fluid='true'>
 				<NavigationBarComponent />
 				<Container fluid='true'>
-					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataModelChange={this.handleDataModelChange} handleCoreLanguage={this.handleCoreLanguageChange} />
+					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} />
 					<NotificationComponent />
 					<Row style={style.basicComponentsStyle}>
-						<div style={style.queryButtonStyle}>
-							<Dropdown>
-								<Dropdown.Toggle variant="dark" id="dropdown-basic">
-									Select example query
-								</Dropdown.Toggle>
-								<Dropdown.Menu>
-									{examples.examples.map((example, i) => <Dropdown.Item key={`${i}`} eventKey={`${i}`} onClick={() => this.handleExampleQuery(example)}>Example {`${i}`}</Dropdown.Item>)}
-								</Dropdown.Menu>
-							</Dropdown>
-						</div>
+						<ExampleQueryComponent handleExampleQuery={this.handleExampleQuery} />
 					</Row>
 					<Row>
 						<Col xl={6}>
-							<SchemaComponent width={this.state.width} height={this.state.height} schemaKey={this.state.schemaKey} schemaData={this.state.schemaData}
-								schemaVisible={this.state.schemaVisible} mlSchemaData={this.state.mlSchemaData} />
+							<SchemaComponent width={this.state.width} height={this.state.height} />
 						</Col>
 						<Col xl={6}>
-							<MLQueryComponent answers={this.state.queryAnswers} />
+
 							<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
 								relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
 								treeResult={this.state.treeResult} treeKey={this.state.treeKey}
 								width={this.state.width} height={this.state.height} />
+
 							<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>
