@@ -87,7 +87,7 @@ class App extends Component {
 				break
 			case "relational":
 				if (answer["answer"] === undefined) {
-					Notification.notify("Relational result is empty.", "warning")
+					Notification.notify("Error in expressing the relational result.", "warning")
 					this.initializeRelationalResult()
 				} else {
 					this.initializeGraphResult()
@@ -101,7 +101,7 @@ class App extends Component {
 				break
 			case "graph":
 				if (answer["answer"] === undefined) {
-					Notification.notify("Graph result is empty.", "warning")
+					Notification.notify("Error in expressing the graph result.", "warning")
 					this.initializeGraphResult()
 				} else {
 					this.initializeRelationalResult()
@@ -116,7 +116,7 @@ class App extends Component {
 			case "tree":
 				console.log(answer["answer"])
 				if (answer["answer"] === undefined) {
-					Notification.notify("Tree result is empty.", "warning")
+					Notification.notify("Error in expressing the tree result.", "warning")
 					this.initializeTreeResult()
 				} else {
 					this.initializeRelationalResult()
