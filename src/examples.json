@@ -1,6 +1,6 @@
 {
     "examples": [{
-            "header": "SQL",
+            "header": "Rel",
             "examples": ["QUERY (\\x xs -> x:xs)\n FROM locations\n AS relational\n TO relational\n RETURN all"]
         },
         {
@@ -15,11 +15,11 @@
             ]
         },
         {
-            "header": "SQL + XML",
+            "header": "Rel + XML",
             "examples": []
         },
         {
-            "header": "SQL + Graph",
+            "header": "Rel + Graph",
             "examples": ["QUERY (\\x -> [(customerName x, countryName(located x locations))])\nFROM customers\nAS graph\nTO relational\nRETURN all", "QUERY (\\x -> if creditLimit x > 500 then Vertex (customerName x, cityName (located x locations)) else empty)\nFROM customers\nAS graph\nTO graph\n RETURN all"]
         },
         {
@@ -29,7 +29,7 @@
             ]
         },
         {
-            "header": "SQL + XML + Graph",
+            "header": "Rel + XML + Graph",
             "examples": ["QUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM orders\nAS tree\nTO relational\nRETURN all",
                 "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then x:xs else xs)\nFROM orders\nAS tree\nTO tree\nRETURN all\nIN\nQUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM t\nAS tree\nTO relational\nRETURN all"]
         }

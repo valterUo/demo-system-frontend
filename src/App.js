@@ -16,7 +16,8 @@ import ResultComponent from './components/ResultComponent'
 import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
 import ExampleQueryComponent from './components/ExampleQueryComponent'
-
+import examples from './examples.json'
+import unibenchPatentDataExamples from './unibenchPatentDataExamples.json'
 
 class App extends Component {
 	constructor(props) {
@@ -144,7 +145,10 @@ class App extends Component {
 					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} />
 					<NotificationComponent />
 					<Row style={style.basicComponentsStyle}>
-						<ExampleQueryComponent handleExampleQuery={this.handleExampleQuery} />
+						<ExampleQueryComponent header = {"Simple demo data examples"} examples = {examples} handleExampleQuery={this.handleExampleQuery} />
+					</Row>
+					<Row style={style.basicComponentsStyle}>
+						<ExampleQueryComponent header = {"UDMS Dataset Patent data examples (contain bugs)"} examples = {unibenchPatentDataExamples} handleExampleQuery={this.handleExampleQuery} />
 					</Row>
 					<Row>
 						<Col xl={6}>
