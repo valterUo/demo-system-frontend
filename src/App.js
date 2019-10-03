@@ -4,20 +4,18 @@ import style from './styles'
 import store from './store'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import StatBox from './components/StatBox'
 import NodeDataTextField from './components/NodeDataTextField'
 import FreeTextInputQueryComponent from './components/queryComponents/FreeTextInputQueryComponent'
 import NavigationBarComponent from './components/NavigationBarComponent'
-import SchemaComponent from './components/SchemaComponent'
 import NotificationComponent from './components/NotificationComponent'
 import Notification from './actions/NotificationAction'
 import ResultComponent from './components/ResultComponent'
 import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
-import ExampleQueryComponent from './components/ExampleQueryComponent'
 import examples from './examples.json'
-import unibenchPatentDataExamples from './unibenchPatentDataExamples.json'
+import SelectDataSetComponent from './components/SelectDataSetComponent'
+import DataSetComponent from './components/DataSetComponent'
 
 class App extends Component {
 	constructor(props) {
@@ -26,7 +24,8 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
 			width: window.innerWidth, height: window.innerHeight, notification: "",
 			queryResultModel: "", relationalResult: undefined, relationalKey: "initialRelationalKey",
-			graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false
+			graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false, 
+			dataSet: {header: "Simple demo data examples", examples: examples}
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -70,6 +69,11 @@ class App extends Component {
 				showedNodeData: store.getState().nodeData
 			})
 		}
+	}
+
+	handleDataSetChange = (obj) => {
+		console.log(obj)
+		this.setState({ dataSet: {header: obj.header, examples: obj.examples}})
 	}
 
 	handleExampleQuery = (exampleQuery) => {
@@ -145,28 +149,21 @@ class App extends Component {
 					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} />
 					<NotificationComponent />
 					<Row style={style.basicComponentsStyle}>
-						<ExampleQueryComponent header = {"Simple demo data examples"} examples = {examples} handleExampleQuery={this.handleExampleQuery} />
-					</Row>
-					<Row style={style.basicComponentsStyle}>
-						<ExampleQueryComponent header = {"UDMS Dataset Patent data examples (contain bugs)"} examples = {unibenchPatentDataExamples} handleExampleQuery={this.handleExampleQuery} />
+						<SelectDataSetComponent handleDataSetChange = {this.handleDataSetChange} />
 					</Row>
 					<Row>
-						<Col xl={6}>
-							<SchemaComponent width={this.state.width} height={this.state.height} />
-						</Col>
-						<Col xl={6}>
-
+					<DataSetComponent dataSet = {this.state.dataSet} width = {this.state.width} height = {this.state.height} handleExampleQuery = {this.handleExampleQuery}/>
+					</Row>
+					<Row style={style.basicComponentsStyle}>
 							<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
 								relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
 								treeResult={this.state.treeResult} treeKey={this.state.treeKey}
 								width={this.state.width} height={this.state.height} />
-
-							<Row style={style.basicComponentsStyle}>
+					</Row>
+					<Row style={style.basicComponentsStyle}>
 								<StatBox data={this.state.showedNodeData} />
 							</Row>
 							<NodeDataTextField />
-						</Col>
-					</Row>
 				</Container>
 				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} /> : null}
 			</Container>
