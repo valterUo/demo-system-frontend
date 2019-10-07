@@ -5,31 +5,31 @@ import Container from 'react-bootstrap/Container'
 import Dropdown from 'react-bootstrap/Dropdown'
 import examples from '../examples.json'
 import patentDataExamples from '../PatentDataExamples.json'
+import simpleSchemaData from '../exampleData/simpleSchema.json'
+import patentSchema from '../exampleData/patentSchema.json'
 
 class SelectDataSetComponent extends Component {
 
     render() {
         return <Container style={{ margin: "5px" }} fluid="true">
-            <Row style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
-                <Col xl={1}>
-                    <Row style={{ marginTop: '5px' }}>
-                        <h4>Select model</h4>
-                    </Row>
-                </Col>
-                <Row style={{ "margin": "10px" }}>
-                    <Dropdown>
+            <Row>
+                    <Col>
+                        <h4>Select dataset</h4>
+                    </Col>
+                <Col>
+                    <Dropdown style = {{left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 10000}}>
                         <Dropdown.Toggle variant="dark" id="dropdown-basic">
                             Datasets
                     </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <Dropdown.Item href="#/action-1" onClick={this.props.handleDataSetChange.bind(this, {header: "Simple demo dataset", examples: examples})}>Simple demo dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={this.props.handleDataSetChange.bind(this, {header: "UDMS Dataset Patent data examples (contain bugs)", examples: patentDataExamples})}>UDMS Patent Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">UDMS Film Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/action-4">UDMS University Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/action-5">UDMS Person Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/simple" onClick={this.props.handleDataSetChange.bind(this, {header: "Simple demo dataset", examples: examples, schemaData: simpleSchemaData})}>Simple demo dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/patent" onClick={this.props.handleDataSetChange.bind(this, {header: "UDMS Dataset Patent data examples (contain bugs)", examples: patentDataExamples, schemaData: patentSchema})}>UDMS Patent Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/film">UDMS Film Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/university">UDMS University Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/person">UDMS Person Dataset</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                </Row>
+                </Col>
             </Row>
         </Container>
     }

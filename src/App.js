@@ -14,8 +14,8 @@ import ResultComponent from './components/ResultComponent'
 import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
 import examples from './examples.json'
-import SelectDataSetComponent from './components/SelectDataSetComponent'
 import DataSetComponent from './components/DataSetComponent'
+import initialSchemaData from './exampleData/simpleSchema.json'
 
 class App extends Component {
 	constructor(props) {
@@ -24,8 +24,8 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
 			width: window.innerWidth, height: window.innerHeight, notification: "",
 			queryResultModel: "", relationalResult: undefined, relationalKey: "initialRelationalKey",
-			graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false, 
-			dataSet: {header: "Simple demo data examples", examples: examples}
+			graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false,
+			dataSet: { header: "Simple demo data examples", examples: examples, schemaData: initialSchemaData, schemaKey: "initialKey" }
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -73,7 +73,8 @@ class App extends Component {
 
 	handleDataSetChange = (obj) => {
 		console.log(obj)
-		this.setState({ dataSet: {header: obj.header, examples: obj.examples}})
+		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
+		this.setState({ dataSet: { header: obj.header, examples: obj.examples, schemaData: obj.schemaData, schemaKey: timeStampInMs } })
 	}
 
 	handleExampleQuery = (exampleQuery) => {
@@ -146,24 +147,19 @@ class App extends Component {
 			<Container style={{ backgroundColor: "#f1f1f2", minHeight: this.state.height }} fluid='true'>
 				<NavigationBarComponent />
 				<Container fluid='true'>
-					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} />
+					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataSetChange={this.handleDataSetChange} />
 					<NotificationComponent />
-					<Row style={style.basicComponentsStyle}>
-						<SelectDataSetComponent handleDataSetChange = {this.handleDataSetChange} />
-					</Row>
 					<Row>
-					<DataSetComponent dataSet = {this.state.dataSet} width = {this.state.width} height = {this.state.height} handleExampleQuery = {this.handleExampleQuery}/>
+						<DataSetComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} handleExampleQuery={this.handleExampleQuery} />
 					</Row>
+					<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
+						relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
+						treeResult={this.state.treeResult} treeKey={this.state.treeKey}
+						width={this.state.width} height={this.state.height} />
 					<Row style={style.basicComponentsStyle}>
-							<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
-								relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
-								treeResult={this.state.treeResult} treeKey={this.state.treeKey}
-								width={this.state.width} height={this.state.height} />
+						<StatBox data={this.state.showedNodeData} />
 					</Row>
-					<Row style={style.basicComponentsStyle}>
-								<StatBox data={this.state.showedNodeData} />
-							</Row>
-							<NodeDataTextField />
+					<NodeDataTextField />
 				</Container>
 				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} /> : null}
 			</Container>

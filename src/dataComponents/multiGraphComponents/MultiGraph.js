@@ -8,13 +8,13 @@ import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, f
 
 class Graph extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.graphRef = React.createRef()
     }
 
     componentDidMount() {
-        const scaledwidth = 0.44 * this.props.width
-        const scaledheigth = 0.44 * this.props.height
+        const scaledwidth =  0.9 * this.props.width
+        const scaledheigth = 0.6 * this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -25,23 +25,14 @@ class Graph extends Component {
         const updateMultiEdge = (selection) => {
             selection.select('path')
                 .attr("d", function (d) {
-                    let x1 = d.source.x,
-                        y1 = d.source.y,
-                        x2 = d.target.x,
-                        y2 = d.target.y,
-                        dx = x2 - x1,
-                        dy = y2 - y1,
-                        dr = 0
+                    let x1 = d.source.x, y1 = d.source.y,
+                        x2 = d.target.x, y2 = d.target.y,
+                        dx = x2 - x1, dy = y2 - y1, dr = 0
                     if (d.count > 1) {
                         dr = (1 / d.count - 1) * Math.sqrt(dx * dx + dy * dy)
                     }
-
-                    let drx = dr,
-                        dry = dr,
-                        xRotation = 0,
-                        largeArc = 0,
-                        sweep = 1
-
+                    let drx = dr, dry = dr,
+                        xRotation = 0, largeArc = 0, sweep = 1
                     if (x1 === x2 && y1 === y2) {
                         xRotation = 45
                         largeArc = 1
@@ -51,7 +42,6 @@ class Graph extends Component {
                         x2 = x2 + 1
                         y2 = y2 + 1
                     }
-
                     return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
                 })
 
@@ -71,10 +61,10 @@ class Graph extends Component {
         this.d3Graph = select(this.graphRef.current)
 
         const force = forceSimulation().nodes(this.props.data.nodes)
-            .force('charge', forceManyBody().strength(-70))
+            .force('charge', forceManyBody().strength(-100))
             .force('link', forceLink(this.props.data.links).distance(200))
             .force('center', forceCenter().x(scaledwidth / 2).y(scaledheigth / 2))
-            .force('collide', forceCollide([10]).iterations([10]))
+            .force('collide', forceCollide([90]).iterations([30]))
             .force("xAxis", forceX(scaledwidth / 2).strength(0.01))
             .force("yAxis", forceY(scaledheigth / 2).strength(0.01))
 
@@ -109,8 +99,8 @@ class Graph extends Component {
     }
 
     render() {
-        const scaledwith = 0.44 * this.props.width
-        const scaledheight = 0.44 * this.props.height
+        const scaledwidth =  0.9 * this.props.width
+        const scaledheigth = 0.6 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
                 <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
@@ -120,9 +110,9 @@ class Graph extends Component {
                 <Multiedge key={i} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
-            <svg className={this.props.nameClass} ref={this.graphRef} width={scaledwith} height={scaledheight}>
+            <svg key={this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth}>
                 <defs>
-                    <marker id="triangle"
+                    <marker id="multitriangle"
                         refX="21" refY="6"
                         markerWidth="100" markerHeight="100"
                         orient="auto" markerUnits="userSpaceOnUse">

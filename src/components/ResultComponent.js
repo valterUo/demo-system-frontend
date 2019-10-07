@@ -5,6 +5,7 @@ import RelationalTabs from '../dataComponents/relationalComponents/relationalTab
 import Graph from '../dataComponents/graphComponents/Graph'
 import NewTree from '../dataComponents/newTreeComponents/newTree'
 import Col from 'react-bootstrap/Col'
+import style from '../styles'
 
 class ResultComponent extends Component {
 
@@ -19,17 +20,22 @@ class ResultComponent extends Component {
         } else if (this.props.queryResultModel === "tree" && this.props.treeResult !== undefined) {
             renderedElement = <NewTree treeResult={this.props.treeResult} width={this.props.width} height={this.props.height} />
         }
-
-        return <Container style={{ margin: "5px" }} fluid="true">
-            <Col style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
-                <Row style={{ marginTop: '5px' }}>
-                    <h4>Result</h4>
-                </Row>
-                <Row style={{ "margin": "10px" }}>
-                    {renderedElement}
-                </Row>
-            </Col>
-        </Container>
+        if (renderedElement == null) {
+            return null
+        } else {
+            return <Row style={style.basicComponentsStyle}>
+                <Container style={{ margin: "5px" }} fluid="true">
+                <Col style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
+                    <Row style={{ marginTop: '5px' }}>
+                        <h4>Result</h4>
+                    </Row>
+                    <Row style={{ "margin": "10px" }}>
+                        {renderedElement}
+                    </Row>
+                </Col>
+            </Container>
+            </Row>
+        }
     }
 }
 export default ResultComponent

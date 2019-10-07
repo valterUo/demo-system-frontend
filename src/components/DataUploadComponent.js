@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import FileSender from '../services/sendFiles'
-//import style from '../styles'
 import Row from 'react-bootstrap/Row'
 import Notification from '../actions/NotificationAction'
 import UploadForm from './UploadForm'
@@ -12,7 +11,8 @@ class DataUploadComponent extends Component {
         super(props)
         this.relationalFile = React.createRef()
         this.xmlFile = React.createRef()
-        this.graphFile = React.createRef()
+        this.graphFileV = React.createRef()
+        this.graphFileE = React.createRef()
     }
 
     setFile = (file, type) => {
@@ -21,8 +21,10 @@ class DataUploadComponent extends Component {
             console.log(file)
         } else if (type === "document") {
             this.xmlFile = file
-        } else if(type === "graph") {
-            this.graphFile = file
+        } else if(type === "graphV") {
+            this.graphFileV = file
+        } else if(type === "graphE") {
+            this.graphFileE = file
         }
     }
 
@@ -34,8 +36,10 @@ class DataUploadComponent extends Component {
             console.log(file)
         } else if (type === "document") {
             file = this.xmlFile
-        } else if(type === "graph") {
-            file = this.graphFile
+        } else if(type === "graphV") {
+            file = this.graphFileV
+        } else if(type === "graphE") {
+            file = this.graphFileE
         }
         const name = file.current.files[0].name
         const address = type
@@ -53,8 +57,9 @@ class DataUploadComponent extends Component {
                 </Col>
                 <Row style={{ "margin": "10px" }}>
                     <UploadForm setFile={this.setFile} id = {"fileupload1"} name = {"relationalFileInput"} handleFileSubmit={this.handleFileSubmit} type = {"relational"} header={"Relational data"} />
-                    <UploadForm setFile={this.setFile} id = {"fileupload2"} name = {"documentFileInput"} handleFileSubmit={this.handleFileSubmit} type = {"document"} header={"XML data"} />
-                    <UploadForm setFile={this.setFile} id = {"fileupload3"} name = {"graphFileInput"} handleFileSubmit={this.handleFileSubmit} type = {"graph"} header={"Graph data"} />
+                    <UploadForm setFile={this.setFile} id = {"fileupload2"} name = {"documentFileInput"} handleFileSubmit={this.handleFileSubmit} type = {"document"} header={"XML/JSON data"} />
+                    <UploadForm setFile={this.setFile} id = {"fileupload3"} name = {"graphFileVertices"} handleFileSubmit={this.handleFileSubmit} type = {"graphV"} header={"Graph vertices"} />
+                    <UploadForm setFile={this.setFile} id = {"fileupload4"} name = {"graphFileEdges"} handleFileSubmit={this.handleFileSubmit} type = {"graphE"} header={"Graph edges"} />
                 </Row>
             </Row>
         </Container>

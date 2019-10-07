@@ -36,11 +36,11 @@ const svgCircle = {
  
 class NewTree extends React.Component {
   render() {
-    const scaledwith = 0.44 * this.props.width
-    const scaledheight = 0.44 * this.props.height
+    const scaledwidth =  0.9 * this.props.width
+    const scaledheigth = 0.6 * this.props.height
     return (
-      <div id="treeWrapper" style={{width: scaledwith, height: scaledheight}}>
-        <Tree data={this.props.treeResult} orientation = "vertical" nodeSvgShape={svgCircle} translate = {{x: scaledwith/2, y: scaledheight/5}} />
+      <div id="treeWrapper" style={{width: scaledwidth, height: scaledheigth}}>
+        <Tree data={this.props.treeResult} orientation = "vertical" nodeSvgShape={svgCircle} translate = {{x: scaledwidth/2, y: scaledheigth/5}} />
       </div>
     );
   }

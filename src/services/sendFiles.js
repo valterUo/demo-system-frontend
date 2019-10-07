@@ -10,7 +10,7 @@ const sendFiles = async (file, fileName, address) => {
     }
     reader.onload = async function (evt) {
         //console.log(evt.target.result)
-        answer = await axios.post('http://localhost:3001/' + address, evt.target.result, { headers: headers })
+        answer = await axios.post('http://localhost:3002/' + address, evt.target.result, { headers: headers })
         console.log(answer)
         let variant = "error"
         let message = "Server failed to process the file."

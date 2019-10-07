@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import Node from './Node'
 import Edge from './Edge'
@@ -26,8 +27,8 @@ class Graph extends Component {
     }
 
     componentDidMount() {
-        const scaledwidth = 0.44 * this.props.width
-        const scaledheigth = 0.44 * this.props.height
+        const scaledwidth = 0.9 * this.props.width
+        const scaledheigth = 0.6 * this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
 
@@ -151,8 +152,8 @@ class Graph extends Component {
 
     render() {
         store.subscribe(this.handleStoreChange)
-        const scaledwidth = 0.44 * this.props.width
-        const scaledheigth = 0.44 * this.props.height
+        const scaledwidth = 0.9 * this.props.width
+        const scaledheigth = 0.6 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (
                 <Node data={node} name={node.name} key={this.props.nodeName + node[Object.keys(node)[0]] + node[Object.keys(node)[1]]} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
@@ -168,7 +169,7 @@ class Graph extends Component {
                         refX="21" refY="6"
                         markerWidth="100" markerHeight="100"
                         orient="auto" markerUnits="userSpaceOnUse">
-                        <path d="M 0 0 12 6 0 12 3 6" fill="black" />
+                        <path d="M 0 0 12 6 0 12 3 6" fill="grey" />
                     </marker>
                 </defs>
                 <g>

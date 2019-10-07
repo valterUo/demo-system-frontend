@@ -7,7 +7,7 @@ const enterLink = (selection) => {
         .attr('stroke-width', 2)
         .style('stroke', 'grey')
         .attr("fill", "none")
-        .attr("marker-end", "url(#triangle)")
+        .attr("marker-end", "url(#multitriangle)")
 
     selection.select('text')
         .style('transform', 'translateX(-50%,-50%')
