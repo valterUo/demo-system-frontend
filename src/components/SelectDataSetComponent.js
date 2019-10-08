@@ -13,10 +13,10 @@ class SelectDataSetComponent extends Component {
     render() {
         return <Container style={{ margin: "5px" }} fluid="true">
             <Row>
-                    <Col>
+                    <Col xl = {6}>
                         <h4>Select dataset</h4>
                     </Col>
-                <Col>
+                <Col xl = {6}>
                     <Dropdown style = {{left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 10000}}>
                         <Dropdown.Toggle variant="dark" id="dropdown-basic">
                             Datasets

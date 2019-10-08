@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button'
 function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionToggle(eventKey)
     return (
-        <Button type="button" variant="dark" onClick={decoratedOnClick}>
+        <Button type="button" variant="dark" onClick={ decoratedOnClick }>
             {children}
         </Button>
     )
@@ -22,8 +22,13 @@ function CustomToggle({ children, eventKey }) {
 class DataSetComponent extends Component {
 
     render() {
-        return <Container style={{ margin: "5px" }} fluid="true">
-            <Accordion defaultActiveKey="e0">
+        return <Container fluid="true">
+            <Card >
+                    <Card.Header style = {{backgroundColor: "#BDF2FF"}}>
+                        <h4>Selected dataset: {this.props.dataSet.header}</h4>
+                    </Card.Header>
+                </Card>
+            <Accordion>
                 <Card >
                     <Card.Header>
                         <CustomToggle eventKey="e0">Upload data</CustomToggle>

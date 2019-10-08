@@ -22,10 +22,9 @@ class App extends Component {
 		super(props)
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
-			width: window.innerWidth, height: window.innerHeight, notification: "",
-			queryResultModel: "", relationalResult: undefined, relationalKey: "initialRelationalKey",
-			graphResult: undefined, graphKey: "initialGraphKey", treeResult: undefined, treeKey: "initialTreeKey", showPopup: false,
-			dataSet: { header: "Simple demo data examples", examples: examples, schemaData: initialSchemaData, schemaKey: "initialKey" }
+			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false,
+			resultSet : {key: undefined, resultData: undefined, model: undefined},
+			dataSet: { header: "Simple demo data", examples: examples, schemaData: initialSchemaData, schemaKey: "initialKey" }
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -41,18 +40,6 @@ class App extends Component {
 
 	updateWindowDimensions() {
 		this.setState({ width: window.innerWidth, height: window.innerHeight })
-	}
-
-	initializeGraphResult = () => {
-		this.setState({ graphResult: undefined, graphKey: "initialGraphKey" })
-	}
-
-	initializeRelationalResult = () => {
-		this.setState({ relationalResult: undefined, relationalKey: "initialRelationalKey" })
-	}
-
-	initializeTreeResult = () => {
-		this.setState({ treeResult: undefined, treeKey: "initialTreeKey" })
 	}
 
 	handleQueryChange = (event) => {
@@ -72,13 +59,16 @@ class App extends Component {
 	}
 
 	handleDataSetChange = (obj) => {
-		console.log(obj)
 		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
 		this.setState({ dataSet: { header: obj.header, examples: obj.examples, schemaData: obj.schemaData, schemaKey: timeStampInMs } })
 	}
 
 	handleExampleQuery = (exampleQuery) => {
 		this.setState({ query: exampleQuery })
+	}
+
+	initializeQueryResult = () => {
+		this.setState({resultSet : {key: undefined, resultData: undefined, model: undefined}})
 	}
 
 	handleQuery = async (event) => {
@@ -94,44 +84,22 @@ class App extends Component {
 			case "relational":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the relational result.", "warning")
-					this.initializeRelationalResult()
 				} else {
-					this.initializeGraphResult()
-					this.initializeTreeResult()
-					this.setState({
-						relationalResult: answer["answer"],
-						queryResultModel: "relational",
-						relationalKey: timeStampInMs
-					})
+					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "relational"}})
 				}
 				break
 			case "graph":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the graph result.", "warning")
-					this.initializeGraphResult()
 				} else {
-					this.initializeRelationalResult()
-					this.initializeTreeResult()
-					this.setState({
-						graphResult: answer["answer"],
-						queryResultModel: "graph",
-						graphKey: timeStampInMs
-					})
+					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "graph"}})
 				}
 				break
 			case "tree":
-				console.log(answer["answer"])
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the tree result.", "warning")
-					this.initializeTreeResult()
 				} else {
-					this.initializeRelationalResult()
-					this.initializeGraphResult()
-					this.setState({
-						treeResult: answer["answer"],
-						queryResultModel: "tree",
-						treeKey: timeStampInMs
-					})
+					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "tree"}})
 				}
 				break
 			default:
@@ -152,10 +120,8 @@ class App extends Component {
 					<Row>
 						<DataSetComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} handleExampleQuery={this.handleExampleQuery} />
 					</Row>
-					<ResultComponent queryResultModel={this.state.queryResultModel} relationalKey={this.state.relationalKey}
-						relationalResult={this.state.relationalResult} graphKey={this.state.graphKey} graphResult={this.state.graphResult}
-						treeResult={this.state.treeResult} treeKey={this.state.treeKey}
-						width={this.state.width} height={this.state.height} />
+					<ResultComponent resultSet = {this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query} 
+						initializeResult = {this.initializeQueryResult.bind(this)} />
 					<Row style={style.basicComponentsStyle}>
 						<StatBox data={this.state.showedNodeData} />
 					</Row>
