@@ -58,7 +58,7 @@ const parseJSONList = (listString) => {
 const JSONtoRelationalTables = (jsonDataList) => {
     let data = []
     let subdata = []
-    console.log(jsonDataList)
+    //console.log(jsonDataList)
     let attributes = Object.keys(jsonDataList[0])
     data.push(attributes)
     jsonDataList.map(element => {

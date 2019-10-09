@@ -76,7 +76,7 @@ class App extends Component {
 		foldQuery.parseLetInQueryBlock(this.state.query)
 		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
 		const answer = await foldQuery.executeQuery(this.state.query)
-		console.log(answer)
+		//console.log(answer)
 		switch (answer["model"]) {
 			case "error":
 				Notification.notify(answer["message"], "warning")
@@ -85,6 +85,7 @@ class App extends Component {
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the relational result.", "warning")
 				} else {
+					//console.log(answer["answer"])
 					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "relational"}})
 				}
 				break

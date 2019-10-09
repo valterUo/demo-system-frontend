@@ -1,0 +1,46 @@
+{
+    "nodes": [
+      {
+        "name": "graph customers",
+        "index": 0
+      },
+      {
+        "name": "relational customers",
+        "index": 1
+      },
+      {
+        "name": "boolean",
+        "index": 2
+      },
+      {
+        "name": "String",
+        "index": 3
+      }
+    ],
+    "links": [
+      {
+        "source": 0,
+        "target": 1,
+        "name": "if customerName x == \"Alice\" then [x] else []",
+        "index": 0
+      },
+      {
+        "source": 0,
+        "target": 2,
+        "name": " customerName x == \"Alice\" ",
+        "index": 1
+      },
+      {
+        "source": 0,
+        "target": 3,
+        "name": "customerName x",
+        "index": 2
+      },
+      {
+        "source": 0,
+        "target": 1,
+        "name": "indentity",
+        "index": 3
+      }
+    ]
+  }

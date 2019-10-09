@@ -28,7 +28,7 @@ class ResultComponent extends Component {
 
         if (this.props.resultSet.model === "relational" && this.props.resultSet.resultData !== undefined) {
             renderedElement = <Col>
-                <RelationalTabs width={this.props.width} height={this.props.height} key={this.props.resultSet.key} tables={this.props.relationalResult} />
+                <RelationalTabs width={this.props.width} height={this.props.height} key={this.props.resultSet.key} tables={this.props.resultSet.resultData} />
             </Col>
         } else if (this.props.resultSet.model === "graph" && this.props.resultSet.resultData !== undefined) {
             renderedElement = <Graph key={this.props.resultSet.key} data={this.props.resultSet.resultData} width={this.props.width} height={this.props.height} nodeName={'GraphNodes'} linkName={'GraphLinks'}

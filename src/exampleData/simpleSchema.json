@@ -22,7 +22,7 @@
         {"source": 8, "target": 5, "name": "contains", "count": 1},
         {"source": 6, "target": 4, "name": "address, cityName, countryName", "count": 1},
         {"source": 6, "target": 1, "name": "locationId, zipCode", "count": 1},
-        {"source": 6, "target": 0, "name": "located", "count": 1},
+        {"source": 0, "target": 6, "name": "located", "count": 1},
         {"source": 0, "target": 7, "name": "graph collection constructor functor", "count": 1},
         {"source": 2, "target": 8, "name": "tree collection constructor functor", "count": 1},
         {"source": 3, "target": 8, "name": "tree collection constructor  functor", "count": 1},
