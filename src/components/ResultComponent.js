@@ -39,14 +39,14 @@ class ResultComponent extends Component {
         if (renderedElement == null) {
             return null
         } else {
-            console.log(this.props.resultSet.resultData)
+            //console.log(this.props.resultSet.resultData)
             return <Row>
                 <Container fluid="true">
                     <Card >
                         <Card.Header style={{ backgroundColor: "#BDF2FF" }}>
                             <Row>
                                 <h4>Result</h4>
-                                <Button style={{ marginLeft: "15px" }} size="sm" variant="dark" onClick={this.props.initializeResult}>Empty</Button>
+                                <Button style={{ marginLeft: "15px", marginTop: "5px", height: "30px" }} size="sm" variant="dark" onClick={this.props.initializeResult}>Empty</Button>
                             </Row>
                         </Card.Header>
                     </Card>

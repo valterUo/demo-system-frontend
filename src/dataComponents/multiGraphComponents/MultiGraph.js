@@ -5,6 +5,7 @@ import { select, selectAll } from 'd3-selection'
 import { event } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
+import Edge from '../graphComponents/Edge'
 
 class Graph extends Component {
     constructor(props) {
@@ -101,18 +102,18 @@ class Graph extends Component {
     render() {
         const scaledwidth =  0.9 * this.props.width
         const scaledheigth = 0.6 * this.props.height
-        const nodes = this.props.data.nodes.map((node) => {
+        const nodes = this.props.data.nodes.map((node, i) => {
             return (
                 <Node data={node} name={node.name} key={node.id} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (
-                <Multiedge key={i} data={link} linkName={this.props.linkName} />)
+                <Multiedge key={link.id === undefined ? link.name : link.id} edgekey = {link.id} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
             <svg key={this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth}>
                 <defs>
-                    <marker id="multitriangle"
+                    <marker id= { "multitriangle" + this.props.linkName }
                         refX="21" refY="6"
                         markerWidth="100" markerHeight="100"
                         orient="auto" markerUnits="userSpaceOnUse">

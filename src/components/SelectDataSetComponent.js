@@ -22,11 +22,11 @@ class SelectDataSetComponent extends Component {
                             Datasets
                     </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <Dropdown.Item href="#/simple" onClick={this.props.handleDataSetChange.bind(this, {header: "Simple demo dataset", examples: examples, schemaData: simpleSchemaData})}>Simple demo dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/patent" onClick={this.props.handleDataSetChange.bind(this, {header: "UDMS Dataset Patent data examples (contain bugs)", examples: patentDataExamples, schemaData: patentSchema})}>UDMS Patent Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/film">UDMS Film Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/university">UDMS University Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/person">UDMS Person Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/simple" onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: examples, schemaData: simpleSchemaData})}>Customer-Orders-Locations Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/patent" onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Patent Dataset (contain bugs)", examples: patentDataExamples, schemaData: patentSchema})}>Patent Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/film">Film Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/university">University Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/person">Person Dataset</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Col>

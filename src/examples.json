@@ -20,7 +20,8 @@
         },
         {
             "header": "Rel + Graph",
-            "examples": ["QUERY (\\x -> [(customerName x, countryName(located x locations))])\nFROM customers\nAS graph\nTO relational\nRETURN all", "QUERY (\\x -> if creditLimit x > 500 then Vertex (customerName x, cityName (located x locations)) else empty)\nFROM customers\nAS graph\nTO graph\n RETURN all"]
+            "examples": ["QUERY (\\x -> [(customerName x, countryName(located x locations))])\nFROM customers\nAS graph\nTO relational\nRETURN all", "QUERY (\\x -> if creditLimit x > 500 then Vertex (customerName x, cityName (located x locations)) else empty)\nFROM customers\nAS graph\nTO graph\n RETURN all",
+                "LET t BE\nQUERY (\\x -> if customerName x == \"John\" then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nQUERY (\\x -> if reachable x (t !! 0) customers then Vertex x else empty)\nFROM customers\nAS graph\nTO graph\nRETURN all"]
         },
         {
             "header": "XML + Graph",
