@@ -15,7 +15,7 @@ class ResultNavigationSidePanel extends Component {
                 <Col>
                     <Card >
                         <Card.Header style={{ backgroundColor: "#BDF2FF" }}>
-                            <Row>
+                            <Row style = {{margin: "5px"}}>
                                 <h4>Result</h4>
                             </Row>
                         </Card.Header>
