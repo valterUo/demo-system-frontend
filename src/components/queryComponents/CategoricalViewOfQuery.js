@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container'
 import MultiGraph from '../../dataComponents/multiGraphComponents/MultiGraph'
-import Button from 'react-bootstrap/Button'
-
 
 class CategoricalViewOfQuery extends Component {
     constructor(props) {

@@ -66,7 +66,7 @@ const queryBox = {
 
 const queryButtonStyle = {
 	marginLeft: "5px",
-	marginRigth: "5px"
+	marginBottom: "5px"
 }
 
 const queryTextStyle = {
@@ -106,6 +106,18 @@ const infoTextStyle = {
 	fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
 }
 
+const navPanelStyle = {
+	borderStyle: "solid",
+	borderRadius: "5px",
+	borderColor: "#d9d9d9",
+	borderWidth: "1px",
+	borderTop: "0px",
+	borderBottom: "0px",
+	align: "middle",
+	paddingTop: "5px",
+	paddingBottom: "5px"
+}
+
 export default {
 	backgroundColorStyle,
 	headerBackGroundColorStyle,
@@ -118,5 +130,6 @@ export default {
 	queryTextStyle,
 	popup,
 	popupInner,
-	infoTextStyle
+	infoTextStyle,
+	navPanelStyle
 }

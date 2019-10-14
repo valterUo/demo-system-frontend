@@ -8,10 +8,10 @@ class ExampleQueryComponent extends Component {
 
     render() {
         return <Container style={{ margin: "5px" }} fluid="true">
-            <Row style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
-                    <div style={{ marginTop: '5px' }}>
-                        <h4>{this.props.header}</h4>
-                    </div>
+            <Row style={{ marginBottom: "5px", marginLeft: "5px" }}>
+                <div>
+                    <h4>{this.props.header}</h4>
+                </div>
                 <Row style={{ "margin": "10px" }}>
                     <ButtonToolbar>
                         {this.props.examples.examples.map((exampleCase, i) =>

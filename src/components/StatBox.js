@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import style from '../styles'
+import Row from 'react-bootstrap/Row'
 
 class StatBox extends Component {
 
@@ -9,12 +11,13 @@ class StatBox extends Component {
             dataBlock = data.map(l => <p key={l["key"]}><b>{l["key"]} : </b> {l["value"]}</p>)
         }
 
-        return <div className= "col">
+        return <Row style={style.basicComponentsStyle}> <div className= "col">
             <h4> Node </h4>
             <div>
                 {dataBlock}
             </div>
         </div>
+        </Row>
     }
 }
 

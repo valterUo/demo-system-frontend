@@ -6,20 +6,8 @@ import Graph from '../dataComponents/graphComponents/Graph'
 import NewTree from '../dataComponents/newTreeComponents/newTree'
 import Col from 'react-bootstrap/Col'
 import style from '../styles'
-import Accordion from 'react-bootstrap/Accordion'
-import { useAccordionToggle } from 'react-bootstrap/AccordionToggle'
 import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
 import CategoricalViewOfQuery from './queryComponents/CategoricalViewOfQuery'
-
-function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionToggle(eventKey)
-    return (
-        <Button type="button" variant="dark" onClick={decoratedOnClick}>
-            {children}
-        </Button>
-    )
-}
 
 class ResultComponent extends Component {
 
@@ -36,42 +24,38 @@ class ResultComponent extends Component {
         } else if (this.props.resultSet.model === "tree" && this.props.resultSet.resultData !== undefined) {
             renderedElement = <NewTree key={this.props.resultSet.key} treeResult={this.props.resultSet.resultData} width={this.props.width} height={this.props.height} />
         }
-        if (renderedElement == null) {
+
+        if (renderedElement === null || (this.props.showResult === false && this.props.showCategoricalView === false)) {
+
             return null
+        } else if (this.props.showCategoricalView === true) {
+
+            return <Row style={style.basicComponentsStyle}>
+                <Container style={{ margin: "5px" }} fluid="true">
+                    <Col style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
+                        <Row style={{ marginTop: '5px' }}>
+                            <h4>Categorical view of the query {this.props.header}</h4>
+                        </Row>
+                        <Row ref={this.mainContainer} style={{ "margin": "10px" }}>
+                            <CategoricalViewOfQuery query={this.props.query} width={this.props.width} height={this.props.height} />
+                        </Row>
+                    </Col>
+                </Container>
+            </Row>
+
         } else {
-            //console.log(this.props.resultSet.resultData)
-            return <Row>
-                <Container fluid="true">
-                    <Card >
-                        <Card.Header style={{ backgroundColor: "#BDF2FF" }}>
-                            <Row>
-                                <h4>Result</h4>
-                                <Button style={{ marginLeft: "15px", marginTop: "5px", height: "30px" }} size="sm" variant="dark" onClick={this.props.initializeResult}>Empty</Button>
-                            </Row>
-                        </Card.Header>
-                    </Card>
-                    <Accordion defaultActiveKey="r0">
-                        <Card >
-                            <Card.Header>
-                                <CustomToggle eventKey="r0">Result</CustomToggle>
-                            </Card.Header>
-                        </Card>
-                        <Accordion.Collapse eventKey="r0">
-                            <Row style={style.basicComponentsStyle}>
-                                {renderedElement}
-                            </Row>
-                        </Accordion.Collapse>
-                        <Card >
-                            <Card.Header>
-                                <CustomToggle eventKey="r1">Categorical view of the query</CustomToggle>
-                            </Card.Header>
-                        </Card>
-                        <Accordion.Collapse eventKey="r1">
-                            <Row style={style.basicComponentsStyle}>
-                                <CategoricalViewOfQuery query={this.props.query} width={this.props.width} height={this.props.height} />
-                            </Row>
-                        </Accordion.Collapse>
-                    </Accordion>
+
+            return <Row style={style.basicComponentsStyle}>
+                <Container style={{ margin: "5px" }} fluid="true">
+                    <Col style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
+                        <Row style={{ marginTop: '5px' }}>
+                            <h4>Result</h4>
+                            <Button style={{ marginLeft: "15px", marginTop: "5px", height: "30px" }} size="sm" variant="dark" onClick={this.props.initializeResult}>Empty</Button>
+                        </Row>
+                        <Row ref={this.mainContainer} style={{ "margin": "10px" }}>
+                            {renderedElement}
+                        </Row>
+                    </Col>
                 </Container>
             </Row>
         }

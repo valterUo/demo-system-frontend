@@ -5,7 +5,6 @@ import { select, selectAll } from 'd3-selection'
 import { event } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
-import Edge from '../graphComponents/Edge'
 
 class Graph extends Component {
     constructor(props) {
@@ -14,7 +13,7 @@ class Graph extends Component {
     }
 
     componentDidMount() {
-        const scaledwidth =  0.9 * this.props.width
+        const scaledwidth =  0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
@@ -100,7 +99,7 @@ class Graph extends Component {
     }
 
     render() {
-        const scaledwidth =  0.9 * this.props.width
+        const scaledwidth =  0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
         const nodes = this.props.data.nodes.map((node, i) => {
             return (

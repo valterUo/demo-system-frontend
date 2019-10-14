@@ -40,6 +40,7 @@ class MultiEdge extends Component {
                 console.log(word)
                 return word.trim()
             }
+            return word
         })
         while (words.length > 0) {
             let word = words.pop()

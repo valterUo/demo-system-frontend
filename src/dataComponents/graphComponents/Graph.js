@@ -27,7 +27,7 @@ class Graph extends Component {
     }
 
     componentDidMount() {
-        const scaledwidth = 0.9 * this.props.width
+        const scaledwidth = 0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
         const nodeName = this.props.nodeName
         const linkName = this.props.linkName
@@ -152,7 +152,7 @@ class Graph extends Component {
 
     render() {
         store.subscribe(this.handleStoreChange)
-        const scaledwidth = 0.9 * this.props.width
+        const scaledwidth = 0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
         const nodes = this.props.data.nodes.map((node) => {
             return (

@@ -14,8 +14,11 @@ import ResultComponent from './components/ResultComponent'
 import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
 import examples from './examples.json'
-import DataSetComponent from './components/DataSetComponent'
+import SchemaComponent from './components/SchemaComponent'
 import initialSchemaData from './exampleData/simpleSchema.json'
+import Col from 'react-bootstrap/Col'
+import ResultNavigationSidePanel from './components/ResultNavigationSidePanel'
+import DataSetSidePanel from './components/DataSetSidePanel'
 
 class App extends Component {
 	constructor(props) {
@@ -23,8 +26,8 @@ class App extends Component {
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
 			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false,
-			resultSet : {key: undefined, resultData: undefined, model: undefined},
-			dataSet: { header: "Simple demo data", examples: examples, schemaData: initialSchemaData, schemaKey: "initialKey" }
+			resultSet: { key: undefined, resultData: undefined, model: undefined },
+			dataSet: { header: "Simple demo data", examples: examples, schemaData: initialSchemaData, schemaKey: "initialKey" }, showSchemaCategory: false, showCategoricalView: false, showResult: false
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -50,6 +53,21 @@ class App extends Component {
 		this.setState((prevState) => { return { showPopup: !prevState.showPopup } })
 	}
 
+	toggleSchemaCategory(event) {
+		event.preventDefault()
+		this.setState((prevState) => { return { showSchemaCategory: !prevState.showSchemaCategory, showResult: false, showCategoricalView: false } })
+	}
+
+	toggleResult(event) {
+		event.preventDefault()
+		this.setState({ showSchemaCategory: false, showResult: true, showCategoricalView: false })
+	}
+
+	toggleCategoricalView(event) {
+		event.preventDefault()
+		this.setState({ showSchemaCategory: false, showResult: false, showCategoricalView: true })
+	}
+
 	handleStoreChange = () => {
 		if (this.state.showedNodeData !== store.getState().nodeData) {
 			this.setState({
@@ -68,7 +86,7 @@ class App extends Component {
 	}
 
 	initializeQueryResult = () => {
-		this.setState({resultSet : {key: undefined, resultData: undefined, model: undefined}})
+		this.setState({ resultSet: { key: undefined, resultData: undefined, model: undefined } })
 	}
 
 	handleQuery = async (event) => {
@@ -84,21 +102,21 @@ class App extends Component {
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the relational result.", "warning")
 				} else {
-					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "relational"}})
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "relational" }, showResult: true })
 				}
 				break
 			case "graph":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the graph result.", "warning")
 				} else {
-					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "graph"}})
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "graph" }, showResult: true })
 				}
 				break
 			case "tree":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the tree result.", "warning")
 				} else {
-					this.setState({resultSet : {key: timeStampInMs, resultData: answer["answer"], model: "tree"}})
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "tree" }, showResult: true })
 				}
 				break
 			default:
@@ -113,19 +131,23 @@ class App extends Component {
 		return (
 			<Container style={{ backgroundColor: "#f1f1f2", minHeight: this.state.height }} fluid='true'>
 				<NavigationBarComponent />
-				<Container fluid='true'>
-					<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataSetChange={this.handleDataSetChange} />
-					<NotificationComponent />
-					<Row>
-						<DataSetComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} handleExampleQuery={this.handleExampleQuery} />
-					</Row>
-					<ResultComponent resultSet = {this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query} 
-						initializeResult = {this.initializeQueryResult.bind(this)} />
-					<Row style={style.basicComponentsStyle}>
-						<StatBox data={this.state.showedNodeData} />
-					</Row>
-					<NodeDataTextField />
-				</Container>
+				<Row>
+					<Col xl={3} style={style.navPanelStyle} >
+						<DataSetSidePanel dataSet={this.state.dataSet} handleExampleQuery={this.handleExampleQuery} toggleSchemaCategory={this.toggleSchemaCategory.bind(this)} />
+						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} />
+					</Col>
+					<Col xl={9}>
+						<Container fluid='true'>
+							<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataSetChange={this.handleDataSetChange} />
+							<NotificationComponent />
+							<SchemaComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} showSchemaCategory={this.state.showSchemaCategory} />
+							<ResultComponent resultSet={this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query}
+								initializeResult={this.initializeQueryResult.bind(this)} showCategoricalView={this.state.showCategoricalView} showResult={this.state.showResult} />
+							<StatBox data={this.state.showedNodeData} />
+							<NodeDataTextField />
+						</Container>
+					</Col>
+				</Row>
 				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} /> : null}
 			</Container>
 		)
