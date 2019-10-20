@@ -1,0 +1,15 @@
+{
+    "examples": [{
+            "header": "JSON",
+            "examples": []
+        },
+        {
+            "header": "RDF",
+            "examples": ["QUERY (\\x newrdf -> if length (triplesOf newrdf) < 20 then addTriple newrdf x else newrdf)\nFROM filmGraph\nAS rdf\nTO rdf\nRETURN all"]
+        },
+        {
+            "header": "JSON + RDF",
+            "examples": []
+        }
+    ]
+}

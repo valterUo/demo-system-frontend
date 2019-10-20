@@ -1,0 +1,15 @@
+{
+    "examples": [{
+            "header": "Rel",
+            "examples": []
+        },
+        {
+            "header": "RDF",
+            "examples": []
+        },
+        {
+            "header": "Rel + RDF",
+            "examples": []
+        }
+    ]
+}

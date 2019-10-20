@@ -13,9 +13,9 @@ import Notification from './actions/NotificationAction'
 import ResultComponent from './components/ResultComponent'
 import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
-import examples from './examples.json'
+import simpleExamples from './queryExamples/simpleDemoDataExamples.json'
 import SchemaComponent from './components/SchemaComponent'
-import initialSchemaData from './exampleData/simpleSchema.json'
+import initialSchemaData from './schemasForD3/simpleSchema.json'
 import Col from 'react-bootstrap/Col'
 import ResultNavigationSidePanel from './components/ResultNavigationSidePanel'
 import DataSetSidePanel from './components/DataSetSidePanel'
@@ -27,7 +27,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
 			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
-			dataSet: { header: "Simple demo data", examples: examples, schemaData: initialSchemaData, schemaKey: "initialKey" }, showSchemaCategory: false, showCategoricalView: false, showResult: false
+			dataSet: { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: initialSchemaData, schemaKey: "initialKey" }, showSchemaCategory: false, showCategoricalView: false, showResult: false
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}

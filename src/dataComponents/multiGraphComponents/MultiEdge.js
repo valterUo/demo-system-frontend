@@ -30,34 +30,29 @@ class MultiEdge extends Component {
     }
 
     wrapText = (text, width) => {
-        let line = [], lineNumber = 1,
+        let line = [], lineNumber = 0,
             lineHeight = -5, // pxs
             y = this.d3Link.select("textPath").attr("y"),
             dy = parseFloat(this.d3Link.select("text").attr("dy")),
-            tspan = this.d3Link.select("textPath").text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "px")
+            tspan = this.d3Link.select("textPath").text(null).append("tspan").attr("x", 20).attr("y", y).attr("dy", dy + "px")
         let words = text.split(" ").filter(word => {
             if(word !== "" || word !== "\n" || word !== " ") {
-                console.log(word)
                 return word.trim()
             }
             return word
         })
         while (words.length > 0) {
             let word = words.pop()
-            //console.log(word)
             line.push(word)
             const printableLine = line.slice().reverse()
-            //console.log(printableLine)
             tspan.text(printableLine.join(" "))
-            //console.log(line)
             if (tspan.node().getComputedTextLength() > width) {
                 line.pop()
                 const printableLine = line.slice().reverse()
-                console.log(printableLine)
+                //console.log(printableLine)
                 tspan.text(printableLine.join(" "))
                 line = [word]
-                //console.log(line)
-                tspan = this.d3Link.select("textPath").append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "px")
+                tspan = this.d3Link.select("textPath").append("tspan").attr("x", 50).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "px")
             }
         }
     }
@@ -65,7 +60,7 @@ class MultiEdge extends Component {
     handleMouseEntering = () => {
         this.d3Link.select("text")
             .attr("visibility", "visible")
-        this.wrapText(this.props.data.name, 150)
+        this.wrapText(this.props.data.name, 170)
         this.d3Link.select('path')
             .attr('stroke-width', 5)
             .style('stroke', '#666666')

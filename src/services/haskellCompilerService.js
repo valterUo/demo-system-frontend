@@ -43,6 +43,20 @@ const compileGraphQuery = async (command) => {
     return graphData
 }
 
+const compileRDFGraphQuery = async (command) => {
+    const answer = await axios.post('http://localhost:3002/query', "encode $ rdfTriplesToD3Graph $ triplesOf " + command, {
+        headers: {
+            'Content-Type': 'text/plain'
+        }
+    })
+    let graphData
+    if (answer.data.includes("nodes") && answer.data.includes("links")) {
+        console.log(answer.data)
+        graphData = parseJSONStringtoD3js(answer.data)
+    }
+    return graphData
+}
+
 const parseJSONList = (listString) => {
     let m = listString.indexOf('{') - 1
     let n = listString.indexOf('*')
@@ -130,5 +144,6 @@ const parseJSONtoTree = (jsonDataList) => {
 export default {
     compileRelationalQuery,
     compileGraphQuery,
-    compileTreeQuery
+    compileTreeQuery,
+    compileRDFGraphQuery
 }

@@ -3,10 +3,20 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Dropdown from 'react-bootstrap/Dropdown'
-import examples from '../examples.json'
-import patentDataExamples from '../PatentDataExamples.json'
-import simpleSchemaData from '../exampleData/simpleSchema.json'
-import patentSchema from '../exampleData/patentSchema.json'
+
+// Schemas for drawing D3 graphs:
+import simpleSchemaData from '../schemasForD3/simpleSchema.json'
+import patentSchema from '../schemasForD3/patentSchema.json'
+import filmSchema from '../schemasForD3/filmSchema.json'
+import universitySchema from '../schemasForD3/universitySchema.json'
+import personSchema from '../schemasForD3/personSchema.json'
+
+//Query examples:
+import simpleExamples from '../queryExamples/simpleDemoDataExamples.json'
+import patentDataExamples from '../queryExamples/patentDataExamples.json'
+import filmExamples from '../queryExamples/filmDataExamples.json'
+import universityExamples from '../queryExamples/universityDataExamples.json'
+import personExamples from '../queryExamples/personDataExamples.json'
 
 class SelectDataSetComponent extends Component {
 
@@ -22,11 +32,26 @@ class SelectDataSetComponent extends Component {
                             Datasets
                     </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <Dropdown.Item href="#/simple" onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: examples, schemaData: simpleSchemaData})}>Customer-Orders-Locations Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/patent" onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Patent Dataset (contain bugs)", examples: patentDataExamples, schemaData: patentSchema})}>Patent Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/film">Film Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/university">University Dataset</Dropdown.Item>
-                            <Dropdown.Item href="#/person">Person Dataset</Dropdown.Item>
+                            <Dropdown.Item href="#/simple" 
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: simpleSchemaData})}>
+                                    Customer-Orders-Locations Dataset
+                            </Dropdown.Item>
+                            <Dropdown.Item href="#/patent" 
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Patent Dataset (contain bugs)", examples: patentDataExamples, schemaData: patentSchema})}>
+                                    Patent Dataset
+                            </Dropdown.Item>
+                            <Dropdown.Item href="#/film"
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: filmExamples, schemaData: filmSchema})}>
+                                    Film Dataset
+                            </Dropdown.Item>
+                            <Dropdown.Item href="#/university"
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: universityExamples, schemaData: universitySchema})}>
+                                    University Dataset
+                            </Dropdown.Item>
+                            <Dropdown.Item href="#/person" 
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: personExamples, schemaData: personSchema})}>
+                                    Person Dataset
+                            </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Col>

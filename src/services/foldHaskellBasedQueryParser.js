@@ -67,6 +67,7 @@ const parseMainQueryBlock = (inputString) => {
             "message": "Error! The function (defined in QUERY line) needs to be in paranthesis."
         }
     }
+    console.log(queryElements)
     switch (queryElements[2]) {
         case "relational":
         case "tree":
@@ -80,7 +81,7 @@ const parseMainQueryBlock = (inputString) => {
                     break
                 case "graph":
                     haskellQuery.push(queryElements[0])
-                    haskellQuery.push(" empty ")
+                    haskellQuery.push(" Algebra.Graph.empty ")
                     haskellQuery.push(queryElements[1])
                     break
                 default:
@@ -99,11 +100,38 @@ const parseMainQueryBlock = (inputString) => {
                     haskellQuery.push(queryElements[1])
                     break
                 case "graph":
-                    haskellQuery.push("empty ")
+                    haskellQuery.push("Algebra.Graph.empty ")
                     haskellQuery.push(queryElements[0])
                     haskellQuery.push(" overlay ")
                     haskellQuery.push("connect ")
                     haskellQuery.push(queryElements[1])
+                    break
+                default:
+                    return "Error!"
+            }
+            break
+        case "rdf":
+            haskellQuery.push("(foldrdf ")
+            switch (queryElements[3]) {
+                case "relational":
+                case "tree":
+                    haskellQuery.push(" [] ")
+                    haskellQuery.push(queryElements[0])
+                    haskellQuery.push(" (union) ")
+                    haskellQuery.push("(union) ")
+                    haskellQuery.push(queryElements[1])
+                    break
+                case "graph":
+                    haskellQuery.push("Algebra.Graph.empty ")
+                    haskellQuery.push(queryElements[0])
+                    haskellQuery.push(" overlay ")
+                    haskellQuery.push("connect ")
+                    haskellQuery.push(queryElements[1])
+                    break
+                case "rdf":
+                    haskellQuery.push(queryElements[0])
+                    haskellQuery.push(" RDF.empty ")
+                    haskellQuery.push(queryElements[1] + " :: RDF TList)")
                     break
                 default:
                     return "Error!"
@@ -146,6 +174,11 @@ const executeQuery = async (inputQuery) => {
         return {
             "model": model,
             "answer": await haskellCompiler.compileTreeQuery(query)
+        }
+    } else if(model === "rdf") {
+        return {
+            "model": model,
+            "answer": await haskellCompiler.compileRDFGraphQuery(query)
         }
     } else if (model === "error") {
         return parsedQueryList

@@ -1,0 +1,15 @@
+{
+    "examples": [{
+            "header": "JSON",
+            "examples": []
+        },
+        {
+            "header": "RDF",
+            "examples": []
+        },
+        {
+            "header": "JSON + RDF",
+            "examples": []
+        }
+    ]
+}
