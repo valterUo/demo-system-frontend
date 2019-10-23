@@ -51,9 +51,10 @@ const compileRDFGraphQuery = async (command) => {
     })
     let graphData
     if (answer.data.includes("nodes") && answer.data.includes("links")) {
-        console.log(answer.data)
+        //console.log(answer.data)
         graphData = parseJSONStringtoD3js(answer.data)
     }
+    console.log(graphData)
     return graphData
 }
 
@@ -104,6 +105,7 @@ const parseJSONStringtoD3js = (jsonString) => {
     let n = jsonString.lastIndexOf('}')
     jsonString = jsonString.substring(m !== -1 ? m : 0, n !== -1 ? n : jsonString.length)
     jsonString = jsonString + '}"'
+    console.log(jsonString)
     try {
         let obj = JSON.parse(JSON.parse(jsonString))
     obj["nodes"] = obj["nodes"].map(node => JSON.parse(node))

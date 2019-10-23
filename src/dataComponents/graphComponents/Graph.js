@@ -151,16 +151,16 @@ class Graph extends Component {
     }
 
     render() {
-        store.subscribe(this.handleStoreChange)
+        //store.subscribe(this.handleStoreChange)
         const scaledwidth = 0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
-        const nodes = this.props.data.nodes.map((node) => {
+        const nodes = this.props.data.nodes.map((node, i) => {
             return (
-                <Node data={node} name={node.name} key={this.props.nodeName + node[Object.keys(node)[0]] + node[Object.keys(node)[1]]} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
+                <Node data={node} name={node.name} key={node.id === undefined ? i : node.id} nodeName={this.props.nodeName} editableGraph={this.props.editableGraph} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (
-                <Edge key={i} data={link} linkName={this.props.linkName} />)
+                <Edge key={link.id === undefined ? i : link.id} data={link} linkName={this.props.linkName} />)
         })
         return (<div>
             <svg key={this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth}>

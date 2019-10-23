@@ -177,7 +177,7 @@ const executeQuery = async (inputQuery) => {
         }
     } else if(model === "rdf") {
         return {
-            "model": model,
+            "model": "graph",
             "answer": await haskellCompiler.compileRDFGraphQuery(query)
         }
     } else if (model === "error") {

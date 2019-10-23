@@ -24,9 +24,7 @@ class ResultComponent extends Component {
         } else if (this.props.resultSet.model === "tree" && this.props.resultSet.resultData !== undefined) {
             renderedElement = <NewTree key={this.props.resultSet.key} treeResult={this.props.resultSet.resultData} width={this.props.width} height={this.props.height} />
         }
-
         if (renderedElement === null || (this.props.showResult === false && this.props.showCategoricalView === false)) {
-
             return null
         } else if (this.props.showCategoricalView === true) {
 
