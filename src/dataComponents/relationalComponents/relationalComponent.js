@@ -59,9 +59,9 @@ class RelationalComponent extends Component {
     }
 
     render() {
-        const scaledwith = 0.44*this.props.width
-        const scaledheigth = 0.44*this.props.height
-        return <div style={{ overflow: "scroll", width: scaledwith, height: scaledheigth }}>
+        const scaledwidth = 0.67 * this.props.width
+        const scaledheigth = 0.6 * this.props.height
+        return <div style={{ overflow: "scroll", width: scaledwidth, height: scaledheigth }}>
             <div ref={table => this.table = table}>
             </div>
         </div>

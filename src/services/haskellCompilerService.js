@@ -51,7 +51,6 @@ const compileRDFGraphQuery = async (command) => {
     })
     let graphData
     if (answer.data.includes("nodes") && answer.data.includes("links")) {
-        //console.log(answer.data)
         graphData = parseJSONStringtoD3js(answer.data)
     }
     console.log(graphData)
@@ -62,6 +61,10 @@ const parseJSONList = (listString) => {
     let m = listString.indexOf('{') - 1
     let n = listString.indexOf('*')
     listString = listString.substring(m !== -1 ? m : 0, n !== -1 ? n : listString.length)
+    listString = listString.replace(/\\/g, "\\\\\\\\")
+                           .replace(/\\\\\\\\"/g, "\\\"")
+                           .replace(/\//g, "\\\\/")
+    console.log([listString])
     try {
         listString = JSON.parse(JSON.parse(listString))
         return listString["result"]
@@ -73,7 +76,6 @@ const parseJSONList = (listString) => {
 const JSONtoRelationalTables = (jsonDataList) => {
     let data = []
     let subdata = []
-    //console.log(jsonDataList)
     let attributes = Object.keys(jsonDataList[0])
     data.push(attributes)
     jsonDataList.map(element => {

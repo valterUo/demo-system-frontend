@@ -73,35 +73,41 @@ class CategoricalViewOfQuery extends Component {
 
     parseLambda = (lambda, domain, target) => {
         let lambdaf = lambda
-        if (lambda.includes("->") && !(this.splitted)) {
-            const re = /->(.+)/
-            let f = lambda.split(re)
-            console.log(f)
-            lambdaf = f[1].trim()
-            this.splitted = true
-            return { domain: target, outerFunction: "-", innerFunction: this.parseLambda(lambdaf, target.split(" ")[1], domain) }
-        }
-        console.log(lambdaf)
-        if (lambdaf.startsWith("if")) {
-            let answer = this.parseIf(lambdaf, domain, target)
-            return answer
-        } else if (lambdaf.startsWith("case")) {
+        try {
+            if (lambda.includes("->") && !(this.splitted)) {
+                const re = /->(.+)/
+                let f = lambda.split(re)
+                console.log(f)
+                lambdaf = f[1].trim()
+                this.splitted = true
+                return { domain: target, outerFunction: "-", innerFunction: this.parseLambda(lambdaf, target.split(" ")[1], domain) }
+            }
             console.log(lambdaf)
-            let g = lambdaf.split(/->(.+)/).join("@").split(";").join("@").split("@")
-            console.log(g)
-            this.parseLambda(g[1].trim(), domain, target)
-        } else if (lambdaf.includes("==")) {
-            let answer = this.parseBooleanFunction(lambdaf, domain, target, "==")
-            return answer
-        } else if (lambdaf.includes("<")) {
-            let answer = this.parseBooleanFunction(lambdaf, domain, target, "<")
-            return answer
-        } else if (lambdaf.includes(">")) {
-            let answer = this.parseBooleanFunction(lambdaf, domain, target, ">")
-            return answer
-        } else {
-            return { domain: target.split(" ")[1], outerFunction: lambda.trim(), target: target }
+            if (lambdaf.startsWith("if")) {
+                let answer = this.parseIf(lambdaf, domain, target)
+                return answer
+            } else if (lambdaf.startsWith("case")) {
+                console.log(lambdaf)
+                let g = lambdaf.split(/->(.+)/).join("@").split(";").join("@").split("@")
+                console.log(g)
+                this.parseLambda(g[1].trim(), domain, target)
+            } else if (lambdaf.includes("==")) {
+                let answer = this.parseBooleanFunction(lambdaf, domain, target, "==")
+                return answer
+            } else if (lambdaf.includes("<")) {
+                let answer = this.parseBooleanFunction(lambdaf, domain, target, "<")
+                return answer
+            } else if (lambdaf.includes(">")) {
+                let answer = this.parseBooleanFunction(lambdaf, domain, target, ">")
+                return answer
+            } else {
+                return { domain: target.split(" ")[1], outerFunction: lambda.trim(), target: target }
+            }
+
+        } catch (error) {
+            console.log(error)
         }
+
     }
 
     parseIf = (lambda, domain, target) => {
@@ -134,10 +140,10 @@ class CategoricalViewOfQuery extends Component {
             let newIndex = graph1.nodes.push(node) - 1
             graph2.links = graph2.links.map(link => {
                 let newLink = link
-                if(link.source === i) {
+                if (link.source === i) {
                     newLink.source = newIndex
                 }
-                if(link.target === i) {
+                if (link.target === i) {
                     newLink.target = newIndex
                 }
                 return newLink

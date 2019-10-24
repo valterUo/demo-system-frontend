@@ -8,10 +8,6 @@ const enterLink = (selection) => {
         .style('stroke', 'grey')
         .attr("fill", "none")
         .attr("marker-end", "url(#triangle)")
-    //.attr('stroke-width', 3)
-    //.style('stroke', 'black')
-    //.style('opacity', '.1')
-    //.attr("marker-end", "url(#triangle)")
 
     selection.select('text')
         .attr('dy', '.35em')

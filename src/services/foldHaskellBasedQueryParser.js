@@ -71,10 +71,12 @@ const parseMainQueryBlock = (inputString) => {
     switch (queryElements[2]) {
         case "relational":
         case "tree":
+        case "json":
             haskellQuery.push("foldr ")
             switch (queryElements[3]) {
                 case "relational":
                 case "tree":
+                case "json":
                     haskellQuery.push(queryElements[0])
                     haskellQuery.push(" [] ")
                     haskellQuery.push(queryElements[1])
@@ -93,6 +95,7 @@ const parseMainQueryBlock = (inputString) => {
             switch (queryElements[3]) {
                 case "relational":
                 case "tree":
+                case "json":
                     haskellQuery.push(" [] ")
                     haskellQuery.push(queryElements[0])
                     haskellQuery.push(" (union) ")
@@ -115,6 +118,7 @@ const parseMainQueryBlock = (inputString) => {
             switch (queryElements[3]) {
                 case "relational":
                 case "tree":
+                case "json":
                     haskellQuery.push(" [] ")
                     haskellQuery.push(queryElements[0])
                     haskellQuery.push(" (union) ")
@@ -179,6 +183,11 @@ const executeQuery = async (inputQuery) => {
         return {
             "model": "graph",
             "answer": await haskellCompiler.compileRDFGraphQuery(query)
+        }
+    } else if(model === "json") {
+        return {
+            "model": "relational",
+            "answer": await haskellCompiler.compileRelationalQuery(query)
         }
     } else if (model === "error") {
         return parsedQueryList

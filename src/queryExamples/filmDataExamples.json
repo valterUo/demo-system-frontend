@@ -1,7 +1,8 @@
 {
     "examples": [{
             "header": "JSON",
-            "examples": []
+            "examples": ["QUERY (\\x xs -> if length xs < 20 then x:xs else xs)\nFROM films\nAS relational\nTO relational\nRETURN all",
+            "QUERY (\\x xs -> if isInfixOf \"Lillo Brancato\" (actors x) then x:xs else xs)\nFROM films\nAS relational\nTO relational\nRETURN all"]
         },
         {
             "header": "RDF",
