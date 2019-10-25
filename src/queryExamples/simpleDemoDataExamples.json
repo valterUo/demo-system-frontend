@@ -11,7 +11,8 @@
             "header": "Graph",
             "examples": ["QUERY (\\x -> Vertex x)\n FROM customers\n AS graph\n TO graph\n RETURN all",
                 "LET t BE\n QUERY (\\x -> if customerName x == \"Alice\" then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n QUERY (\\x -> if any (\\y -> knows x y customers) t then Vertex x else Algebra.Graph.empty)\n FROM customers\n AS graph\n TO graph\n RETURN all",
-                "LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nFROM k\nAS relational\nTO relational\nRETURN all"
+                "LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\nFROM customers\nAS graph\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nFROM k\nAS relational\nTO relational\nRETURN all",
+                "LET t BE\nQUERY (\\x -> if (customerId x ==  3 || customerId x == 4) then Vertex x else Algebra.Graph.empty)\nFROM customers\nAS graph\nTO graph\nRETURN all\nIN\nQUERY (\\x -> findTargetNeighbors x customers)\nFROM t\nAS graph\nTO graph\nRETURN all"
             ]
         },
         {
