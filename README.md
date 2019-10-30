@@ -1,6 +1,7 @@
-# Category theory in multi-model databases
+# MultiCategory
+## Category theory on multi-model databases
 
-This is the frontend project for the [backend](https://github.com/valterUo/demo-system-backend-Haskell). Category theoretical backround of this project is described in this unofficial draft [Some Applications of Category Theory to Multi-Model Queries](https://www.overleaf.com/read/kqvkvrhcnmxv).
+This is the frontend project for the [backend](https://github.com/valterUo/demo-system-backend-Haskell). Some part of the category theoretical background of this project is described in this unofficial draft [Some Applications of Category Theory to Multi-Model Queries](https://www.overleaf.com/read/kqvkvrhcnmxv).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and it uses [D3.js](https://d3js.org/).
 
@@ -10,14 +11,13 @@ You need to have [Node.js](https://nodejs.org/en/) installed. With Node you will
 
 ### `npm install`
 
-After the installation, you can start the program
+The installation will take a while and a folder called node_modules is created. After the installation, you can start the program
 
 ### `npm start`
 
-This runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This runs the app in the development mode. Probably your default browser will open the front page automatically. If not, open [http://localhost:3000](http://localhost:3000) to view the frontend in the browser. The whole application needs the [backend](https://github.com/valterUo/demo-system-backend-Haskell) to work properly and its installation guide is described in its github page. <br> 
 
-The page will reload if you make edits.<br>
+The page will reload automatically if you make edits.<br>
 You will also see any lint errors in the console.
 
 ### `npm test`
@@ -34,16 +34,6 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## Example query
 
