@@ -21,7 +21,7 @@ class ResultComponent extends Component {
         } else if (this.props.resultSet.model === "graph" && this.props.resultSet.resultData !== undefined) {
             renderedElement = <Graph key={this.props.resultSet.key} data={this.props.resultSet.resultData} width={this.props.width} height={this.props.height} nodeName={'GraphNodes'} linkName={'GraphLinks'}
                 nameClass={'GraphClassName'} editableGraph={false} />
-        } else if (this.props.resultSet.model === "tree" && this.props.resultSet.resultData !== undefined) {
+        } else if (this.props.resultSet.model === "xml" && this.props.resultSet.resultData !== undefined) {
             renderedElement = <NewTree key={this.props.resultSet.key} treeResult={this.props.resultSet.resultData} width={this.props.width} height={this.props.height} />
         }
         if (renderedElement === null || (this.props.showResult === false && this.props.showCategoricalView === false)) {

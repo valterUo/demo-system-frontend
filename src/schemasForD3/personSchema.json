@@ -2,13 +2,13 @@
     "nodes": [
         {"name": "Customer", "attributes":"customerId, customerName, creditLimit, location", "model": "graph", "id": 0},
         {"name": "Int", "attributes":"-", "model": "primitive", "id": 1},
-        {"name": "Product", "attributes":"productId, productName, productPrice", "model": "tree", "id": 2},
-        {"name": "Order", "attributes": "orderNumber, orderProducts", "model": "tree", "id": 3},
+        {"name": "Product", "attributes":"productId, productName, productPrice", "model": "xml", "id": 2},
+        {"name": "Order", "attributes": "orderNumber, orderProducts", "model": "xml", "id": 3},
         {"name": "String", "attributes": "-", "model": "primitive", "id": 4},
         {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 5},
         {"name": "Location", "attributes": "locationId, address, cityName, zipCode, countryName", "model": "relational", "id": 6},
         {"name": "Graph Customers", "attributes": "-", "model": "graph", "id": 7},
-        {"name": "Tree Orders", "attributes": "-", "model": "tree", "id": 8},
+        {"name": "XML Orders", "attributes": "-", "model": "XML", "id": 8},
         {"name": "Relational Locations", "attributes": "-", "model": "relational", "id": 9}
     ], 
     "links": [
@@ -24,8 +24,8 @@
         {"source": 6, "target": 1, "name": "locationId, zipCode", "count": 1},
         {"source": 0, "target": 6, "name": "located", "count": 1},
         {"source": 0, "target": 7, "name": "graph collection constructor functor", "count": 1},
-        {"source": 2, "target": 8, "name": "tree collection constructor functor", "count": 1},
-        {"source": 3, "target": 8, "name": "tree collection constructor  functor", "count": 1},
+        {"source": 2, "target": 8, "name": "XML collection constructor functor", "count": 1},
+        {"source": 3, "target": 8, "name": "XML collection constructor  functor", "count": 1},
         {"source": 6, "target": 9, "name": "relational collection constructor functor", "count": 1}
         ]
 }

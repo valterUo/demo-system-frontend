@@ -112,11 +112,18 @@ class App extends Component {
 					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "graph" }, showResult: true })
 				}
 				break
-			case "tree":
+			case "xml":
 				if (answer["answer"] === undefined) {
-					Notification.notify("Error in expressing the tree result.", "warning")
+					Notification.notify("Error in expressing the XML result.", "warning")
 				} else {
-					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "tree" }, showResult: true })
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "xml" }, showResult: true })
+				}
+				break
+			case "json":
+				if (answer["answer"] === undefined) {
+					Notification.notify("Error in expressing the json result.", "warning")
+				} else {
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "json" }, showResult: true })
 				}
 				break
 			default:

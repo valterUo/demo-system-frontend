@@ -8,9 +8,9 @@ class CategoricalViewOfQuery extends Component {
         this.state = {
             graphData: undefined,
             morphisms: [{ name: "knows", domain: "Graph customers", target: "Boolean" }, { name: "customerId", domain: "Customer", target: "Int" }, { name: "creditLimit", domain: "Customer", target: "Int" }, { name: "customerName", domain: "Customer", target: "String" }, { name: "productPrice", domain: "Product", target: "Int" }, { name: "productId", domain: "Product", target: "String" }, { name: "productName", domain: "Product", target: "String" },
-            { name: "orderNumber", domain: "Order", target: "String" }, { name: "ordered", domain: "Order", target: "Customer" }, { name: "contains", domain: "Tree Orders", target: "Boolean" }, { name: "address", domain: "Location", target: "String" }, { name: "cityName", domain: "Location", target: "String" }, { name: "countryName", domain: "Location", target: "String" }, { name: "locationId", domain: "Location", target: "Int" },
+            { name: "orderNumber", domain: "Order", target: "String" }, { name: "ordered", domain: "Order", target: "Customer" }, { name: "contains", domain: "XML Orders", target: "Boolean" }, { name: "address", domain: "Location", target: "String" }, { name: "cityName", domain: "Location", target: "String" }, { name: "countryName", domain: "Location", target: "String" }, { name: "locationId", domain: "Location", target: "Int" },
             { name: "zipCode", domain: "Location", target: "Int" }, { name: "located", domain: "Customer", target: "Location" }, { name: "cons Graph", domain: "Customer", target: "Graph customers" },
-            { name: "cons Location", domain: "Location", target: "Relational locations" }, { name: "cons Order", domain: "Order", target: "Tree orders" }]
+            { name: "cons Location", domain: "Location", target: "Relational locations" }, { name: "cons Order", domain: "Order", target: "XML orders" }]
         }
         this.splitted = React.createRef()
     }
@@ -18,7 +18,6 @@ class CategoricalViewOfQuery extends Component {
     componentDidMount() {
         if (this.props.query !== "" && !this.props.query.includes("patent")) {
             let graph = this.parseLetBeInBlock(this.props.query)
-            //this.compositionTreeToGraph({ nodes: [], links: [] }, this.parseQueryBlock(this.props.query))
             let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
             this.setState({ graphData: graph, graphKey: timeStampInMs })
         }
@@ -28,7 +27,6 @@ class CategoricalViewOfQuery extends Component {
         if (prevProps.query !== this.props.query) {
             if (this.props.query !== "" && !this.props.query.includes("patent")) {
                 let graph = this.parseLetBeInBlock(this.props.query)
-                //this.compositionTreeToGraph({ nodes: [], links: [] }, this.parseQueryBlock(this.props.query))
                 let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
                 this.setState({ graphData: graph, graphKey: timeStampInMs })
             }

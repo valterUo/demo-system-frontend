@@ -16,9 +16,9 @@ class PopUpComponent extends React.Component {
 
                         <ul>
                             <li>Each query must contain parts QUERY, FROM, AS, TO and RETURN in this order.</li>
-                            <li>Typed collections have names <i>customers</i> (graph data), <i>orders</i> (tree structured data) and <i>locations</i> (relational data).</li>
+                            <li>Typed collections have names <i>customers</i> (graph data), <i>orders</i> (xml structured data) and <i>locations</i> (relational data).</li>
                             <li>LET BE IN -clause is optional.</li>
-                            <li>At the moment queries support three data models: relational, tree and graph. After AS and TO user must write exactly one of these.</li>
+                            <li>At the moment queries support three data models: relational, xml and graph. After AS and TO user must write exactly one of these.</li>
                             <li>If user is querying data to graph model, then the function in QUERY line must have exactly one variable (i.e. \x -> ...)</li>
                             <li>If user is querying any other model, then the function in QUERY line must have exactly two variables (i.e. \x xs -> ...) where the second variable refers
                             to the structure where the variable x is inserted.</li>

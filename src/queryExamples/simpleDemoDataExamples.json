@@ -5,7 +5,7 @@
         },
         {
             "header": "XML",
-            "examples": ["QUERY (\\x xs -> x:xs)\n FROM orders\n AS tree\n TO tree\n RETURN all", "LET t BE\nQUERY (\\x xs -> if orderNumber x == \"3qqqeq9\" then (orderProducts x) ++ xs else xs)\nFROM orders\nAS tree\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nFROM t\nAS relational\nTO relational\n RETURN all"]
+            "examples": ["QUERY (\\x xs -> x:xs)\n FROM orders\n AS xml\n TO xml\n RETURN all", "LET t BE\nQUERY (\\x xs -> if orderNumber x == \"3qqqeq9\" then (orderProducts x) ++ xs else xs)\nFROM orders\nAS xml\nTO relational\nRETURN all\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nFROM t\nAS relational\nTO relational\n RETURN all"]
         },
         {
             "header": "Graph",
@@ -17,7 +17,7 @@
         },
         {
             "header": "Rel + XML",
-            "examples": ["LET t BE\nQUERY (\\x xs ->if (foldr (\\x xs -> if xs == True then True else if productName x == \"Car\" then True else False) False (orderProducts x)) then x:xs else xs)\nFROM orders\n AS tree\nTO tree\n RETURN all\nIN\nQUERY (\\x xs -> (located (ordered x customers) locations) : xs)\nFROM t\n AS tree\nTO relational\nRETURN all"]
+            "examples": ["LET t BE\nQUERY (\\x xs ->if (foldr (\\x xs -> if xs == True then True else if productName x == \"Car\" then True else False) False (orderProducts x)) then x:xs else xs)\nFROM orders\n AS xml\nTO xml\n RETURN all\nIN\nQUERY (\\x xs -> (located (ordered x customers) locations) : xs)\nFROM t\n AS xml\nTO relational\nRETURN all"]
         },
         {
             "header": "Rel + Graph",
@@ -26,14 +26,14 @@
         },
         {
             "header": "XML + Graph",
-            "examples": ["LET t BE\n QUERY (\\x xs -> if elem \"Carpet\" (map productName (orderProducts x)) then x:xs else xs)\n FROM orders\n AS tree\n TO relational\n RETURN all\nIN\n QUERY (\\x -> if any (\\y -> ordered y customers == x ) t then Vertex x else Algebra.Graph.empty)\n FROM customers\n AS graph\n TO graph\n RETURN all",
-                "LET t BE\n QUERY (\\x -> if customerId x == 6 then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y customers) k then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x customers == y ) h then x:xs else xs)\n FROM orders\n AS tree\n TO relational\n RETURN all\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then x:xs else xs)\n FROM r\n AS relational\n TO tree\n RETURN all"
+            "examples": ["LET t BE\n QUERY (\\x xs -> if elem \"Carpet\" (map productName (orderProducts x)) then x:xs else xs)\n FROM orders\n AS xml\n TO relational\n RETURN all\nIN\n QUERY (\\x -> if any (\\y -> ordered y customers == x ) t then Vertex x else Algebra.Graph.empty)\n FROM customers\n AS graph\n TO graph\n RETURN all",
+                "LET t BE\n QUERY (\\x -> if customerId x == 6 then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y customers) k then [x] else [])\n FROM customers\n AS graph\n TO relational\n RETURN all\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x customers == y ) h then x:xs else xs)\n FROM orders\n AS xml\n TO relational\n RETURN all\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then x:xs else xs)\n FROM r\n AS relational\n TO xml\n RETURN all"
             ]
         },
         {
             "header": "Rel + XML + Graph",
-            "examples": ["QUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM orders\nAS tree\nTO relational\nRETURN all",
-                "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then x:xs else xs)\nFROM orders\nAS tree\nTO tree\nRETURN all\nIN\nQUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM t\nAS tree\nTO relational\nRETURN all"]
+            "examples": ["QUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM orders\nAS xml\nTO relational\nRETURN all",
+                "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then x:xs else xs)\nFROM orders\nAS xml\nTO xml\nRETURN all\nIN\nQUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM t\nAS xml\nTO relational\nRETURN all"]
         }
     ]
 }

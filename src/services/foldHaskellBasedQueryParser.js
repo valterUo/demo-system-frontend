@@ -70,12 +70,12 @@ const parseMainQueryBlock = (inputString) => {
     console.log(queryElements)
     switch (queryElements[2]) {
         case "relational":
-        case "tree":
+        case "xml":
         case "json":
             haskellQuery.push("foldr ")
             switch (queryElements[3]) {
                 case "relational":
-                case "tree":
+                case "xml":
                 case "json":
                     haskellQuery.push(queryElements[0])
                     haskellQuery.push(" [] ")
@@ -94,7 +94,7 @@ const parseMainQueryBlock = (inputString) => {
             haskellQuery.push("foldg ")
             switch (queryElements[3]) {
                 case "relational":
-                case "tree":
+                case "xml":
                 case "json":
                     haskellQuery.push(" [] ")
                     haskellQuery.push(queryElements[0])
@@ -117,7 +117,7 @@ const parseMainQueryBlock = (inputString) => {
             haskellQuery.push("(foldrdf ")
             switch (queryElements[3]) {
                 case "relational":
-                case "tree":
+                case "xml":
                 case "json":
                     haskellQuery.push(" [] ")
                     haskellQuery.push(queryElements[0])
@@ -174,7 +174,7 @@ const executeQuery = async (inputQuery) => {
             "model": model,
             "answer": await haskellCompiler.compileRelationalQuery(query)
         }
-    } else if (model === "tree") {
+    } else if (model === "xml") {
         return {
             "model": model,
             "answer": await haskellCompiler.compileTreeQuery(query)

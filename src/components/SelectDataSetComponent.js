@@ -37,19 +37,23 @@ class SelectDataSetComponent extends Component {
                                     Customer-Orders-Locations Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/patent" 
-                                onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Patent Dataset (contain bugs)", examples: patentDataExamples, schemaData: patentSchema})}>
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Patent Dataset (contains bugs)", examples: patentDataExamples, schemaData: patentSchema})}>
                                     Patent Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/film"
-                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: filmExamples, schemaData: filmSchema})}>
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Film Dataset (contain bugs)", examples: filmExamples, schemaData: filmSchema})}>
                                     Film Dataset
                             </Dropdown.Item>
+                            <Dropdown.Item href="#/unibench"
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Unibench Dataset", examples: filmExamples, schemaData: filmSchema})}>
+                                    Unibench Dataset
+                            </Dropdown.Item>
                             <Dropdown.Item href="#/university"
-                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: universityExamples, schemaData: universitySchema})}>
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Universities Dataset (contain bugs)", examples: universityExamples, schemaData: universitySchema})}>
                                     University Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/person" 
-                                onClick={this.props.handleDataSetChange.bind(this, {header: "Customer-Orders-Locations Dataset", examples: personExamples, schemaData: personSchema})}>
+                                onClick={this.props.handleDataSetChange.bind(this, {header: "Helsinki Multi-Model Repository: Persons Dataset (contain bugs)", examples: personExamples, schemaData: personSchema})}>
                                     Person Dataset
                             </Dropdown.Item>
                         </Dropdown.Menu>
