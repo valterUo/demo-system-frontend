@@ -11,7 +11,7 @@ class ExampleQueryTypeComponent extends Component {
                     {this.props.header}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                    {this.props.examples.map((example, i) => <Dropdown.Item key={`${i}`} eventKey={`${i}`} onClick={() => this.props.handleExampleQuery(example)}>Example {`${i}`}</Dropdown.Item>)}
+                    {this.props.examples.map((example, i) => <Dropdown.Item key={`${i}`} eventKey="e1" onClick={() => this.props.handleExampleQuery(example)}>Example {`${i}`}</Dropdown.Item>)}
                 </Dropdown.Menu>
             </Dropdown>
         </div>

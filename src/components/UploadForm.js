@@ -11,7 +11,7 @@ class UploadForm extends Component {
 
     setFile = (event) => {
         this.file = event.target.files[0]
-        console.log(this.file)
+        console.log(this.file.path)
     }
 
     handleFormSubmit = (event) => {

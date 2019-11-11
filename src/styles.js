@@ -118,6 +118,20 @@ const navPanelStyle = {
 	paddingBottom: "5px"
 }
 
+const progressBar = {
+	width: "100%",
+	height: "16px",
+	backgroundColor: "#f1f1f1",
+	borderRadius: "5px"
+  }
+  
+const progress = {
+	backgroundColor: "#616161",
+	height: "100%",
+	margin: "0",
+	borderRadius: "5px"
+  }
+
 export default {
 	backgroundColorStyle,
 	headerBackGroundColorStyle,
@@ -131,5 +145,7 @@ export default {
 	popup,
 	popupInner,
 	infoTextStyle,
-	navPanelStyle
+	navPanelStyle,
+	progressBar,
+	progress
 }

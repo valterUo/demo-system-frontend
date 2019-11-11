@@ -42,7 +42,7 @@ class DataSetSidePanel extends Component {
                         </Card>
                         <Accordion.Collapse eventKey="e0">
                             <Row style={style.basicComponentsStyle}>
-                                <DataUploadComponent />
+                                <DataUploadComponent uploadInfo = {this.props.dataSet.metaData} />
                             </Row>
                         </Accordion.Collapse>
                         <Card >

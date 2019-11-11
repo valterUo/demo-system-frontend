@@ -19,6 +19,7 @@ import initialSchemaData from './schemasForD3/simpleSchema.json'
 import Col from 'react-bootstrap/Col'
 import ResultNavigationSidePanel from './components/ResultNavigationSidePanel'
 import DataSetSidePanel from './components/DataSetSidePanel'
+import uploadInfo from './dataUploadInfo/uploadInfo.json'
 
 class App extends Component {
 	constructor(props) {
@@ -27,7 +28,7 @@ class App extends Component {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
 			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
-			dataSet: { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: initialSchemaData, schemaKey: "initialKey" }, showSchemaCategory: false, showCategoricalView: false, showResult: false
+			dataSet: { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: initialSchemaData, schemaKey: "initialKey", metaData: uploadInfo["simpleDemoData"] }, showSchemaCategory: false, showCategoricalView: false, showResult: false
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -78,7 +79,7 @@ class App extends Component {
 
 	handleDataSetChange = (obj) => {
 		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
-		this.setState({ dataSet: { header: obj.header, examples: obj.examples, schemaData: obj.schemaData, schemaKey: timeStampInMs } })
+		this.setState({ dataSet: { header: obj.header, examples: obj.examples, schemaData: obj.schemaData, schemaKey: timeStampInMs, metaData: obj.metaData } })
 	}
 
 	handleExampleQuery = (exampleQuery) => {

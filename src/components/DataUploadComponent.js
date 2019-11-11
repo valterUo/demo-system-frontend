@@ -1,67 +1,72 @@
 import React, { Component } from 'react'
 import FileSender from '../services/sendFiles'
 import Row from 'react-bootstrap/Row'
-import Notification from '../actions/NotificationAction'
 import UploadForm from './UploadForm'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
+import ProgressBar from './ProgressBar'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 class DataUploadComponent extends Component {
     constructor(props) {
         super(props)
-        this.relationalFile = React.createRef()
-        this.xmlFile = React.createRef()
-        this.graphFileV = React.createRef()
-        this.graphFileE = React.createRef()
+        this.file = React.createRef()
+        this.state = { dataSet: undefined, progress: -1, uploading: false }
     }
 
-    setFile = (file, type) => {
-        if(type === "relational"){
-            this.relationalFile = file
-            console.log(file)
-        } else if (type === "document") {
-            this.xmlFile = file
-        } else if(type === "graphV") {
-            this.graphFileV = file
-        } else if(type === "graphE") {
-            this.graphFileE = file
-        }
+    handleDatasetChange = (datasetIndex) => {
+        this.setState({ dataSet: this.props.uploadInfo[datasetIndex] })
     }
 
-    handleFileSubmit = async (type) => {
-        console.log(type)
-        let file;
-        if(type === "relational"){
-            file = this.relationalFile
-            console.log(file)
-        } else if (type === "document") {
-            file = this.xmlFile
-        } else if(type === "graphV") {
-            file = this.graphFileV
-        } else if(type === "graphE") {
-            file = this.graphFileE
-        }
+    setFile = (file) => {
+        this.file = file
+    }
+
+    handleFileSubmit = async () => {
+        let file = this.file
         const name = file.current.files[0].name
-        const address = type
-        await FileSender.sendFiles(file.current.files[0], name, address)
-        Notification.notify("File " + name + " uploaded!", "success")
+        const variableName = this.state.dataSet.name
+        await FileSender.sendFiles(file.current.files[0], name, variableName, this.state.dataSet["loadingFunction"], this.handleUploadProgressChange)
+        setTimeout(() => this.setState({ progress: -1 }), 3000)
+    }
+
+    handleUploadProgressChange = (progress) => {
+        this.setState({ progress: progress })
     }
 
     render() {
         return <Container style={{ margin: "5px" }} fluid="true">
-            <Row style={{ marginBottom: "5px", marginLeft: "5px", marginRigth: "5px" }}>
-                <Col xl={1}>
-                    <Row style={{ marginTop: '5px' }}>
-                        <h4>Upload data</h4>
-                    </Row>
-                </Col>
-                <Row style={{ "margin": "10px" }}>
-                    <UploadForm setFile={this.setFile} id = {"fileupload1"} name = {"relationalFileInput"} handleFileSubmit={this.handleFileSubmit} type = {"relational"} header={"Relational data"} />
-                    <UploadForm setFile={this.setFile} id = {"fileupload2"} name = {"documentFileInput"} handleFileSubmit={this.handleFileSubmit} type = {"document"} header={"XML/JSON data"} />
-                    <UploadForm setFile={this.setFile} id = {"fileupload3"} name = {"graphFileVertices"} handleFileSubmit={this.handleFileSubmit} type = {"graphV"} header={"Graph vertices"} />
-                    <UploadForm setFile={this.setFile} id = {"fileupload4"} name = {"graphFileEdges"} handleFileSubmit={this.handleFileSubmit} type = {"graphE"} header={"Graph edges"} />
+            <Col style={{ marginLeft: "5px", marginRigth: "5px" }}>
+                <Row>
+                    <Col>
+                        <Row style={{ marginTop: '5px' }}>
+                            <h4>Upload data</h4>
+                        </Row>
+                    </Col>
                 </Row>
-            </Row>
+                <Row>
+                    <Col>
+                        <Dropdown style={{ marginTop: "20px" }}>
+                            <Dropdown.Toggle variant="dark" id="dropdown-collection">
+                                Select collection
+                    </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                {
+                                    this.props.uploadInfo.map((element, i) => <Dropdown.Item eventKey="e0" key={i} onClick={this.handleDatasetChange.bind(this, i)}>{element.name}</Dropdown.Item>)
+                                }
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+                    {this.state.dataSet === undefined ? null : <Col>
+                        <UploadForm setFile={this.setFile} id={"fileupload"} name={"fileInput"} handleFileSubmit={this.handleFileSubmit} header={"Select file for " + this.state.dataSet["name"]} />
+                        {
+                            this.state.progress > -1 ? <Row>
+                                <ProgressBar progress={this.state.progress} />
+                            </Row> : null
+                        }
+                    </Col>}
+                </Row>
+            </Col>
         </Container>
     }
 }

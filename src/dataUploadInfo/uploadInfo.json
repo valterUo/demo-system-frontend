@@ -1,0 +1,63 @@
+{
+    "simpleDemoData": [{
+            "name": "customers",
+            "loadingFunction": "collectCustomers",
+            "requiredFiles": 2
+        },
+        {
+            "name": "orders",
+            "loadingFunction": "readXMLFile",
+            "requiredFiles": 1
+        },
+        {
+            "name": "locations",
+            "loadingFunction": "collectLocations",
+            "requiredFiles": 1
+        }
+    ],
+    "patent": [{
+            "name": "categories",
+            "loadingFunction": "collectCategories",
+            "requiredFiles": 1
+        },
+        {
+            "name": "assignees",
+            "loadingFunction": "collectAssignees",
+            "requiredFiles": 1
+        },
+        {
+            "name": "classes",
+            "loadingFunction": "collectClasses",
+            "requiredFiles": 1
+        },
+        {
+            "name": "patents",
+            "loadingFunction": "collectPatents",
+            "requiredFiles": 1
+        },
+        {
+            "name": "patentGraph",
+            "loadingFunction": "collectPatentGraph",
+            "requiredFiles": 1
+        },
+        {
+            "name": "inventors",
+            "loadingFunction": "collectInventors",
+            "requiredFiles": 1
+        }
+    ],
+    "film": [{
+            "name": "films",
+            "loadingFunction": "collectFilms",
+            "requiredFiles": 1
+        },
+        {
+            "name": "filmGraph",
+            "loadingFunction": "collectFilmGraph",
+            "requiredFiles": 1
+        }
+    ],
+    "unibench": [],
+    "university": [],
+    "person": []
+}
