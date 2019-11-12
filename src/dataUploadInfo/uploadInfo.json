@@ -37,7 +37,7 @@
         },
         {
             "name": "patentGraph",
-            "loadingFunction": "collectPatentGraph",
+            "loadingFunction": "collectPatentGraph patents",
             "requiredFiles": 1
         },
         {
