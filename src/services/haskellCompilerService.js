@@ -62,8 +62,8 @@ const parseJSONList = (listString) => {
     let n = listString.indexOf('*')
     listString = listString.substring(m !== -1 ? m : 0, n !== -1 ? n : listString.length)
     listString = listString.replace(/\\/g, "\\\\\\\\")
-                           .replace(/\\\\\\\\"/g, "\\\"")
-                           .replace(/\//g, "\\\\/")
+        .replace(/\\\\\\\\"/g, "\\\"")
+        .replace(/\//g, "\\\\/")
     console.log([listString])
     try {
         listString = JSON.parse(JSON.parse(listString))
@@ -110,12 +110,12 @@ const parseJSONStringtoD3js = (jsonString) => {
     console.log(jsonString)
     try {
         let obj = JSON.parse(JSON.parse(jsonString))
-    obj["nodes"] = obj["nodes"].map(node => JSON.parse(node))
-    return obj
+        console.log(obj)
+        obj["nodes"] = obj["nodes"].map(node => JSON.parse(node))
+        return obj
     } catch (err) {
         console.log("Error while parsing the JSON in Graph.")
     }
-    
 }
 
 const parseChild = (childElement) => {
