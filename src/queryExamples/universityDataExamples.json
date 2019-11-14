@@ -1,11 +1,11 @@
 {
     "examples": [{
             "header": "Rel",
-            "examples": []
+            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else x:xs)\nFROM universities\nAS relational\nTO relational\nRETURN all"]
         },
         {
             "header": "RDF",
-            "examples": []
+            "examples": ["QUERY (\\current total -> if length (triplesOf total) < 20 then addTriple total current else total)\nFROM famousLocations\nAS rdf\nTO rdf\nRETURN all"]
         },
         {
             "header": "Rel + RDF",
