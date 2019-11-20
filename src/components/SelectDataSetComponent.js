@@ -10,6 +10,7 @@ import patentSchema from '../schemasForD3/patentSchema.json'
 import filmSchema from '../schemasForD3/filmSchema.json'
 import universitySchema from '../schemasForD3/universitySchema.json'
 import personSchema from '../schemasForD3/personSchema.json'
+import unibenchSchema from '../schemasForD3/unibenchSchema.json'
 
 //Query examples:
 import simpleExamples from '../queryExamples/simpleDemoDataExamples.json'
@@ -17,6 +18,8 @@ import patentDataExamples from '../queryExamples/patentDataExamples.json'
 import filmExamples from '../queryExamples/filmDataExamples.json'
 import universityExamples from '../queryExamples/universityDataExamples.json'
 import personExamples from '../queryExamples/personDataExamples.json'
+import unibenchExamples from "../queryExamples/unibenchExamples.json"
+
 import uploadInfo from '../dataUploadInfo/uploadInfo.json'
 
 class SelectDataSetComponent extends Component {
@@ -37,6 +40,10 @@ class SelectDataSetComponent extends Component {
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: simpleSchemaData, metaData: uploadInfo["simpleDemoData"] })}>
                                 Customer-Orders-Locations Dataset
                             </Dropdown.Item>
+                            <Dropdown.Item href="#/unibench"
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Unibench Dataset", examples: unibenchExamples, schemaData: unibenchSchema, metaData: uploadInfo["unibench"] })}>
+                                Unibench Dataset
+                            </Dropdown.Item>
                             <Dropdown.Item href="#/patent"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Patent Dataset (contains bugs)", examples: patentDataExamples, schemaData: patentSchema, metaData: uploadInfo["patent"] })}>
                                 Patent Dataset
@@ -44,10 +51,6 @@ class SelectDataSetComponent extends Component {
                             <Dropdown.Item href="#/film"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Film Dataset (contain bugs)", examples: filmExamples, schemaData: filmSchema, metaData: uploadInfo["film"] })}>
                                 Film Dataset
-                            </Dropdown.Item>
-                            <Dropdown.Item href="#/unibench"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Unibench Dataset", examples: filmExamples, schemaData: filmSchema, metaData: uploadInfo["unibench"] })}>
-                                Unibench Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/university"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Universities Dataset (contain bugs)", examples: universityExamples, schemaData: universitySchema, metaData: uploadInfo["university"] })}>

@@ -1,0 +1,42 @@
+{
+    "nodes": [
+        {"name": "Person", "attributes":"personsId, firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed, place", "model": "graph, relational", "id": 0},
+        {"name": "Int", "attributes":"-", "model": "primitive", "id": 1},
+        {"name": "UnibenchProduct", "attributes":"productAsin, productTitle, productPrice, imgUrl, unibenchProductId, productBrand", "model": "json", "id": 2},
+        {"name": "UnibenchOrder", "attributes": "orderid, personid, orderdate, totalprice, orderline", "model": "json", "id": 3},
+        {"name": "String", "attributes": "-", "model": "primitive", "id": 4},
+        {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 5},
+        {"name": "Feedback", "attributes": "asin, personId, feedback", "model": "key-value", "id": 6},
+        {"name": "Graph Person-Knows->Person", "attributes": "knows", "model": "graph", "id": 7},
+        {"name": "JSON UnibenchOrders", "attributes": "-", "model": "json", "id": 8},
+        {"name": "Relational Person", "attributes": "-", "model": "relational", "id": 9},
+        {"name": "Graph Post-has->Tag", "attributes": "-", "model": "graph", "id": 10},
+        {"name": "Graph Person-hasInterest->Tag", "attributes": "graph", "model": "", "id": 11},
+        {"name": "Graph Person-created->Post", "attributes": "-", "model": "graph", "id": 12},
+        {"name": "Post", "attributes": "postId, postCreationDate, postLocationIP, postBrowserUsed, language, content, postLength", "model": "graph", "id": 13},
+        {"name": "Vendor", "attributes": "vendor, vendorCountry, vendorIndustry", "model": "relationals", "id": 14},
+        {"name": "Relational Vendor", "attributes": "-", "model": "relational", "id": 15},
+        {"name": "Invoice", "attributes": "-", "model": "xml", "id": 16},
+        {"name": "XML Invoice", "attributes": "-", "model": "xml", "id": 17},
+        {"name": "JSON UnibenchProducts", "attributes": "-", "model": "json", "id": 18},
+        {"name": "Double", "attributes":"-", "model": "primitive", "id": 19}
+    ], 
+    "links": [
+        {"source": 7, "target": 5, "name": "knows", "count": 1},
+        {"source": 0, "target": 4, "name": "firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed", "count": 1},
+        {"source": 0, "target": 1, "name": "personsId, place", "count": 1},
+        {"source": 2, "target": 1, "name": "unibenchProductId, productBrand", "count": 1},
+        {"source": 2, "target": 4, "name": "productAsin, productTitle, imgUrl", "count": 1},
+        {"source": 2, "target": 19, "name": "productPrice", "count": 1},
+        {"source": 3, "target": 4, "name": "orderNumber", "count": 1},
+        {"source": 3, "target": 0, "name": "ordered", "count": 1},
+        {"source": 8, "target": 5, "name": "contains", "count": 1},
+        {"source": 6, "target": 4, "name": "address, cityName, countryName", "count": 1},
+        {"source": 6, "target": 1, "name": "locationId, zipCode", "count": 1},
+        {"source": 0, "target": 6, "name": "located", "count": 1},
+        {"source": 0, "target": 7, "name": "graph collection constructor functor", "count": 1},
+        {"source": 2, "target": 8, "name": "XML collection constructor functor", "count": 1},
+        {"source": 3, "target": 8, "name": "XML collection constructor  functor", "count": 1},
+        {"source": 6, "target": 9, "name": "relational collection constructor functor", "count": 1}
+        ]
+}

@@ -1,0 +1,63 @@
+{
+    "examples": [{
+            "header": "Rel",
+            "examples": []
+        },
+        {
+            "header": "XML",
+            "examples": []
+        },
+        {
+            "header": "Graph",
+            "examples": []
+        },
+        {
+            "header": "JSON",
+            "examples": []
+        },
+        {
+            "header": "Rel+JSON",
+            "examples": []
+        },
+        {
+            "header": "XML+JSON",
+            "examples": []
+        },
+        {
+            "header": "Graph+JSON",
+            "examples": []
+        },
+        {
+            "header": "Rel+XML",
+            "examples": []
+        },
+        {
+            "header": "Rel+Graph",
+            "examples": []
+        },
+        {
+            "header": "XML+Graph",
+            "examples": []
+        },
+        {
+            "header": "Rel+XML+JSON",
+            "examples": []
+        },
+        {
+            "header": "Rel+Graph+JSON",
+            "examples": []
+        },
+        {
+            "header": "XML+Graph+JSON",
+            "examples": []
+        },
+        {
+            "header": "Rel+XML+Graph",
+            "examples": []
+        },
+        {
+            "header": "Rel+XML+Graph+JSON",
+            "examples": []
+        }
+    ]
+}
