@@ -8,18 +8,24 @@
         {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 5},
         {"name": "Feedback", "attributes": "asin, personId, feedback", "model": "key-value", "id": 6},
         {"name": "Graph Person-Knows->Person", "attributes": "knows", "model": "graph", "id": 7},
-        {"name": "JSON UnibenchOrders", "attributes": "-", "model": "json", "id": 8},
+        {"name": "JSON UnibenchOrder", "attributes": "-", "model": "json", "id": 8},
         {"name": "Relational Person", "attributes": "-", "model": "relational", "id": 9},
+
         {"name": "Graph Post-has->Tag", "attributes": "-", "model": "graph", "id": 10},
         {"name": "Graph Person-hasInterest->Tag", "attributes": "graph", "model": "", "id": 11},
         {"name": "Graph Person-created->Post", "attributes": "-", "model": "graph", "id": 12},
+
         {"name": "Post", "attributes": "postId, postCreationDate, postLocationIP, postBrowserUsed, language, content, postLength", "model": "graph", "id": 13},
-        {"name": "Vendor", "attributes": "vendor, vendorCountry, vendorIndustry", "model": "relationals", "id": 14},
+        
+        {"name": "Vendor", "attributes": "vendor, vendorCountry, vendorIndustry", "model": "relational", "id": 14},
         {"name": "Relational Vendor", "attributes": "-", "model": "relational", "id": 15},
+
         {"name": "Invoice", "attributes": "-", "model": "xml", "id": 16},
         {"name": "XML Invoice", "attributes": "-", "model": "xml", "id": 17},
-        {"name": "JSON UnibenchProducts", "attributes": "-", "model": "json", "id": 18},
-        {"name": "Double", "attributes":"-", "model": "primitive", "id": 19}
+
+        {"name": "JSON UnibenchProduct", "attributes": "-", "model": "json", "id": 18},
+        {"name": "Double", "attributes":"-", "model": "primitive", "id": 19},
+        {"name": "UnibenchOrderline", "attributes":"productId, asin, title, price,brand", "model": "xml, json", "id": 20}
     ], 
     "links": [
         {"source": 7, "target": 5, "name": "knows", "count": 1},
@@ -28,15 +34,26 @@
         {"source": 2, "target": 1, "name": "unibenchProductId, productBrand", "count": 1},
         {"source": 2, "target": 4, "name": "productAsin, productTitle, imgUrl", "count": 1},
         {"source": 2, "target": 19, "name": "productPrice", "count": 1},
-        {"source": 3, "target": 4, "name": "orderNumber", "count": 1},
-        {"source": 3, "target": 0, "name": "ordered", "count": 1},
-        {"source": 8, "target": 5, "name": "contains", "count": 1},
-        {"source": 6, "target": 4, "name": "address, cityName, countryName", "count": 1},
-        {"source": 6, "target": 1, "name": "locationId, zipCode", "count": 1},
-        {"source": 0, "target": 6, "name": "located", "count": 1},
-        {"source": 0, "target": 7, "name": "graph collection constructor functor", "count": 1},
-        {"source": 2, "target": 8, "name": "XML collection constructor functor", "count": 1},
-        {"source": 3, "target": 8, "name": "XML collection constructor  functor", "count": 1},
-        {"source": 6, "target": 9, "name": "relational collection constructor functor", "count": 1}
+
+        {"source": 3, "target": 4, "name": "orderid, personid, orderdate", "count": 1},
+        {"source": 3, "target": 19, "name": "totalprice", "count": 1},
+        {"source": 3, "target": 20, "name": "contains", "count": 1},
+
+        {"source": 6, "target": 4, "name": "asin, feedback", "count": 1},
+        {"source": 6, "target": 1, "name": "personId", "count": 1},
+
+        {"source": 13, "target": 4, "name": "postCreationDate, postLocationIP, postBrowserUsed, language, content", "count": 1},
+        {"source": 13, "target": 1, "name": "postId, postLength", "count": 1},
+
+        {"source": 14, "target": 4, "name": "vendor, vendorCountry, vendorIndustry", "count": 1},
+
+        {"source": 14, "target": 15, "name": "relational collection contructor functor2", "count": 1},
+
+        {"source": 16, "target": 17, "name": "XML collection contructor functor3", "count": 1},
+
+        {"source": 3, "target": 8, "name": "JSON collection constructor functor1", "count": 1},
+        {"source": 0, "target": 7, "name": "graph collection constructor functor1", "count": 1},
+        {"source": 2, "target": 18, "name": "JSON collection constructor functor2", "count": 1},
+        {"source": 0, "target": 9, "name": "relational collection constructor functor1", "count": 1}
         ]
 }
