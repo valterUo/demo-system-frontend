@@ -167,34 +167,40 @@ const executeQuery = async (inputQuery) => {
     if (model === "graph") {
         return {
             "model": model,
-            "answer": await haskellCompiler.compileGraphQuery(query)
+            "answer": await haskellCompiler.compileGraphQuery(query),
+            "fold": query
         }
     } else if (model === "relational") {
         return {
             "model": model,
-            "answer": await haskellCompiler.compileRelationalQuery(query)
+            "answer": await haskellCompiler.compileRelationalQuery(query),
+            "fold": query
         }
     } else if (model === "xml") {
         return {
             "model": model,
-            "answer": await haskellCompiler.compileTreeQuery(query)
+            "answer": await haskellCompiler.compileTreeQuery(query),
+            "fold": query
         }
     } else if(model === "rdf") {
         return {
             "model": "graph",
-            "answer": await haskellCompiler.compileRDFGraphQuery(query)
+            "answer": await haskellCompiler.compileRDFGraphQuery(query),
+            "fold": query
         }
     } else if(model === "json") {
         return {
             "model": "relational",
-            "answer": await haskellCompiler.compileRelationalQuery(query)
+            "answer": await haskellCompiler.compileRelationalQuery(query),
+            "fold": query
         }
     } else if (model === "error") {
         return parsedQueryList
     } else {
         return {
             "model": "error",
-            "message": "Unexpected error happened. No model was found."
+            "message": "Unexpected error happened. No model was found.",
+            "fold": query
         }
     }
 }

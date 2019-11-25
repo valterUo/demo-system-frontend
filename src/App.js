@@ -5,7 +5,6 @@ import store from './store'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import StatBox from './components/StatBox'
-import NodeDataTextField from './components/NodeDataTextField'
 import FreeTextInputQueryComponent from './components/queryComponents/FreeTextInputQueryComponent'
 import NavigationBarComponent from './components/NavigationBarComponent'
 import NotificationComponent from './components/NotificationComponent'
@@ -20,13 +19,14 @@ import Col from 'react-bootstrap/Col'
 import ResultNavigationSidePanel from './components/ResultNavigationSidePanel'
 import DataSetSidePanel from './components/DataSetSidePanel'
 import uploadInfo from './dataUploadInfo/uploadInfo.json'
+import FoldViewBox from './components/FoldViewBox'
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
-			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false,
+			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false, fold: undefined,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
 			dataSet: { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: initialSchemaData, schemaKey: "initialKey", metaData: uploadInfo["simpleDemoData"] }, showSchemaCategory: false, showCategoricalView: false, showResult: false
 		}
@@ -103,28 +103,35 @@ class App extends Component {
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the relational result.", "warning")
 				} else {
-					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "relational" }, showResult: true })
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "relational" }, showResult: true, fold: answer["fold"] })
 				}
 				break
 			case "graph":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the graph result.", "warning")
 				} else {
-					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "graph" }, showResult: true })
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "graph" }, showResult: true, fold: answer["fold"] })
 				}
 				break
 			case "xml":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the XML result.", "warning")
 				} else {
-					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "xml" }, showResult: true })
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "xml" }, showResult: true, fold: answer["fold"] })
 				}
 				break
 			case "json":
 				if (answer["answer"] === undefined) {
 					Notification.notify("Error in expressing the json result.", "warning")
 				} else {
-					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "json" }, showResult: true })
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "json" }, showResult: true, fold: answer["fold"] })
+				}
+				break
+			case "rdf":
+				if (answer["answer"] === undefined) {
+					Notification.notify("Error in expressing the rdf result.", "warning")
+				} else {
+					this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "rdf" }, showResult: true, fold: answer["fold"] })
 				}
 				break
 			default:
@@ -151,8 +158,14 @@ class App extends Component {
 							<SchemaComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} showSchemaCategory={this.state.showSchemaCategory} />
 							<ResultComponent resultSet={this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query}
 								initializeResult={this.initializeQueryResult.bind(this)} showCategoricalView={this.state.showCategoricalView} showResult={this.state.showResult} />
-							<StatBox data={this.state.showedNodeData} />
-							<NodeDataTextField />
+							<Row>
+								<Col>
+									<StatBox data={this.state.showedNodeData} />
+								</Col>
+								<Col>
+									<FoldViewBox fold = {this.state.fold} />
+								</Col>
+							</Row>
 						</Container>
 					</Col>
 				</Row>
