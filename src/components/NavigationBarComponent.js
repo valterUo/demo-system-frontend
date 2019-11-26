@@ -7,7 +7,7 @@ class NavigationBarComponent extends Component {
 
     render() {
         return <Navbar style={style.headerBackGroundColorStyle} variant="light" expand="lg">
-            <Navbar.Brand href="#home"><h3>Category Theory in Multi-model Databases</h3></Navbar.Brand>
+            <Navbar.Brand href="#home"><h3>MultiCategory: Category Theory in Multi-model Databases</h3></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end">
                 <a href="https://www.helsinki.fi/en/researchgroups/unified-database-management-systems-udbms"> UDBMS </a>
