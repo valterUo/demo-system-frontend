@@ -1,7 +1,7 @@
 {
     "examples": [{
             "header": "Rel",
-            "examples": []
+            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else if (personBrowserUsed x == \"Safari\" && gender x == \"female\" && lastName x == \"Li\") then x:xs else xs)\nFROM persons\nTO relational\nRETURN all"]
         },
         {
             "header": "XML",

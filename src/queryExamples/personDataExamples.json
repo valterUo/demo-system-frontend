@@ -5,7 +5,7 @@
         },
         {
             "header": "RDF",
-            "examples": ["QUERY (\\triple total -> if tripleContainsString triple (Just \"Renaud_de_Cormont\") Nothing Nothing then addTriple total triple else total)\nFROM personGraph\nAS rdf\nTO rdf\nRETURN all"]
+            "examples": ["QUERY (\\triple total -> if tripleContainsString triple (Just \"Renaud_de_Cormont\") Nothing Nothing then addTriple total triple else total)\nFROM personGraph\nTO rdf\nRETURN all"]
         },
         {
             "header": "JSON + RDF",
