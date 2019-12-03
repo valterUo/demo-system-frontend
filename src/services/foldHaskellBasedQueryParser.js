@@ -215,7 +215,6 @@ const parseMainQueryBlock = (inputString) => {
                 "model": "error", "message": "Error! Data model (AS line in the query) did not mathc any data model."
             }
     }
-
     return {
         "model": queryElements[2 + i],
         "query": haskellQuery.join("")
@@ -233,44 +232,49 @@ const executeQuery = async (inputQuery) => {
         const model = parsedQueryList["model"]
         const query = parsedQueryList["query"]
         console.log(query)
-        if (model === "graph") {
-            return {
+        switch (model) {
+            case "graph":
+                return {
                 "model": model,
                 "answer": await haskellCompiler.compileGraphQuery(query),
                 "fold": query
-            }
-        } else if (model === "relational") {
-            return {
+                }
+            case "relational":
+                return {
                 "model": model,
                 "answer": await haskellCompiler.compileRelationalQuery(query),
                 "fold": query
-            }
-        } else if (model === "xml") {
-            return {
-                "model": model,
-                "answer": await haskellCompiler.compileTreeQuery(query),
-                "fold": query
-            }
-        } else if (model === "rdf") {
-            return {
-                "model": "graph",
-                "answer": await haskellCompiler.compileRDFGraphQuery(query),
-                "fold": query
-            }
-        } else if (model === "json") {
-            return {
-                "model": "relational",
-                "answer": await haskellCompiler.compileRelationalQuery(query),
-                "fold": query
-            }
-        } else if (model === "error") {
-            return parsedQueryList
-        } else {
-            return {
-                "model": "error",
-                "message": "Unexpected error happened. No model was found.",
-                "fold": query
-            }
+                }
+            case "xml":
+                return {
+                    "model": model,
+                    "answer": await haskellCompiler.compileTreeQuery(query),
+                    "fold": query
+                }
+            case "rdf":
+                return {
+                    "model": "graph",
+                    "answer": await haskellCompiler.compileRDFGraphQuery(query),
+                    "fold": query
+                }
+            case "json":
+                return {
+                    "model": "relational",
+                    "answer": await haskellCompiler.compileRelationalQuery(query),
+                    "fold": query
+                }
+            case "nimblegraph":
+                return {
+                    "model": "graph",
+                    "answer": await haskellCompiler.compileNimbleGraphQuery(query),
+                    "fold": query
+                }
+            default:
+                return {
+                    "model": "error",
+                    "message": "Unexpected error happened. No model was found.",
+                    "fold": query
+                }
         }
     }
 }
