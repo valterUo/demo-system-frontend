@@ -107,7 +107,7 @@ class Graph extends Component {
         })
         const links = this.props.data.links.map((link, i) => {
             return (
-                <Multiedge key={link.id === undefined ? link.name : link.id} edgekey = {link.id} data={link} linkName={this.props.linkName} />)
+                <Multiedge key={link.id === undefined ? link.name : link.id} edgekey = {link.id} data={link} linkName={this.props.linkName} showEdgeLabels = {this.props.showEdgeLabels} />)
         })
         return (<div>
             <svg key={this.props.nameClass + 'Key'} className={this.props.nameClass} ref={this.graphRef} width={scaledwidth} height={scaledheigth}>

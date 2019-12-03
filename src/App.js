@@ -25,7 +25,7 @@ class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			query: "", showedNodeData: { data: [{ "key": undefined, "value": undefined }] },
+			query: "", showedStat: { data: [{ "header": undefined, "key": undefined, "value": undefined }] },
 			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false, fold: undefined,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
 			dataSet: { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: initialSchemaData, schemaKey: "initialKey", metaData: uploadInfo["simpleDemoData"] }, showSchemaCategory: false, showCategoricalView: false, showResult: false
@@ -70,9 +70,9 @@ class App extends Component {
 	}
 
 	handleStoreChange = () => {
-		if (this.state.showedNodeData !== store.getState().nodeData) {
+		if (this.state.showedStat !== store.getState().nodeData) {
 			this.setState({
-				showedNodeData: store.getState().nodeData
+				showedStat: store.getState().nodeData
 			})
 		}
 	}
@@ -160,7 +160,7 @@ class App extends Component {
 								initializeResult={this.initializeQueryResult.bind(this)} showCategoricalView={this.state.showCategoricalView} showResult={this.state.showResult} />
 							<Row>
 								<Col>
-									<StatBox data={this.state.showedNodeData} />
+									<StatBox data={this.state.showedStat} />
 								</Col>
 								<Col>
 									<FoldViewBox fold = {this.state.fold} />

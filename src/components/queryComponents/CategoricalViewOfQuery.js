@@ -202,7 +202,7 @@ class CategoricalViewOfQuery extends Component {
             return null
         } else {
             return <Container style={{ margin: "5px" }} fluid="true">
-                <MultiGraph key={this.state.graphKey} data={this.state.graphData} width={this.props.width} height={this.props.height} nodeName={'ViewOfQueryNodes'} linkName={'ViewOfQueryLinks'} nameClass={'ViewOfQueryClassName'} editableGraph={false} />
+                <MultiGraph key={this.state.graphKey} data={this.state.graphData} width={this.props.width} height={this.props.height} nodeName={'ViewOfQueryNodes'} linkName={'ViewOfQueryLinks'} nameClass={'ViewOfQueryClassName'} editableGraph={false} showEdgeLabels = {false} />
             </Container>
         }
     }

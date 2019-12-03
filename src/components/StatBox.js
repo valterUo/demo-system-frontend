@@ -10,9 +10,14 @@ class StatBox extends Component {
         if (data[0]["key"] !== undefined && data[0]["key"] !== "") {
             dataBlock = data.map(l => <p key={l["key"]}><b>{l["key"]} : </b> {l["value"]}</p>)
         }
+        let header = "Contents"
+        if(this.props.data.header !== undefined) {
+            header = this.props.data.header
+        }
+            
 
         return <Row style={style.basicComponentsStyle}> <div className= "col">
-            <h4> Node </h4>
+            <h4> { header } </h4>
             <div>
                 {dataBlock}
             </div>

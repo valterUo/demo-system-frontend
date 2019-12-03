@@ -123,7 +123,7 @@ class Node extends Component {
             }
         }
         if (JSON.stringify(store.getState().nodeData.data) !== JSON.stringify(filteredData)) {
-            store.dispatch({ type: 'ADD_NODE_DATA', data: filteredData })
+            store.dispatch({ type: 'SHOW_NODE_EDGE_DATA', data: filteredData, header: "Node" })
         }
         this.d3Node.select("circle").style("fill", "#FCBC34")
     }

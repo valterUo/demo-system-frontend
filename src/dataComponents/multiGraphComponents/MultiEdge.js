@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { select } from 'd3-selection'
+import store from '../../store'
 
 class MultiEdge extends Component {
     constructor(props) {
@@ -49,7 +50,6 @@ class MultiEdge extends Component {
             if (tspan.node().getComputedTextLength() > width) {
                 line.pop()
                 const printableLine = line.slice().reverse()
-                //console.log(printableLine)
                 tspan.text(printableLine.join(" "))
                 line = [word]
                 tspan = this.d3Link.select("textPath").append("tspan").attr("x", 50).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "px")
@@ -58,22 +58,29 @@ class MultiEdge extends Component {
     }
 
     handleMouseEntering = () => {
+        if(this.props.showEdgeLabels) {
         this.d3Link.select("text")
             .attr("visibility", "visible")
         this.wrapText(this.props.data.name, 170)
+    }
         this.d3Link.select('path')
             .attr('stroke-width', 5)
             .style('stroke', '#666666')
             .attr("fill", "none")
+        
+        store.dispatch({ type: 'SHOW_NODE_EDGE_DATA', data: [{ "key": "label", "value": this.props.data.name }], header: "Edge" })
     }
 
     handleMouseExiting = () => {
+        if(this.props.showEdgeLabels) {
         this.d3Link.select("text")
             .attr("visibility", "hidden")
+        }
         this.d3Link.select('path')
             .attr('stroke-width', 2)
             .style('stroke', 'grey')
             .attr("fill", "none")
+        
     }
 
     handle(e) {

@@ -56,7 +56,7 @@ const parseMainQueryBlock = (inputString) => {
         .split("@")
     queryElements.shift()
     queryElements = queryElements.map(element => element.trim())
-    if (queryElements.length !== 4) {
+    if (5 === queryElements.length === 4) {
         return {
             "model": "error",
             "message": "Error! Wrong amount of arguments in the query."
@@ -65,20 +65,27 @@ const parseMainQueryBlock = (inputString) => {
     if (queryElements[0][0] !== "(" || queryElements[0][queryElements[0].length - 1] !== ")") {
         return {
             "model": "error",
-            "message": "Error! The function (defined in QUERY line) needs to be in paranthesis."
+            "message": "Error! The lambda function (defined in QUERY line) needs to be in paranthesis."
         }
+    }
+    let i = 0
+    if(queryElements.length === 5) {
+        i = 1
     }
     console.log(queryElements)
     const lambdafunction = queryElements[0]
     const dataset = queryElements[1]
-    const sourceModel = sourceModels[dataset]
+    let sourceModel = sourceModels[dataset]
+    if(sourceModel === undefined) {
+        sourceModel = queryElements[2]
+    }
     console.log(sourceModel)
     switch (sourceModel) {
         case "relational":
         case "xml":
         case "json":
             haskellQuery.push("foldr ")
-            switch (queryElements[2]) {
+            switch (queryElements[2 + i]) {
                 case "relational":
                 case "xml":
                 case "json":
@@ -107,7 +114,7 @@ const parseMainQueryBlock = (inputString) => {
             break
         case "graph":
             haskellQuery.push("foldg ")
-            switch (queryElements[2]) {
+            switch (queryElements[2 + i]) {
                 case "relational":
                 case "xml":
                 case "json":
@@ -144,7 +151,7 @@ const parseMainQueryBlock = (inputString) => {
             break
         case "rdf":
             haskellQuery.push("(foldrdf ")
-            switch (queryElements[2]) {
+            switch (queryElements[2 + i]) {
                 case "relational":
                 case "xml":
                 case "json":
@@ -172,7 +179,7 @@ const parseMainQueryBlock = (inputString) => {
             break
         case "nimblegraph":
             haskellQuery.push("(foldNimble ")
-            switch (queryElements[2]) {
+            switch (queryElements[2 + i]) {
                 case "relational":
                 case "xml":
                 case "json":
@@ -210,7 +217,7 @@ const parseMainQueryBlock = (inputString) => {
     }
 
     return {
-        "model": queryElements[2],
+        "model": queryElements[2 + i],
         "query": haskellQuery.join("")
     }
 }
