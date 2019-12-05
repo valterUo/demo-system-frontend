@@ -11,7 +11,8 @@
         {"name": "Relational Assignees", "attributes": "-", "model": "relational", "id": 8},
         {"name": "Relational Categories", "attributes": "-", "model": "relational", "id": 9},
         {"name": "Relational Classes", "attributes": "-", "model": "relational", "id": 10},
-        {"name": "Relational Inventors", "attributes": "-", "model": "relational", "id": 11}
+        {"name": "Relational Inventors", "attributes": "-", "model": "relational", "id": 11},
+        {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 12}
     ], 
     "links": [
         {"source": 0, "target": 5, "name": "assname, pname, sname, cusip, assigneeCname", "count": 1},
@@ -45,6 +46,8 @@
         {"source": 7, "target": 8, "name": "patentAssignee'", "count": 1},
         {"source": 7, "target": 9, "name": "patentNclass'", "count": 1},
         {"source": 7, "target": 10, "name": "patentCat', patentSubcat'", "count": 1},
-        {"source": 11, "target": 7, "name": "inventorPatent'", "count": 1}
+        {"source": 11, "target": 7, "name": "inventorPatent'", "count": 1},
+
+        {"source": 7, "target": 12, "name": "cited(-,-)", "count": 1}
         
         ]}

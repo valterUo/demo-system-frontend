@@ -90,7 +90,13 @@ const parseJSONList = (listString) => {
 const JSONtoRelationalTables = (jsonDataList) => {
     let data = []
     let subdata = []
-    let attributes = Object.keys(jsonDataList[0])
+    let attributes
+    try {
+        attributes = Object.keys(jsonDataList[0])
+    } catch {
+        return undefined
+    }
+    
     data.push(attributes)
     jsonDataList.map(element => {
         let elements = Object.values(element)
@@ -138,10 +144,14 @@ const parseChild = (childElement) => {
         attributes: {},
         children: []
     }
+    console.log(childElement)
     Object.keys(childElement).forEach(function (key) {
         if (Array.isArray(childElement[key])) {
             answer.name = key
             childElement[key].map(child => answer.children.push(parseChild(child)))
+        } else if (hasJsonStructure(JSON.stringify(childElement[key]))) {
+            answer.name = key
+            answer.children.push(parseChild(childElement[key]))
         } else {
             answer.attributes[key] = childElement[key]
         }
@@ -157,6 +167,18 @@ const parseJSONtoTree = (jsonDataList) => {
     }
     jsonDataList.map(child => answer.children.push(parseChild(child)))
     return [answer]
+}
+
+const hasJsonStructure = (str) => {
+    if (typeof str !== 'string') return false
+    try {
+        const result = JSON.parse(str)
+        const type = Object.prototype.toString.call(result)
+        return type === '[object Object]' 
+            || type === '[object Array]'
+    } catch (err) {
+        return false
+    }
 }
 
 export default {

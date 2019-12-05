@@ -178,7 +178,7 @@ const parseMainQueryBlock = (inputString) => {
             }
             break
         case "nimblegraph":
-            haskellQuery.push("(foldNimble ")
+            haskellQuery.push("foldNimble ")
             switch (queryElements[2 + i]) {
                 case "relational":
                 case "xml":
@@ -203,7 +203,7 @@ const parseMainQueryBlock = (inputString) => {
                     break
                 case "nimblegraph":
                     haskellQuery.push(lambdafunction)
-                    haskellQuery.push(" emptyNimbleGraph ")
+                    haskellQuery.push(" (\\edge newGraph -> case (Map.lookup (vertexId $ NimbleGraph.NimbleGraph.source edge) (NimbleGraph.NimbleGraph.vertices newGraph)) of Nothing -> newGraph; Just(sourceVertex) -> case Map.lookup (vertexId $ NimbleGraph.NimbleGraph.target edge) (NimbleGraph.NimbleGraph.vertices newGraph) of Nothing -> newGraph; Just(targetVertex) -> addEdge edge newGraph) emptyNimbleGraph ")
                     haskellQuery.push(dataset)
                     break
                 default:
@@ -259,8 +259,8 @@ const executeQuery = async (inputQuery) => {
                 }
             case "json":
                 return {
-                    "model": "relational",
-                    "answer": await haskellCompiler.compileRelationalQuery(query),
+                    "model": "xml",
+                    "answer": await haskellCompiler.compileTreeQuery(query),
                     "fold": query
                 }
             case "nimblegraph":

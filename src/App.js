@@ -20,6 +20,7 @@ import ResultNavigationSidePanel from './components/ResultNavigationSidePanel'
 import DataSetSidePanel from './components/DataSetSidePanel'
 import uploadInfo from './dataUploadInfo/uploadInfo.json'
 import FoldViewBox from './components/FoldViewBox'
+import ErrorBoundary from './errorBoundary/ErrorBoundary'
 
 class App extends Component {
 	constructor(props) {
@@ -160,7 +161,9 @@ class App extends Component {
 								initializeResult={this.initializeQueryResult.bind(this)} showCategoricalView={this.state.showCategoricalView} showResult={this.state.showResult} />
 							<Row>
 								<Col>
+								<ErrorBoundary>
 									<StatBox data={this.state.showedStat} />
+									</ErrorBoundary>
 								</Col>
 								<Col>
 									<FoldViewBox fold = {this.state.fold} />

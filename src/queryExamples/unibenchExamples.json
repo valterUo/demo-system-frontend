@@ -5,15 +5,17 @@
         },
         {
             "header": "XML",
-            "examples": []
+            "examples": ["QUERY (\\x xs -> if totalprice(order x ) > 2100.00 then (order x):xs else xs)\nFROM invoices\nTO xml\nRETURN all"]
         },
         {
             "header": "Graph",
-            "examples": []
+            "examples": ["QUERY (\\vertex newGraph -> let person = vertexValue vertex in if firstName person == \"Li\" && lastName person == \"Li\" then addVertex vertex newGraph else newGraph)\nFROM personKnowsPersonGraph\nTO nimblegraph\nRETURN all",
+            "LET t BE\nQUERY (\\vertex newGraph -> let person = vertexValue vertex in if personsId person == 26388279076888 then addVertex vertex newGraph else newGraph)\nFROM personKnowsPersonGraph\nTO nimblegraph\nRETURN all\nIN\nQUERY (\\vertex newGraph -> inComingNeighbors vertex personKnowsPersonGraph)\nFROM t\nTO nimblegraph\nRETURN all",
+            "QUERY (\\vertex newGraph -> case (vertexValue vertex) of Right(person) -> if firstName person == \"Ning\" then addVertex vertex newGraph else newGraph; Left(post) -> if postId post == 1649267452025 then addVertex vertex newGraph else newGraph)\nFROM personCreatedPostGraph\nTO nimblegraph\nRETURN all"]
         },
         {
             "header": "JSON",
-            "examples": []
+            "examples": ["QUERY (\\x xs -> if totalprice(x) > 3500.00 then x:xs else xs)\nFROM unibenchOrders\nTO json\nRETURN all"]
         },
         {
             "header": "Rel+JSON",
