@@ -35,7 +35,7 @@ class ResultComponent extends Component {
                             <h4>Categorical view of the query {this.props.header}</h4>
                         </Row>
                         <Row ref={this.mainContainer} style={{ "margin": "10px" }}>
-                            <CategoricalViewOfQuery query={this.props.query} width={this.props.width} height={this.props.height} />
+                            <CategoricalViewOfQuery dataSet = {this.props.dataSet} query={this.props.query} width={this.props.width} height={this.props.height} />
                         </Row>
                     </Col>
                 </Container>

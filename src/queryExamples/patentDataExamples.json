@@ -1,19 +1,19 @@
 {
     "examples": [{
             "header": "Rel",
-            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else case inventorPatent x patents of Just patent -> (lastnam x, firstnam x, patentId(patent)):xs; Nothing -> xs)\nFROM inventors\nTO relational\nRETURN all"]
+            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else case inventorPatent x patents of Just patent -> (lastnam x, firstnam x, patentId(patent)):xs; Nothing -> xs)\nFROM inventors\nTO relational"]
         },
         {
             "header": "Graph",
-            "examples": ["QUERY (\\x -> if (patentId x == 3858241 || patentId x == 3398406 || patentId x == 3557384 || patentId x == 3634889) then Vertex((patentId x, patentCountry x)) else Algebra.Graph.empty)\nFROM patentGraph\nTO graph\nRETURN all",
-            "QUERY (\\x -> case gyear x of Just year -> if year < 1964 then Vertex((patentId x, patentCountry x)) else Algebra.Graph.empty; Nothing ->Vertex((patentId x, patentCountry x)))\nFROM patentGraph\nTO graph\nRETURN all",
-            "LET t BE\nQUERY (\\x -> if patentId x == 3858249 then [x] else [])\nFROM patentGraph\nTO relational\nRETURN all\nIN\nQUERY (\\x -> if reachable x (t !! 0) patentGraph then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph\nRETURN all",
-            "QUERY (\\x -> if reachable x (patents !? 3858249) patentGraph then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph\nRETURN all",
-            "LET t BE\nQUERY (\\x -> if patentId x ==  3859982 then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph\nRETURN all\nIN\nQUERY (\\x -> findTargetNeighbors x patentGraph)\nFROM t\nTO graph\nRETURN all"]
+            "examples": ["QUERY (\\x -> if (patentId x == 3858241 || patentId x == 3398406 || patentId x == 3557384 || patentId x == 3634889) then Vertex((patentId x, patentCountry x)) else Algebra.Graph.empty)\nFROM patentGraph\nTO graph",
+            "QUERY (\\x -> case gyear x of Just year -> if year < 1964 then Vertex((patentId x, patentCountry x)) else Algebra.Graph.empty; Nothing ->Vertex((patentId x, patentCountry x)))\nFROM patentGraph\nTO graph",
+            "LET t BE\nQUERY (\\x -> if patentId x == 3858249 then [x] else [])\nFROM patentGraph\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) patentGraph then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph",
+            "QUERY (\\x -> if reachable x (patents !? 3858249) patentGraph then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph",
+            "LET t BE\nQUERY (\\x -> if patentId x ==  3859982 then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph\nIN\nQUERY (\\x -> findTargetNeighbors x patentGraph)\nFROM t\nTO graph"]
         },
         {
             "header": "Rel + Graph",
-            "examples": ["QUERY (\\x xs -> if lastnam x == \"Williams\" then Overlay (Vertex (inventorPatent x patents))  xs else xs)\nFROM inventors\nTO graph\nRETURN all"]
+            "examples": ["QUERY (\\x xs -> if lastnam x == \"Williams\" then Overlay (Vertex (inventorPatent x patents))  xs else xs)\nFROM inventors\nTO graph"]
         }
     ]
 }

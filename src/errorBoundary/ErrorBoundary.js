@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import Row from 'react-bootstrap/Row'
+import style from '../styles'
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
     this.state = { hasError: false }
@@ -18,11 +20,16 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <p><b>value:</b> error to express the data </p>
+      return <Row style={style.basicComponentsStyle}> <div className="col">
+        <h4> Contents </h4>
+        <div>
+          <p><b>value:</b> error to express the data </p>
+        </div>
+      </div>
+      </Row>
     }
 
-    return this.props.children; 
+    return this.props.children
   }
 }
 

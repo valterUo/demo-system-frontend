@@ -144,7 +144,6 @@ const parseChild = (childElement) => {
         attributes: {},
         children: []
     }
-    console.log(childElement)
     Object.keys(childElement).forEach(function (key) {
         if (Array.isArray(childElement[key])) {
             answer.name = key

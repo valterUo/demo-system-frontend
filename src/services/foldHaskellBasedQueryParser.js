@@ -51,12 +51,10 @@ const parseMainQueryBlock = (inputString) => {
         .join("@")
         .split("FROM")
         .join("@")
-        .split("RETURN")
-        .join("@")
         .split("@")
     queryElements.shift()
     queryElements = queryElements.map(element => element.trim())
-    if (5 === queryElements.length === 4) {
+    if (3 === queryElements.length === 4) {
         return {
             "model": "error",
             "message": "Error! Wrong amount of arguments in the query."
@@ -101,7 +99,7 @@ const parseMainQueryBlock = (inputString) => {
                 case "rdf":
                     haskellQuery.push(lambdafunction)
                     haskellQuery.push(" RDF.empty ")
-                    haskellQuery.push(dataset + " :: RDF TList)")
+                    haskellQuery.push(dataset + " :: RDF TList")
                     break
                 case "nimblegraph":
                     haskellQuery.push(lambdafunction)
@@ -136,7 +134,7 @@ const parseMainQueryBlock = (inputString) => {
                     haskellQuery.push(lambdafunction)
                     haskellQuery.push(" rdfUnion ")
                     haskellQuery.push("rdfUnion ")
-                    haskellQuery.push(dataset + " :: RDF TList)")
+                    haskellQuery.push(dataset + " :: RDF TList")
                     break
                 case "nimblegraph":
                     haskellQuery.push(" emptyNimbleGraph ")
@@ -155,18 +153,16 @@ const parseMainQueryBlock = (inputString) => {
                 case "relational":
                 case "xml":
                 case "json":
-                    haskellQuery.push(" [] ")
                     haskellQuery.push(lambdafunction)
-                    haskellQuery.push(" (union) ")
-                    haskellQuery.push("(union) ")
-                    haskellQuery.push(dataset)
+                    haskellQuery.push(" [] ")
+                    haskellQuery.push(dataset + ")")
                     break
                 case "graph":
                     haskellQuery.push("Algebra.Graph.empty ")
                     haskellQuery.push(lambdafunction)
                     haskellQuery.push(" overlay ")
                     haskellQuery.push("connect ")
-                    haskellQuery.push(dataset)
+                    haskellQuery.push(dataset + ")")
                     break
                 case "rdf":
                     haskellQuery.push(lambdafunction)
@@ -199,7 +195,7 @@ const parseMainQueryBlock = (inputString) => {
                 case "rdf":
                     haskellQuery.push(lambdafunction)
                     haskellQuery.push(" RDF.empty ")
-                    haskellQuery.push(dataset + " :: RDF TList)")
+                    haskellQuery.push(dataset + " :: RDF TList")
                     break
                 case "nimblegraph":
                     haskellQuery.push(lambdafunction)
@@ -221,7 +217,7 @@ const parseMainQueryBlock = (inputString) => {
     }
 }
 
-const executeQuery = async (inputQuery) => {
+const getTheQuery = (inputQuery) => {
     const parsedQueryList = parseLetInQueryBlock(inputQuery)
     if (parsedQueryList === undefined) {
         return {
@@ -232,6 +228,11 @@ const executeQuery = async (inputQuery) => {
         const model = parsedQueryList["model"]
         const query = parsedQueryList["query"]
         console.log(query)
+        return { "model": model, "query": query }
+    }
+}
+
+const executeQuery = async (model, query) => {
         switch (model) {
             case "graph":
                 return {
@@ -276,10 +277,10 @@ const executeQuery = async (inputQuery) => {
                     "fold": query
                 }
         }
-    }
 }
 
 export default {
     executeQuery,
-    parseLetInQueryBlock
+    parseLetInQueryBlock,
+    getTheQuery
 }

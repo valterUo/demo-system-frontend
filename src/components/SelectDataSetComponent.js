@@ -37,27 +37,27 @@ class SelectDataSetComponent extends Component {
                     </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item href="#/simple"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Customer-Orders-Locations Dataset", examples: simpleExamples, schemaData: simpleSchemaData, metaData: uploadInfo["simpleDemoData"] })}>
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Customer-Orders-Locations dataset", examples: simpleExamples, schemaData: simpleSchemaData, metaData: uploadInfo["simpleDemoData"], nameForCategoricalQueryView: "simpleDemo" })}>
                                 Customer-Orders-Locations Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/unibench"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Unibench Dataset", examples: unibenchExamples, schemaData: unibenchSchema, metaData: uploadInfo["unibench"] })}>
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Unibench dataset", examples: unibenchExamples, schemaData: unibenchSchema, metaData: uploadInfo["unibench"], nameForCategoricalQueryView: "unibench" })}>
                                 Unibench Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/patent"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Patent Dataset (contains bugs)", examples: patentDataExamples, schemaData: patentSchema, metaData: uploadInfo["patent"] })}>
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Patent dataset", examples: patentDataExamples, schemaData: patentSchema, metaData: uploadInfo["patent"], nameForCategoricalQueryView: "patent" })}>
                                 Patent Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/film"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Film Dataset (contain bugs)", examples: filmExamples, schemaData: filmSchema, metaData: uploadInfo["film"] })}>
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Film dataset", examples: filmExamples, schemaData: filmSchema, metaData: uploadInfo["film"], nameForCategoricalQueryView: "film" })}>
                                 Film Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/university"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Universities Dataset (contain bugs)", examples: universityExamples, schemaData: universitySchema, metaData: uploadInfo["university"] })}>
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Universities dataset", examples: universityExamples, schemaData: universitySchema, metaData: uploadInfo["university"], nameForCategoricalQueryView: "university" })}>
                                 University Dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/person"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Persons Dataset (contain bugs)", examples: personExamples, schemaData: personSchema, metaData: uploadInfo["person"] })}>
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Persons dataset", examples: personExamples, schemaData: personSchema, metaData: uploadInfo["person"], nameForCategoricalQueryView: "person" })}>
                                 Person Dataset
                             </Dropdown.Item>
                         </Dropdown.Menu>

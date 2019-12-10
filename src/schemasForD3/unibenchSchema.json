@@ -2,7 +2,7 @@
     "nodes": [
         {"name": "Person", "attributes":"personsId, firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed, place", "model": "graph, relational", "id": 0},
         {"name": "Int", "attributes":"-", "model": "primitive", "id": 1},
-        {"name": "UnibenchProduct", "attributes":"productAsin, productTitle, productPrice, imgUrl, unibenchProductId, productBrand", "model": "json", "id": 2},
+        {"name": "UnibenchProduct", "attributes":"unibenchProductAsin, unibenchProductTitle, unibenchProductPrice, unibenchProductimgUrl, unibenchProductId, unibenchProductBrand", "model": "json", "id": 2},
         {"name": "UnibenchOrder", "attributes": "orderid, personid, orderdate, totalprice, orderline", "model": "json", "id": 3},
         {"name": "String", "attributes": "-", "model": "primitive", "id": 4},
         {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 5},
@@ -28,7 +28,8 @@
         {"name": "UnibenchOrderline", "attributes":"productId, asin, title, price,brand", "model": "xml", "id": 20},
 
         {"name": "Relational Post", "attributes": "-", "model": "relational", "id": 21},
-        {"name": "Relational Feedback", "attributes": "-", "model": "relational", "id": 22}
+        {"name": "Relational Feedback", "attributes": "-", "model": "relational", "id": 22},
+        {"name": "Relational UnibenchOrderline", "attributes":"productId, asin, title, price,brand", "model": "xml", "id": 23}
     ], 
     "links": [
         {"source": 7, "target": 5, "name": "knows(-,-)", "count": 1},
@@ -43,7 +44,8 @@
 
         {"source": 3, "target": 4, "name": "orderid, personid, orderdate", "count": 1},
         {"source": 3, "target": 19, "name": "totalprice", "count": 1},
-        {"source": 3, "target": 20, "name": "contains", "count": 1},
+        {"source": 3, "target": 23, "name": "contains", "count": 1},
+        {"source": 20, "target": 23, "name": "collection construction functor", "count": 1},
 
         {"source": 6, "target": 4, "name": "asin, feedback", "count": 1},
         {"source": 6, "target": 1, "name": "personId", "count": 1},
