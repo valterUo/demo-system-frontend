@@ -12,7 +12,8 @@
             "examples": ["QUERY (\\vertex newGraph -> let person = vertexValue vertex in if firstName person == \"Li\" && lastName person == \"Li\" then addVertex vertex newGraph else newGraph)\nFROM personKnowsPersonGraph\nTO nimblegraph",
             "LET t BE\nQUERY (\\vertex newGraph -> let person = vertexValue vertex in if personsId person == 26388279076888 then addVertex vertex newGraph else newGraph)\nFROM personKnowsPersonGraph\nTO nimblegraph\nIN\nQUERY (\\vertex newGraph -> inComingNeighbors vertex personKnowsPersonGraph)\nFROM t\nTO nimblegraph",
             "QUERY (\\vertex newGraph -> case (vertexValue vertex) of Right(person) -> if firstName person == \"Ning\" then addVertex vertex newGraph else newGraph; Left(post) -> if postId post == 1649267452025 then addVertex vertex newGraph else newGraph)\nFROM personCreatedPostGraph\nTO nimblegraph",
-            "LET t BE\nQUERY (\\v g -> case (vertexValue v) of Right(person) -> g; Left(post) -> if isInfixOf \"tennis\" (content post) then addVertex v g else g)\nFROM personCreatedPostGraph\nTO nimblegraph\nIN\nQUERY (\\v g -> nimbleGraphUnion (outGoingNeighbors v personCreatedPostGraph) g)\nFROM t\nAS nimblegraph\nTO nimblegraph"]
+            "LET t BE\nQUERY (\\v g -> case (vertexValue v) of Right(person) -> g; Left(post) -> if isInfixOf \"tennis\" (content post) then addVertex v g else g)\nFROM personCreatedPostGraph\nTO nimblegraph\nIN\nQUERY (\\v g -> nimbleGraphUnion (outGoingNeighbors v personCreatedPostGraph) g)\nFROM t\nAS nimblegraph\nTO nimblegraph",
+            "QUERY (\\vertex newGraph -> case (vertexValue vertex) of Left(person) -> newGraph; Right(product) -> if unibenchProductId product == 5604 then nimbleGraphUnion (inComingNeighbors vertex personToProductGraph) newGraph else newGraph)\nFROM personToProductGraph\nTO nimblegraph"]
         },
         {
             "header": "JSON",

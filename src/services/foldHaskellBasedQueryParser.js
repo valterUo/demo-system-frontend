@@ -67,7 +67,7 @@ const parseMainQueryBlock = (inputString) => {
         }
     }
     let i = 0
-    if(queryElements.length === 5) {
+    if(queryElements.length === 4) {
         i = 1
     }
     console.log(queryElements)
