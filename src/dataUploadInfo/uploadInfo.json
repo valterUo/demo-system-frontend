@@ -57,7 +57,76 @@
             "requiredFiles": 1
         }
     ],
-    "unibench": [],
-    "university": [],
-    "person": []
+    "unibench": [{
+            "name": "persons",
+            "loadingFunction": "collectPersons",
+            "requiredFiles": 1
+        },
+        {
+            "name": "posts",
+            "loadingFunction": "collectPosts",
+            "requiredFiles": 1
+        },
+        {
+            "name": "unibenchProducts",
+            "loadingFunction": "collectUnibenchProducts",
+            "requiredFiles": 1
+        },
+        {
+            "name": "unibenchOrders",
+            "loadingFunction": "collectUnibenchOrders",
+            "requiredFiles": 1
+        },
+        {
+            "name": "personKnowsPersonGraph",
+            "loadingFunction": "collectPersonKnowsPersonGraph persons",
+            "requiredFiles": 1
+        },
+        {
+            "name": "personCreatedPostGraph",
+            "loadingFunction": "collectPersonPostGraph persons posts",
+            "requiredFiles": 1
+        },
+        {
+            "name": "postHasProductGraph",
+            "loadingFunction": "collectPostProductGraph posts unibenchProducts",
+            "requiredFiles": 1
+        },
+        {
+            "name": "personToProductGraph",
+            "loadingFunction": "collectPersonToProductGraph persons unibenchProducts",
+            "requiredFiles": 1
+        },
+        {
+            "name": "feedbacks",
+            "loadingFunction": "collectFeedbacks",
+            "requiredFiles": 1
+        },
+        {
+            "name": "vendors",
+            "loadingFunction": "collectVendors",
+            "requiredFiles": 1
+        },
+        {
+            "name": "invoices",
+            "loadingFunction": "collectInvoices",
+            "requiredFiles": 1
+        }
+    ],
+    "university": [{
+            "name": "universities",
+            "loadingFunction": "collectUniversities",
+            "requiredFiles": 1
+        },
+        {
+            "name": "famousLocations",
+            "loadingFunction": "collectRDF",
+            "requiredFiles": 1
+        }
+    ],
+    "person": [{
+        "name": "personGraph",
+        "loadingFunction": "collectRDF",
+        "requiredFiles": 1
+    }]
 }

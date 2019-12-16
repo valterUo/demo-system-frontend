@@ -22,7 +22,7 @@
         },
         {
             "header": "Rel+JSON",
-            "examples": []
+            "examples": ["LET t BE\nQUERY (\\x xs -> if orderid x == \"aeafd60c-8e60-4daf-9136-d3714911bde7\" then x:xs else xs)\nFROM unibenchOrders\nTO relational\nIN\nQUERY (\\x xs ->(orderedBy x persons):xs)\nFROM t\nAS relational\nTO relational"]
         },
         {
             "header": "XML+JSON",

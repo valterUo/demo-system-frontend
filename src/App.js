@@ -30,7 +30,7 @@ class App extends Component {
 			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false, fold: undefined,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
 			dataSet: {
-				header: "Customer-Orders-Locations Dataset", examples: simpleExamples,
+				header: "Customer-Orders-Locations", examples: simpleExamples,
 				schemaData: initialSchemaData, schemaKey: "initialKey", metaData: uploadInfo["simpleDemoData"]
 			},
 			showSchemaCategory: false, showCategoricalView: false, showResult: false, nameForCategoricalQueryView: "simpleDemo"
@@ -111,35 +111,35 @@ class App extends Component {
 					break
 				case "relational":
 					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the relational result.", "warning")
+						Notification.notify("Error in expressing the relational result. The result is empty.", "warning")
 					} else {
 						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "relational" }, showResult: true })
 					}
 					break
 				case "graph":
 					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the graph result.", "warning")
+						Notification.notify("Error in expressing the graph result. The result is empty.", "warning")
 					} else {
 						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "graph" }, showResult: true })
 					}
 					break
 				case "xml":
 					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the XML result.", "warning")
+						Notification.notify("Error in expressing the XML result. The result is empty.", "warning")
 					} else {
 						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "xml" }, showResult: true })
 					}
 					break
 				case "json":
 					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the json result.", "warning")
+						Notification.notify("Error in expressing the json result. The result is empty.", "warning")
 					} else {
 						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "json" }, showResult: true })
 					}
 					break
 				case "rdf":
 					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the rdf result.", "warning")
+						Notification.notify("Error in expressing the rdf result. The result is empty.", "warning")
 					} else {
 						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "rdf" }, showResult: true })
 					}
@@ -182,7 +182,7 @@ class App extends Component {
 						</Container>
 					</Col>
 				</Row>
-				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} /> : null}
+				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} width={this.state.width} height={this.state.height} /> : null}
 			</Container>
 		)
 	}

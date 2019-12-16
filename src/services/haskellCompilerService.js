@@ -118,7 +118,12 @@ const JSONtoRelationalTables = (jsonDataList) => {
     result["eventKey"] = JSON.stringify(data[0])
     result["title"] = "Title"
     let returndata = [result]
-    subdata.map(e => returndata.push(e))
+    try {
+        subdata.map(e => returndata.push(e))
+    } catch {
+        return undefined
+    }
+    
     return returndata
 }
 

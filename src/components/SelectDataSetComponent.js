@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 
 // Schemas for drawing D3 graphs:
 import simpleSchemaData from '../schemasForD3/simpleSchema.json'
@@ -31,36 +32,38 @@ class SelectDataSetComponent extends Component {
                     <h4>Select dataset</h4>
                 </Col>
                 <Col xl={6}>
-                    <Dropdown style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 10000 }}>
-                        <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                            Datasets
-                    </Dropdown.Toggle>
-                        <Dropdown.Menu>
+                    <Dropdown style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 10000, right: "0px" }}>
+                        <DropdownButton
+                                drop={"left"}
+                                variant="dark"
+                                title={"Datasets"}
+                                id={'dropdown-button-drop-left'}
+                                key={"left"}>
                             <Dropdown.Item href="#/simple"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Customer-Orders-Locations dataset", examples: simpleExamples, schemaData: simpleSchemaData, metaData: uploadInfo["simpleDemoData"], nameForCategoricalQueryView: "simpleDemo" })}>
-                                Customer-Orders-Locations Dataset
+                                onClick={this.props.handleDataSetChange.bind(this, { header: "Customer-Orders-Locations", examples: simpleExamples, schemaData: simpleSchemaData, metaData: uploadInfo["simpleDemoData"], nameForCategoricalQueryView: "simpleDemo" })}>
+                                Customer-Orders-Locations dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/unibench"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Unibench dataset", examples: unibenchExamples, schemaData: unibenchSchema, metaData: uploadInfo["unibench"], nameForCategoricalQueryView: "unibench" })}>
-                                Unibench Dataset
+                                Unibench dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/patent"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Patent dataset", examples: patentDataExamples, schemaData: patentSchema, metaData: uploadInfo["patent"], nameForCategoricalQueryView: "patent" })}>
-                                Patent Dataset
+                                Patent dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/film"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Film dataset", examples: filmExamples, schemaData: filmSchema, metaData: uploadInfo["film"], nameForCategoricalQueryView: "film" })}>
-                                Film Dataset
+                                Film dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/university"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Universities dataset", examples: universityExamples, schemaData: universitySchema, metaData: uploadInfo["university"], nameForCategoricalQueryView: "university" })}>
-                                University Dataset
+                                University dataset
                             </Dropdown.Item>
                             <Dropdown.Item href="#/person"
                                 onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Persons dataset", examples: personExamples, schemaData: personSchema, metaData: uploadInfo["person"], nameForCategoricalQueryView: "person" })}>
-                                Person Dataset
+                                Person dataset
                             </Dropdown.Item>
-                        </Dropdown.Menu>
+                        </DropdownButton>
                     </Dropdown>
                 </Col>
             </Row>
