@@ -44,16 +44,14 @@ class CategoricalViewOfQuery extends Component {
             return query
         })
         let newBlocks = blocks.map(element => {
-            console.log(element)
             return this.compositionTreeToGraphWithoutDuplicateNodes({ nodes: [], links: [] }, element)
         })
-        console.log(newBlocks)
         let totalGraph = { nodes: [], links: [] }
         newBlocks.map(graph => {
             totalGraph = this.compositionGraphsWithDuplicateNodes(totalGraph, graph)
             return graph
         })
-        console.log(totalGraph)
+        //console.log(totalGraph)
         return totalGraph
     }
 
@@ -65,46 +63,60 @@ class CategoricalViewOfQuery extends Component {
             .split("FROM").join("@")
             .split("AS").join("@")
             .split("TO").join("@").split("@")
-        console.log(newQuery)
+        //console.log(newQuery)
         return this.parseLambda(newQuery[1], newQuery[4].trim() + " " + newQuery[3].trim(), "all " + newQuery[3].trim())
     }
 
-    parseLambda = (lambda, domain, target) => {
-        let lambdaf = lambda
+    parseLambda = (lambdaf, domain, target) => {
+        console.log(lambdaf)
         try {
-            if (lambda.includes("->") && !(this.splitted)) {
-                const re = /->(.+)/
-                let f = lambda.split(re)
-                console.log(f)
-                lambdaf = f[1].trim()
+            if (lambdaf.includes("->") && !(this.splitted)) {
+                lambdaf = lambdaf.split(/->(.+)/)[1].trim()
                 this.splitted = true
                 return { domain: target, outerFunction: "-", innerFunction: this.parseLambda(lambdaf, target.split(" ")[1], domain) }
             }
-            console.log(lambdaf)
             if (lambdaf.startsWith("if")) {
-                let answer = this.parseIf(lambdaf, domain, target)
-                return answer
+                return this.parseIf(lambdaf, domain, target)
             } else if (lambdaf.startsWith("case")) {
-                console.log(lambdaf)
                 let g = lambdaf.split(/->(.+)/).join("@").split(";").join("@").split("@")
-                console.log(g)
                 this.parseLambda(g[1].trim(), domain, target)
+            } else if (lambdaf.includes(":")) {
+                lambdaf = lambdaf.split(":")[0].trim()
+                return { domain: target, outerFunction: "cons function :", innerFunction: this.parseLambda(lambdaf, target.split(" ")[1], domain) }
             } else if (lambdaf.includes("==")) {
-                let answer = this.parseBooleanFunction(lambdaf, domain, target, "==")
-                return answer
+                return this.parseBooleanFunction(lambdaf, domain, target, "==")
             } else if (lambdaf.includes("<")) {
-                let answer = this.parseBooleanFunction(lambdaf, domain, target, "<")
-                return answer
+                return this.parseBooleanFunction(lambdaf, domain, target, "<")
             } else if (lambdaf.includes(">")) {
-                let answer = this.parseBooleanFunction(lambdaf, domain, target, ">")
-                return answer
-            } else {
-                return { domain: target.split(" ")[1], outerFunction: lambda.trim(), target: target }
+                return this.parseBooleanFunction(lambdaf, domain, target, ">")
+            } //else if (lambdaf.startsWith("(")) {
+            //     return this.parseTermsOfTuple(lambdaf, domain, target)
+            else {
+                if(target.split(" ")[1] === undefined) {
+                    return { domain: "collection", outerFunction: lambdaf.trim(), target: target }
+                } else {
+                    console.log(target, target.split(" ")[1])
+                    return { domain: target.split(" ")[1], outerFunction: lambdaf.trim(), target: target }
+                }
             }
         } catch (error) {
             console.log(error)
         }
 
+    }
+
+    parseTermsOfTuple = (lambdaf, domain, target) => {
+        let termsOfTuple = lambdaf.split(",")//.map(term => term.split(/([()])/))
+        termsOfTuple = termsOfTuple.map(term => {
+            if (term[0] === "(") {
+                return term.substr(1).trim()
+            } else if (term[term.length - 1] === ")") {
+                return term.substr(0, term.length - 1).trim()
+            }
+            return term.trim()
+        })
+        console.log(termsOfTuple)
+        return { domain: "Tuple", outerFunction: lambdaf.trim(), innerFunction: termsOfTuple.map(term => this.parseLambda(term, domain, target)) }
     }
 
     parseIf = (lambda, domain, target) => {
@@ -114,7 +126,6 @@ class CategoricalViewOfQuery extends Component {
 
     parseBooleanFunction = (lambda, domain, target, operator) => {
         let parsedLambda = lambda.split(operator)
-        console.log(parsedLambda)
         let foundMorphism, morphismsTarget
         this.state.morphisms.map(morphism => {
             if (parsedLambda[0].trim().includes(morphism.name)) {
@@ -126,7 +137,6 @@ class CategoricalViewOfQuery extends Component {
             }
             return morphism
         })
-        console.log(foundMorphism)
         return { domain: morphismsTarget, outerFunction: lambda.trim(), innerFunction: this.parseLambda(foundMorphism, morphismsTarget, target) }
     }
 
@@ -146,56 +156,69 @@ class CategoricalViewOfQuery extends Component {
             })
             return node
         })
-        console.log(graph2.links)
         graph1.links = graph1.links.concat(graph2.links.map((link, i) => {
             link.id = graph1.links.length + i
             return link
         }))
-        console.log(graph1)
+        //console.log(graph1)
         return graph1
     }
 
     compositionTreeToGraphWithoutDuplicateNodes = (graph, composition) => {
-        let sourceIndex
-        let targetIndex
+        console.log(composition)
         let domainElement
         let targetElement = { name: composition.domain, id: graph.nodes.length }
-        if (composition.innerFunction !== undefined) {
+        if(Array.isArray(composition.innerFunction)) {
+            let outerFunctionsNames = composition.innerFunction.map(f => f.outerFunction)
+            domainElement = composition.innerFunction.map((element, i) => { return { name: element.domain, id: graph.nodes.length + i + 1 }})
+            domainElement.map((node, i) => this.addEdgeToGraph(graph, node, targetElement, outerFunctionsNames[i]))
+        } else if (composition.innerFunction !== undefined) {
             domainElement = { name: composition.innerFunction.domain, id: graph.nodes.length + 1 }
+            if(composition.innerFunction === undefined) {
+                this.addEdgeToGraph(graph, domainElement, targetElement, undefined)
+            } else {
+                this.addEdgeToGraph(graph, domainElement, targetElement, composition.innerFunction.outerFunction)
+            }   
         } else {
             domainElement = { name: composition.target, id: graph.nodes.length + 1 }
+            if(composition.innerFunction === undefined) {
+                this.addEdgeToGraph(graph, domainElement, targetElement, undefined)
+            } else {
+                this.addEdgeToGraph(graph, domainElement, targetElement, composition.innerFunction.outerFunction)
+            } 
         }
+        if (composition.innerFunction !== undefined) {
+            graph = this.compositionTreeToGraphWithoutDuplicateNodes(graph, composition.innerFunction)
+        }
+        console.log(graph)
+        return graph
+    }
 
+    addEdgeToGraph = (graph, domain, target, functionName) => {
+        let sourceIndex, targetIndex
         graph.nodes.map((node, i) => {
-            if (node.name === domainElement.name) {
+            if (node.name === domain.name) {
                 sourceIndex = i
             }
-            if (node.name === targetElement.name) {
+            if (node.name === target.name) {
                 targetIndex = i
             }
             return node
         })
         if (sourceIndex === undefined) {
-            sourceIndex = graph.nodes.push(domainElement) - 1
+            sourceIndex = graph.nodes.push(domain) - 1
         }
         if (targetIndex === undefined) {
-            targetIndex = graph.nodes.push(targetElement) - 1
+            targetIndex = graph.nodes.push(target) - 1
         }
-        let functionName
-        if (composition.innerFunction !== undefined) {
-            functionName = composition.innerFunction.outerFunction.trim()
-        } else {
-            functionName = "type constructor " + domainElement.name
+        if (functionName === undefined) {
+            functionName = "type constructor " + domain.name
         }
         graph.links.push({ source: sourceIndex, target: targetIndex, name: functionName, count: 1, id: graph.links.length })
-        if (composition.innerFunction !== undefined) {
-            graph = this.compositionTreeToGraphWithoutDuplicateNodes(graph, composition.innerFunction)
-        }
         return graph
     }
 
     render() {
-        //console.log(this.parseQueryBlock(this.props.query))
         if (this.state.graphData === undefined) {
             return null
         } else {

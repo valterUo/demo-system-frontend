@@ -23,7 +23,7 @@ class FreeTextInputQueryComponent extends Component {
                 <SelectDataSetComponent handleDataSetChange={this.props.handleDataSetChange} />
             </Col>
             <Col xl={1}>
-                <i className="fa fa-info-circle" style={{ fontSize: "28px", margin: "20px" }} aria-hidden="true" onClick={this.props.togglePopup}></i>
+                <i className="fa fa-info-circle" style={{ fontSize: "28px", margin: "20px" }} aria-hidden="true" onClick={() => this.props.togglePopup("main")}></i>
             </Col>
         </Row>
     }

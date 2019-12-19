@@ -90,12 +90,12 @@ const popup = {
 const popupInner = {
 	position: "absolute",
 	left: "25%",
-	right: "25%",
 	top: "25%",
-	bottom: "25%",
+	right: "25%",
 	margin: "auto",
 	borderRadius: "20px",
-	background: "white"
+	background: "white",
+	display: "inlineBlock"
 }
 
 const infoTextStyle = {

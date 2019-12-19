@@ -24,6 +24,7 @@ class ResultNavigationSidePanel extends Component {
                         <Card >
                             <Card.Header>
                                 <Button style={{ width: "192px" }} type="button" variant="dark" onClick={this.props.toggleResult}>Result</Button>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("result")}></i>
                             </Card.Header>
                         </Card>
                     </Nav.Item>
@@ -31,6 +32,7 @@ class ResultNavigationSidePanel extends Component {
                         <Card >
                             <Card.Header>
                                 <Button type="button" variant="dark" onClick={this.props.toggleCategoricalView}>Categorical view of query </Button>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("categoricalViewToQuery")}></i>
                             </Card.Header>
                         </Card>
                     </Nav.Item>

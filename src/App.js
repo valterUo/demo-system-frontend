@@ -21,13 +21,25 @@ import DataSetSidePanel from './components/DataSetSidePanel'
 import uploadInfo from './dataUploadInfo/uploadInfo.json'
 import FoldViewBox from './components/FoldViewBox'
 import ErrorBoundary from './errorBoundary/ErrorBoundary'
+const __mainHTML = require('./infoTexts/mainHTML.js')
+const __categoricalViewToQueryHTML = require('./infoTexts/categoricalViewToSchemaHTML.js')
+const __examplesHTML = require('./infoTexts/examplesHTML.js')
+const __resultHTML = require('./infoTexts/resultHTML.js')
+const __schemaCategoryHTML = require('./infoTexts/schemaCategoryHTML.js')
+const __uploadDataHTML = require('./infoTexts/uploadDataHTML.js')
+const templateMain = { __html: __mainHTML }
+const templateCategoricalViewToQuery = { __html: __categoricalViewToQueryHTML }
+const templateExamples = { __html: __examplesHTML }
+const templateResult = { __html: __resultHTML }
+const templateSchemaCategory = { __html: __schemaCategoryHTML }
+const templateUploadData = { __html: __uploadDataHTML }
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			query: "", showedStat: { data: [{ "header": undefined, "key": undefined, "value": undefined }] },
-			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false, fold: undefined,
+			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false, popContent: templateMain, fold: undefined,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
 			dataSet: {
 				header: "Customer-Orders-Locations", examples: simpleExamples,
@@ -55,13 +67,35 @@ class App extends Component {
 		this.setState({ query: event.target.value })
 	}
 
-	togglePopup() {
-		this.setState((prevState) => { return { showPopup: !prevState.showPopup } })
+	togglePopup(template) {
+		switch (template) {
+			case "main":
+				this.setState({ showPopup: true, popContent: templateMain })
+				break;
+			case "categoricalViewToQuery":
+				this.setState({ showPopup: true, popContent: templateCategoricalViewToQuery })
+				break;
+			case "examples":
+				this.setState({ showPopup: true, popContent: templateExamples })
+				break;
+			case "result":
+				this.setState({ showPopup: true, popContent: templateResult })
+				break;
+			case "schemaCategory":
+				this.setState({ showPopup: true, popContent: templateSchemaCategory })
+				break;
+			case "uploadData":
+				this.setState({ showPopup: true, popContent: templateUploadData })
+				break;
+			default:
+				this.setState((prevState) => { return { showPopup: !prevState.showPopup } })
+		}
+
 	}
 
 	toggleSchemaCategory(event) {
 		event.preventDefault()
-		this.setState((prevState) => { return { showSchemaCategory: !prevState.showSchemaCategory, showResult: false, showCategoricalView: false } })
+		this.setState((prevState) => { return { showSchemaCategory: !prevState.showSchemaCategory } })
 	}
 
 	toggleResult(event) {
@@ -159,8 +193,8 @@ class App extends Component {
 				<NavigationBarComponent />
 				<Row>
 					<Col xl={3} style={style.navPanelStyle} >
-						<DataSetSidePanel dataSet={this.state.dataSet} handleExampleQuery={this.handleExampleQuery} toggleSchemaCategory={this.toggleSchemaCategory.bind(this)} />
-						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} />
+						<DataSetSidePanel dataSet={this.state.dataSet} handleExampleQuery={this.handleExampleQuery} toggleSchemaCategory={this.toggleSchemaCategory.bind(this)} togglePopup={this.togglePopup.bind(this)} />
+						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} />
 					</Col>
 					<Col xl={9}>
 						<Container fluid='true'>
@@ -182,7 +216,7 @@ class App extends Component {
 						</Container>
 					</Col>
 				</Row>
-				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} width={this.state.width} height={this.state.height} /> : null}
+				{this.state.showPopup ? <PopUpComponent closePopup={this.togglePopup.bind(this)} width={this.state.width} height={this.state.height} content={this.state.popContent} /> : null}
 			</Container>
 		)
 	}

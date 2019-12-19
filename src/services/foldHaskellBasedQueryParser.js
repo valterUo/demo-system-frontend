@@ -70,14 +70,14 @@ const parseMainQueryBlock = (inputString) => {
     if(queryElements.length === 4) {
         i = 1
     }
-    console.log(queryElements)
+    //console.log(queryElements)
     const lambdafunction = queryElements[0]
     const dataset = queryElements[1]
     let sourceModel = sourceModels[dataset]
     if(sourceModel === undefined) {
         sourceModel = queryElements[2]
     }
-    console.log(sourceModel)
+    //console.log(sourceModel)
     switch (sourceModel) {
         case "relational":
         case "xml":

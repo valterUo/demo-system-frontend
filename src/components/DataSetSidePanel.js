@@ -38,6 +38,7 @@ class DataSetSidePanel extends Component {
                         <Card >
                             <Card.Header>
                                 <CustomToggle eventKey="e0">Upload data</CustomToggle>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("uploadData")}></i>
                             </Card.Header>
                         </Card>
                         <Accordion.Collapse eventKey="e0">
@@ -48,6 +49,7 @@ class DataSetSidePanel extends Component {
                         <Card >
                             <Card.Header>
                                 <CustomToggle eventKey="e1">Examples</CustomToggle>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("examples")}></i>
                             </Card.Header>
                         </Card>
                         <Accordion.Collapse eventKey="e1">
@@ -59,7 +61,8 @@ class DataSetSidePanel extends Component {
                     <Nav.Item>
                         <Card >
                             <Card.Header>
-                                <Button type="button" variant="dark" onClick={this.props.toggleSchemaCategory}>Schema category </Button>
+                                <Button type="button" variant="dark" onClick={this.props.toggleSchemaCategory}>Schema category</Button>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("schemaCategory")}></i>
                             </Card.Header>
                         </Card>
                     </Nav.Item>

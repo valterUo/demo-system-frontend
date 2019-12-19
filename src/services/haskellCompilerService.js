@@ -78,7 +78,7 @@ const parseJSONList = (listString) => {
     listString = listString.replace(/\\/g, "\\\\\\\\")
         .replace(/\\\\\\\\"/g, "\\\"")
         .replace(/\//g, "\\\\/")
-    console.log([listString])
+    //console.log([listString])
     try {
         listString = JSON.parse(JSON.parse(listString))
         return listString["result"]
@@ -116,7 +116,7 @@ const JSONtoRelationalTables = (jsonDataList) => {
     let result = {}
     result["data"] = data
     result["eventKey"] = JSON.stringify(data[0])
-    result["title"] = "Title"
+    result["title"] = "Result"
     let returndata = [result]
     try {
         subdata.map(e => returndata.push(e))
@@ -133,14 +133,32 @@ const parseJSONStringtoD3js = (jsonString) => {
     jsonString = jsonString.substring(m !== -1 ? m : 0, n !== -1 ? n : jsonString.length)
     jsonString = jsonString + '}"'
     console.log(jsonString)
+    jsonString = jsonString.replace(/(\\[0-9])/g, "")
+    console.log(jsonString)
     try {
         let obj = JSON.parse(JSON.parse(jsonString))
         console.log(obj)
-        obj["nodes"] = obj["nodes"].map(node => JSON.parse(node))
+        obj["nodes"] = obj["nodes"].map(node => {
+            // node = node.replace("\\", "")
+            // console.log(node)
+            return JSON.parse(node)
+        })
+        if(obj["nodes"][0]["Left"] !== undefined || obj["nodes"][0]["Right"] !== undefined) {
+            obj["nodes"] = obj["nodes"].map(node => {
+                console.log(node)
+                if(node["Left"] !== undefined) {
+                    return node["Left"]
+                } else if(node["Right"] !== undefined) {
+                    return node["Right"]
+                }
+                return node
+            })
+        }
         return obj
     } catch (err) {
         console.log("Error while parsing the JSON in Graph.")
     }
+    
 }
 
 const parseChild = (childElement) => {

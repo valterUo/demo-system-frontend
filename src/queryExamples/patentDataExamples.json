@@ -1,7 +1,8 @@
 {
     "examples": [{
             "header": "Rel",
-            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else case inventorPatent x patents of Just patent -> (lastnam x, firstnam x, patentId(patent)):xs; Nothing -> xs)\nFROM inventors\nTO relational"]
+            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else case inventorPatent x patents of Just patent -> (lastnam x, firstnam x, patentId(patent)):xs; Nothing -> xs)\nFROM inventors\nTO relational",
+            "QUERY (\\x xs -> if xs == [] then (\"size of inventors table\", 1):xs else let (a,b) = (xs !! 0) in (a, b + 1):[])\nFROM inventors\nTO relational"]
         },
         {
             "header": "Graph",
