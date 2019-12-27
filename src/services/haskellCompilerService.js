@@ -132,12 +132,9 @@ const parseJSONStringtoD3js = (jsonString) => {
     let n = jsonString.lastIndexOf('}')
     jsonString = jsonString.substring(m !== -1 ? m : 0, n !== -1 ? n : jsonString.length)
     jsonString = jsonString + '}"'
-    console.log(jsonString)
     jsonString = jsonString.replace(/(\\[0-9])/g, "")
-    console.log(jsonString)
     try {
         let obj = JSON.parse(JSON.parse(jsonString))
-        console.log(obj)
         obj["nodes"] = obj["nodes"].map(node => {
             // node = node.replace("\\", "")
             // console.log(node)

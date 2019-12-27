@@ -6,6 +6,7 @@ import { select, selectAll, mouse, event } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { line } from 'd3-shape'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
+import { zoom } from 'd3-zoom'
 import store from '../../store'
 let ptdata = []
 
@@ -112,6 +113,15 @@ class Graph extends Component {
         force.on('tick', () => {
             this.d3Graph.call(updateGraph)
         })
+
+        this.d3Graph.call(zoom().extent([[0, 0], [0.67 * this.props.width, 0.6 * this.props.height]]).scaleExtent([0.5, 2.5])).on("zoom", function () {
+            var selection = select(this)
+            selection
+                .call(zoom)
+                .on("dblclick.zoom", null).on("dragstart.zoom", null).on("mousedown.zoom", null)
+            selection.attr("transform", event.transform)
+            selection.attr("transform-origin", "0 0")
+        })
     }
 
     componentDidUpdate() {
@@ -142,6 +152,15 @@ class Graph extends Component {
                 }
             }
         }
+
+        this.d3Graph.call(zoom().extent([[0, 0], [0.67 * this.props.width, 0.6 * this.props.height]]).scaleExtent([0.5, 2.5]).on("zoom", function () {
+            var selection = select(this)
+            selection
+                .call(zoom)
+                .on("dblclick.zoom", null).on("dragstart.zoom", null).on("mousedown.zoom", null)
+            selection.attr("transform", event.transform)
+            selection.attr("transform-origin", "0 0")
+        }))
     }
 
     handleStoreChange = () => {

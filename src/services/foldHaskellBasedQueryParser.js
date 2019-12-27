@@ -71,7 +71,7 @@ const parseMainQueryBlock = (inputString) => {
         i = 1
     }
     //console.log(queryElements)
-    const lambdafunction = queryElements[0]
+    let lambdafunction = queryElements[0]
     const dataset = queryElements[1]
     let sourceModel = sourceModels[dataset]
     if(sourceModel === undefined) {
@@ -112,6 +112,7 @@ const parseMainQueryBlock = (inputString) => {
             break
         case "graph":
             haskellQuery.push("foldg ")
+            lambdafunction = lambdafunction.replace("empty", "Algebra.Graph.empty")
             switch (queryElements[2 + i]) {
                 case "relational":
                 case "xml":

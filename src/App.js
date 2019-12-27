@@ -194,7 +194,7 @@ class App extends Component {
 				<Row>
 					<Col xl={3} style={style.navPanelStyle} >
 						<DataSetSidePanel dataSet={this.state.dataSet} handleExampleQuery={this.handleExampleQuery} toggleSchemaCategory={this.toggleSchemaCategory.bind(this)} togglePopup={this.togglePopup.bind(this)} />
-						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} />
+						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} resultSet={this.state.resultSet}/>
 					</Col>
 					<Col xl={9}>
 						<Container fluid='true'>
