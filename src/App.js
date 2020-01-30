@@ -100,12 +100,12 @@ class App extends Component {
 
 	toggleResult(event) {
 		event.preventDefault()
-		this.setState({ showSchemaCategory: false, showResult: true, showCategoricalView: false })
+		this.setState((prevState) => { return { showResult: !prevState.showResult, showCategoricalView: false }})
 	}
 
 	toggleCategoricalView(event) {
 		event.preventDefault()
-		this.setState({ showSchemaCategory: false, showResult: false, showCategoricalView: true })
+		this.setState((prevState) => { return { showResult: false, showCategoricalView: !prevState.showCategoricalView }})
 	}
 
 	handleStoreChange = () => {

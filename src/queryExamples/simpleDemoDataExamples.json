@@ -11,6 +11,7 @@
         {
             "header": "Graph",
             "examples": ["QUERY (\\x -> Vertex x)\n FROM customers\n TO graph",
+                "QUERY (\\x -> if creditLimit x > 3000 then Vertex x else empty)\nFROM customers\nTO graph",
                 "LET t BE\n QUERY (\\x -> if customerName x == \"Alice\" then [x] else [])\n FROM customers\n TO relational\n IN\n QUERY (\\x -> if any (\\y -> knows x y customers) t then Vertex x else Algebra.Graph.empty)\n FROM customers\n TO graph",
                 "LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nFROM customers\nTO relational\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\nFROM customers\nTO relational\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nFROM k\nAS relational\nTO relational",
                 "LET t BE\nQUERY (\\x -> if (customerId x ==  3 || customerId x == 4) then Vertex x else Algebra.Graph.empty)\nFROM customers\nTO graph\nIN\nQUERY (\\x -> findTargetNeighbors x customers)\nFROM t\nAS graph\nTO graph"
