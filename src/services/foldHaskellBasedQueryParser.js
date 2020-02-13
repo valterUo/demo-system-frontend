@@ -159,16 +159,19 @@ const parseMainQueryBlock = (inputString) => {
                     haskellQuery.push(dataset + ")")
                     break
                 case "graph":
-                    haskellQuery.push("Algebra.Graph.empty ")
                     haskellQuery.push(lambdafunction)
-                    haskellQuery.push(" overlay ")
-                    haskellQuery.push("connect ")
+                    haskellQuery.push(" Algebra.Graph.empty ")
                     haskellQuery.push(dataset + ")")
                     break
                 case "rdf":
                     haskellQuery.push(lambdafunction)
                     haskellQuery.push(" RDF.empty ")
                     haskellQuery.push(dataset + " :: RDF TList)")
+                    break
+                case "nimblegraph":
+                    haskellQuery.push(lambdafunction)
+                    haskellQuery.push(" emptyNimbleGraph ")
+                    haskellQuery.push(dataset + ")")
                     break
                 default:
                     return "Error!"
@@ -183,7 +186,6 @@ const parseMainQueryBlock = (inputString) => {
                     haskellQuery.push(" [] ")
                     haskellQuery.push(lambdafunction)
                     haskellQuery.push(" (union) ")
-                    haskellQuery.push("(union) ")
                     haskellQuery.push(dataset)
                     break
                 case "graph":

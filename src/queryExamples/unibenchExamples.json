@@ -22,7 +22,7 @@
         {
             "header": "JSON",
             "examples": ["QUERY (\\x xs -> if totalprice(x) > 3500.00 then x:xs else xs)\nFROM unibenchOrders\nTO json",
-            "QUERY (\\x xs ->if length xs > 0 then if unibenchProductPrice(xs !! 0) < unibenchProductPrice x then [x] else xs else [x])\nFROM unibenchProducts\nTO relational"]
+            "QUERY (\\x xs ->if length xs > 0 then if unibenchProductPrice(head xs) < unibenchProductPrice x then [x] else xs else [x])\nFROM unibenchProducts\nTO relational"]
         },
         {
             "header": "Rel+JSON",
