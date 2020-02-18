@@ -10,7 +10,6 @@ import NavigationBarComponent from './components/NavigationBarComponent'
 import NotificationComponent from './components/NotificationComponent'
 import Notification from './actions/NotificationAction'
 import ResultComponent from './components/ResultComponent'
-import foldQuery from './services/foldHaskellBasedQueryParser'
 import PopUpComponent from './components/PopUpComponent'
 import simpleExamples from './queryExamples/simpleDemoDataExamples.json'
 import SchemaComponent from './components/SchemaComponent'
@@ -21,6 +20,7 @@ import DataSetSidePanel from './components/DataSetSidePanel'
 import uploadInfo from './dataUploadInfo/uploadInfo.json'
 import FoldViewBox from './components/FoldViewBox'
 import ErrorBoundary from './errorBoundary/ErrorBoundary'
+import QueryExecutingService from './services/QueryExecutingService'
 const __mainHTML = require('./infoTexts/mainHTML.js')
 const __categoricalViewToQueryHTML = require('./infoTexts/categoricalViewToSchemaHTML.js')
 const __examplesHTML = require('./infoTexts/examplesHTML.js')
@@ -129,60 +129,55 @@ class App extends Component {
 		this.setState({ resultSet: { key: undefined, resultData: undefined, model: undefined } })
 	}
 
-	handleQuery = async (event) => {
+	executeQuery = async (event) => {
 		event.preventDefault()
-		//foldQuery.parseLetInQueryBlock(this.state.query)
 		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
-		const queryAndModel = foldQuery.getTheQuery(this.state.query)
-		if (queryAndModel["model"] === "error") {
-			Notification.notify(queryAndModel["message"], "warning")
+		const response = await QueryExecutingService.executeQuery(this.state.query)
+		if(response.data["error"] !== undefined) {
+			console.log(response.data["message"])
+			Notification.notify("Error in expressing the result!", "warning")
 		} else {
-			this.setState({ fold: queryAndModel["query"] })
-			const answer = await foldQuery.executeQuery(queryAndModel.model, queryAndModel.query)
-			switch (answer["model"]) {
-				case "error":
-					Notification.notify(answer["message"], "warning")
-					break
-				case "relational":
-					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the relational result. The result is empty.", "warning")
-					} else {
-						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "relational" }, showResult: true })
-					}
-					break
-				case "graph":
-					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the graph result. The result is empty.", "warning")
-					} else {
-						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "graph" }, showResult: true })
-					}
-					break
-				case "xml":
-					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the XML result. The result is empty.", "warning")
-					} else {
-						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "xml" }, showResult: true })
-					}
-					break
-				case "json":
-					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the json result. The result is empty.", "warning")
-					} else {
-						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "json" }, showResult: true })
-					}
-					break
-				case "rdf":
-					if (answer["answer"] === undefined) {
-						Notification.notify("Error in expressing the rdf result. The result is empty.", "warning")
-					} else {
-						this.setState({ resultSet: { key: timeStampInMs, resultData: answer["answer"], model: "rdf" }, showResult: true })
-					}
-					break
-				default:
-					Notification.notify("Unknown error! An answer to the query did not follow any model.", "warning")
-					break
+			this.setState({fold: response.data["parsedQuery"]})
+			const result = await QueryExecutingService.getSelectiveQueryResultById(response.data["id"])
+			console.log(result.data[0]["result"])
+			
+			const model = result.data[0]["model"]
+			if(model === "algebraic graph" || model === "rdf" || model === "nimblegraph") {
+				const parsedResult = this.parseJSONStringtoD3js(result.data[0]["result"])
+				this.setState({ resultSet: { key: timeStampInMs, resultData: parsedResult, model: model}, showResult: true })
+			} else {
+				const parsedResult = JSON.parse(JSON.parse(result.data[0]["result"]))
+				console.log(parsedResult)
+				this.setState({ resultSet: { key: timeStampInMs, resultData: parsedResult["result"], model: model }, showResult: true })
 			}
+			
 		}
+	}
+
+	parseJSONStringtoD3js = (jsonString) => {
+		jsonString = jsonString.replace(/(\\[0-9])/g, "")
+		try {
+			let obj = JSON.parse(JSON.parse(jsonString))
+			obj["nodes"] = obj["nodes"].map(node => {
+				return JSON.parse(node)
+			})
+			// In some cases nodes are wrapped to Haskell Either datatype. This unwraps the wrapping.
+			if(obj["nodes"][0]["Left"] !== undefined || obj["nodes"][0]["Right"] !== undefined) {
+				obj["nodes"] = obj["nodes"].map(node => {
+					console.log(node)
+					if(node["Left"] !== undefined) {
+						return node["Left"]
+					} else if(node["Right"] !== undefined) {
+						return node["Right"]
+					}
+					return node
+				})
+			}
+			return obj
+		} catch (err) {
+			console.log("Error while parsing the JSON in Graph.")
+		}
+		
 	}
 
 	render() {
@@ -198,7 +193,7 @@ class App extends Component {
 					</Col>
 					<Col xl={9}>
 						<Container fluid='true'>
-							<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.handleQuery} query={this.state.query} handleDataSetChange={this.handleDataSetChange} />
+							<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.executeQuery} query={this.state.query} handleDataSetChange={this.handleDataSetChange} />
 							<NotificationComponent />
 							<SchemaComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} showSchemaCategory={this.state.showSchemaCategory} />
 							<ResultComponent dataSet={this.state.dataSet} resultSet={this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query}

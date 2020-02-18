@@ -1,16 +1,16 @@
 {
     "examples": [{
             "header": "Rel",
-            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else case inventorPatent x patents of Just patent -> (lastnam x, firstnam x, patentId(patent)):xs; Nothing -> xs)\nFROM inventors\nTO relational",
-            "QUERY (\\x xs -> if xs == [] then (\"size of inventors table\", 1):xs else let (a,b) = (xs !! 0) in (a, b + 1):[])\nFROM inventors\nTO relational"]
+            "examples": ["QUERY (\\x xs -> if length xs > 20 then xs else case inventorPatent x patents of Just patent -> cons (lastnam x, firstnam x, patentId(patent)) xs; Nothing -> xs)\nFROM inventors\nTO relational",
+            "QUERY (\\x xs -> if xs == nil then cons (\"size of inventors table\", 1) xs else let (a,b) = (xs !! 0) in cons (a, b + 1) nil)\nFROM inventors\nTO relational"]
         },
         {
             "header": "Graph",
-            "examples": ["QUERY (\\x -> if (patentId x == 3858241 || patentId x == 3398406 || patentId x == 3557384 || patentId x == 3634889) then Vertex((patentId x, patentCountry x)) else Algebra.Graph.empty)\nFROM patentGraph\nTO graph",
-            "QUERY (\\x -> case gyear x of Just year -> if year < 1964 then Vertex((patentId x, patentCountry x)) else Algebra.Graph.empty; Nothing ->Vertex((patentId x, patentCountry x)))\nFROM patentGraph\nTO graph",
-            "LET t BE\nQUERY (\\x -> if patentId x == 3858249 then [x] else [])\nFROM patentGraph\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) patentGraph then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph",
-            "QUERY (\\x -> if reachable x (patents !? 3858249) patentGraph then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph",
-            "LET t BE\nQUERY (\\x -> if patentId x ==  3859982 then Vertex x else Algebra.Graph.empty)\nFROM patentGraph\nTO graph\nIN\nQUERY (\\x -> findTargetNeighbors x patentGraph)\nFROM t\nTO graph"]
+            "examples": ["QUERY (\\x -> if (patentId x == 3858241 || patentId x == 3398406 || patentId x == 3557384 || patentId x == 3634889) then cons ((patentId x, patentCountry x)) else nil)\nFROM patentGraph\nTO graph",
+            "QUERY (\\x -> case gyear x of Just year -> if year < 1964 then cons ((patentId x, patentCountry x)) else nil; Nothing -> cons ((patentId x, patentCountry x)))\nFROM patentGraph\nTO graph",
+            "LET t BE\nQUERY (\\x -> if patentId x == 3858249 then cons x nil else nil)\nFROM patentGraph\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) patentGraph then cons x else nil)\nFROM patentGraph\nTO graph",
+            "QUERY (\\x -> if reachable x (patents !? 3858249) patentGraph then cons x else nil)\nFROM patentGraph\nTO graph",
+            "LET t BE\nQUERY (\\x -> if patentId x ==  3859982 then cons x else nil)\nFROM patentGraph\nTO graph\nIN\nQUERY (\\x -> findTargetNeighbors x patentGraph)\nFROM t\nTO graph"]
         },
         {
             "header": "Rel + Graph",

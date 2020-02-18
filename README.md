@@ -1,7 +1,7 @@
 # MultiCategory
 ## Category theory on multi-model databases
 
-This is the frontend project for the [backend](https://github.com/valterUo/demo-system-backend-Haskell). Some part of the category theoretical background of this project is described in this unofficial draft [Some Applications of Category Theory to Multi-Model Queries](https://www.overleaf.com/read/kqvkvrhcnmxv).
+This is the frontend project for the [backend](https://github.com/valterUo/MultiCategory-demo-system). For trying the MultiCategory demo system you do not need download this but it suffices to install only the backend that serves the built version of the frontend also. The old version of the [backend](https://github.com/valterUo/demo-system-backend-Haskell) can be found also but it is not needed anymore. Some part of the category theoretical background of this project is described in this unofficial draft [Some Applications of Category Theory to Multi-Model Queries](https://www.overleaf.com/read/kqvkvrhcnmxv).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and it uses [D3.js](https://d3js.org/).
 

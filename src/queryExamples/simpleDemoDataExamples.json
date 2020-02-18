@@ -5,7 +5,7 @@
         },
         {
             "header": "XML",
-            "examples": ["QUERY (\\x xs -> x:xs)\n FROM orders\n TO xml", 
+            "examples": ["QUERY (\\x xs -> cons x xs)\nFROM orders\nTO relational", "QUERY (\\x xs -> x:xs)\n FROM orders\n TO xml", 
                 "LET t BE\nQUERY (\\x xs -> if orderNumber x == \"3qqqeq9\" then (orderProducts x) ++ xs else xs)\nFROM orders\nTO relational\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nFROM t\nAS relational\nTO relational"]
         },
         {

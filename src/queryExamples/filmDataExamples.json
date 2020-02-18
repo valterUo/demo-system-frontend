@@ -1,13 +1,13 @@
 {
     "examples": [{
             "header": "JSON",
-            "examples": ["QUERY (\\x xs -> if length xs < 20 then x:xs else xs)\nFROM films\nTO json",
-            "QUERY (\\x xs -> if isInfixOf \"Howard Hall\" (actors x) then x:xs else xs)\nFROM films\nTO json",
-            "QUERY (\\x xs -> if HelsinkiMultiModelRepo.Film.SchemaCategory.title x == \"Romeo and Juliet\" then x:xs else xs)\nFROM films\nTO json"]
+            "examples": ["QUERY (\\x xs -> if length xs < 20 then cons x xs else xs)\nFROM films\nTO json",
+            "QUERY (\\x xs -> if isInfixOf \"Howard Hall\" (actors x) then cons x xs else xs)\nFROM films\nTO json",
+            "QUERY (\\x xs -> if HelsinkiMultiModelRepo.Film.SchemaCategory.title x == \"Romeo and Juliet\" then cons x xs else xs)\nFROM films\nTO json"]
         },
         {
             "header": "RDF",
-            "examples": ["QUERY (\\x newrdf -> if length (triplesOf newrdf) < 20 then addTriple newrdf x else newrdf)\nFROM filmGraph\nTO rdf"]
+            "examples": ["QUERY (\\x newrdf -> if length (triplesOf newrdf) < 20 then cons newrdf x else newrdf)\nFROM filmGraph\nTO rdf"]
         },
         {
             "header": "JSON + RDF",

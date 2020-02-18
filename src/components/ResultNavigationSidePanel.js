@@ -23,16 +23,18 @@ class ResultNavigationSidePanel extends Component {
 
     render() {
         let infoBlock = []
-        if (this.props.resultSet.model === "graph") {
+        if (this.props.resultSet.model === "algebraic graph") {
             infoBlock = this.props.resultSet.resultData.nodes.map((l, i) => {
                 let info = []
                 for (var key of Object.keys(l)) {
                     if (key === "index") {
                         break
                     }
-                    info.push(<div key = {l[key] + i + Math.random()}><b>{key}</b>:{l[key]}</div>)
+                    info.push(<div key={l[key] + i + Math.random()}><b>{key}</b>:{l[key]}</div>)
                 }
-                return info })}
+                return info
+            })
+        }
         return <Container>
             <Navbar>
                 <Col>
@@ -59,19 +61,18 @@ class ResultNavigationSidePanel extends Component {
                             </Card.Header>
                         </Card>
                     </Nav.Item>
-                    <Nav.Item hidden={!(this.props.resultSet.model === "graph")} >
+                    <Nav.Item hidden={!(this.props.resultSet.model === "algebraic graph")} >
                         <Accordion>
                             <Card >
                                 <Card.Header>
                                     <CustomToggle eventKey="e4">Nodes</CustomToggle>
-                                    {/*<i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("uploadData")}></i>*/}
                                 </Card.Header>
                             </Card>
                             <Accordion.Collapse eventKey="e4">
                                 <Row style={style.basicComponentsStyle}>
                                     <Col>
                                         <h4>Nodes:</h4>
-                                        <div>{infoBlock.map((l, i) => <div key = {"list" + i}><h6>Node: </h6>{l}</div>)}</div>
+                                        <div>{infoBlock.map((l, i) => <div key={"list" + i}><h6>Node: </h6>{l}</div>)}</div>
                                     </Col>
                                 </Row>
                             </Accordion.Collapse>
