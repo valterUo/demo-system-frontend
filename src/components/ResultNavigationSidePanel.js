@@ -23,7 +23,7 @@ class ResultNavigationSidePanel extends Component {
 
     render() {
         let infoBlock = []
-        if (this.props.resultSet.model === "algebraic graph") {
+        if (this.props.resultSet.model === "algebraic graph" && this.props.resultSet.resultData !== undefined) {
             infoBlock = this.props.resultSet.resultData.nodes.map((l, i) => {
                 let info = []
                 for (var key of Object.keys(l)) {

@@ -1,41 +1,42 @@
 {
     "examples": [{
             "header": "Rel",
-            "examples": ["QUERY (\\x xs -> x:xs)\n FROM locations\n TO relational", "QUERY (\\x xs -> if xs == [] then (\"size\", 1):xs else let (a,b) = (xs !! 0) in (a, b + 1):[])\nFROM locations\nTO relational"]
+            "examples": ["QUERY (\\x xs -> cons x xs)\n FROM locations\n TO relational", "QUERY (\\x xs -> if xs == nil then cons (\"size\", 1) xs else let (a,b) = (xs !! 0) in cons (a, b + 1) nil)\nFROM locations\nTO relational"]
         },
         {
             "header": "XML",
-            "examples": ["QUERY (\\x xs -> cons x xs)\nFROM orders\nTO relational", "QUERY (\\x xs -> x:xs)\n FROM orders\n TO xml", 
-                "LET t BE\nQUERY (\\x xs -> if orderNumber x == \"3qqqeq9\" then (orderProducts x) ++ xs else xs)\nFROM orders\nTO relational\nIN\nQUERY (\\x xs -> if productPrice x > 50 then x:xs else xs)\nFROM t\nAS relational\nTO relational"]
+            "examples": ["QUERY (\\x xs -> cons x xs)\nFROM orders\nTO relational", "QUERY (\\x xs -> cons x xs)\n FROM orders\n TO xml", 
+                "LET t BE\nQUERY (\\x xs -> if orderNumber x == \"3qqqeq9\" then (orderProducts x) ++ xs else xs)\nFROM orders\nTO relational\nIN\nQUERY (\\x xs -> if productPrice x > 50 then cons x xs else xs)\nFROM t\nAS relational\nTO relational"]
         },
         {
-            "header": "Graph",
-            "examples": ["QUERY (\\x -> Vertex x)\n FROM customers\n TO graph",
-                "QUERY (\\x -> if creditLimit x > 3000 then Vertex x else empty)\nFROM customers\nTO graph",
-                "LET t BE\n QUERY (\\x -> if customerName x == \"Alice\" then [x] else [])\n FROM customers\n TO relational\n IN\n QUERY (\\x -> if any (\\y -> knows x y customers) t then Vertex x else empty)\n FROM customers\n TO graph",
-                "LET t BE\nQUERY (\\x -> if customerId x == 6 then [x] else [])\nFROM customers\nTO relational\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\nFROM customers\nTO relational\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then x:xs else xs)\nFROM k\nAS relational\nTO relational",
-                "LET t BE\nQUERY (\\x -> if (customerId x ==  3 || customerId x == 4) then Vertex x else empty)\nFROM customers\nTO graph\nIN\nQUERY (\\x -> findTargetNeighbors x customers)\nFROM t\nAS graph\nTO graph"
+            "header": "algebraic graph",
+            "examples": ["QUERY (\\x -> cons x)\n FROM customers\n TO algebraic graph",
+                "QUERY (\\x -> if creditLimit x > 3000 then cons x else nil)\nFROM customers\nTO algebraic graph",
+                "LET t BE\n QUERY (\\x -> if customerName x == \"Alice\" then cons x else nil)\n FROM customers\n TO relational\n IN\n QUERY (\\x -> if any (\\y -> knows x y customers) t then cons x else nil)\n FROM customers\n TO algebraic graph",
+                "LET t BE\nQUERY (\\x -> if customerId x == 6 then cons x else nil)\nFROM customers\nTO relational\nIN\nLET k BE\nQUERY (\\x -> if any (\\y -> knows x y customers) t then cons x else nil)\nFROM customers\nTO relational\nIN\nQUERY (\\x xs -> if creditLimit x > 1000 then cons x xs else xs)\nFROM k\nAS relational\nTO relational",
+                "LET t BE\nQUERY (\\x -> if (customerId x ==  3 || customerId x == 4) then cons x else nil)\nFROM customers\nTO algebraic graph\nIN\nQUERY (\\x -> findTargetNeighbors x customers)\nFROM t\nAS algebraic graph\nTO algebraic graph"
             ]
         },
         {
             "header": "Rel + XML",
-            "examples": ["LET t BE\nQUERY (\\x xs ->if (foldr (\\x xs -> if xs == True then True else if productName x == \"Book\" then True else False) False (orderProducts x)) then x:xs else xs)\nFROM orders\nTO xml\nIN\nQUERY (\\x xs -> (located (ordered x customers) locations) : xs)\nFROM t\nAS relational\nTO relational"]
+            "examples": ["LET t BE\nQUERY (\\x xs ->if (foldr (\\x xs -> if xs == True then True else if productName x == \"Book\" then True else False) False (orderProducts x)) then cons x xs else xs)\nFROM orders\nTO xml\nIN\nQUERY (\\x xs -> cons (located (ordered x customers) locations) xs)\nFROM t\nAS relational\nTO relational"]
         },
         {
-            "header": "Rel + Graph",
-            "examples": ["QUERY (\\x -> [(customerName x, countryName(located x locations))])\nFROM customers\nTO relational", "QUERY (\\x -> if creditLimit x > 500 then Vertex (customerName x, cityName (located x locations)) else empty)\nFROM customers\nTO graph",
-                "LET t BE\nQUERY (\\x -> if customerName x == \"John\" then [x] else [])\nFROM customers\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) customers then Vertex x else empty)\nFROM customers\nTO graph"]
+            "header": "Rel + algebraic graph",
+            "examples": ["QUERY (\\x -> [(customerName x, countryName(located x locations))])\nFROM customers\nTO relational", 
+                "QUERY (\\x -> if creditLimit x > 500 then cons (customerName x, cityName (located x locations)) else nil)\nFROM customers\nTO algebraic graph",
+                "LET t BE\nQUERY (\\x -> if customerName x == \"John\" then cons x else nil)\nFROM customers\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) customers then cons x else nil)\nFROM customers\nTO algebraic graph"]
         },
         {
-            "header": "XML + Graph",
-            "examples": ["LET t BE\n QUERY (\\x xs -> if elem \"Book\" (map productName (orderProducts x)) then x:xs else xs)\n FROM orders\n TO relational\nIN\n QUERY (\\x -> if any (\\y -> ordered y customers == x ) t then Vertex x else empty)\n FROM customers\n TO graph",
-                "LET t BE\n QUERY (\\x -> if customerId x == 6 then [x] else [])\n FROM customers\n TO relational\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y customers) t then [x] else [])\n FROM customers\n TO relational\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y customers) k then [x] else [])\n FROM customers\n TO relational\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x customers == y ) h then x:xs else xs)\n FROM orders\n TO relational\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then x:xs else xs)\n FROM r\nAS xml\nTO xml"
+            "header": "XML + algebraic graph",
+            "examples": ["LET t BE\n QUERY (\\x xs -> if elem \"Book\" (map productName (orderProducts x)) then cons x xs else xs)\n FROM orders\n TO relational\nIN\n QUERY (\\x -> if any (\\y -> ordered y customers == x ) t then cons x else nil)\n FROM customers\n TO algebraic graph",
+                "LET t BE\n QUERY (\\x -> if customerId x == 6 then cons x else nil)\n FROM customers\n TO relational\n IN\n LET k BE\n QUERY (\\x -> if any (\\y -> knows x y customers) t then cons x else nil)\n FROM customers\n TO relational\n IN\n LET h BE\n QUERY (\\x -> if any (\\y -> knows x y customers) k then cons x else nil)\n FROM customers\n TO relational\n IN\n LET r BE\n QUERY (\\x xs -> if any (\\y -> ordered x customers == y ) h then cons x xs else xs)\n FROM orders\n TO relational\n IN\n QUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 5000) then cons x xs else xs)\n FROM r\nAS xml\nTO xml"
             ]
         },
         {
-            "header": "Rel + XML + Graph",
-            "examples": ["QUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM orders\nTO relational",
-                "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then x:xs else xs)\nFROM orders\nTO xml\nIN\nQUERY (\\x xs -> (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)):xs)\nFROM t\nTO relational"]
+            "header": "Rel + XML + algebraic graph",
+            "examples": ["QUERY (\\x xs -> cons (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)) xs)\nFROM orders\nTO relational",
+                "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then cons x xs else xs)\nFROM orders\nTO xml\nIN\nQUERY (\\x xs -> cons (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)) xs)\nFROM t\nAS xml\nTO relational"]
         }
     ]
 }

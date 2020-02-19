@@ -8,7 +8,6 @@ import StatBox from './components/StatBox'
 import FreeTextInputQueryComponent from './components/queryComponents/FreeTextInputQueryComponent'
 import NavigationBarComponent from './components/NavigationBarComponent'
 import NotificationComponent from './components/NotificationComponent'
-import Notification from './actions/NotificationAction'
 import ResultComponent from './components/ResultComponent'
 import PopUpComponent from './components/PopUpComponent'
 import simpleExamples from './queryExamples/simpleDemoDataExamples.json'
@@ -21,6 +20,9 @@ import uploadInfo from './dataUploadInfo/uploadInfo.json'
 import FoldViewBox from './components/FoldViewBox'
 import ErrorBoundary from './errorBoundary/ErrorBoundary'
 import QueryExecutingService from './services/QueryExecutingService'
+import { parseJSONStringtoD3js } from './parsers/GraphDataParser'
+import { parseJSONtoTree } from './parsers/TreeDataParser'
+import { parseTablesFromData } from './parsers/RelationalDataParser'
 const __mainHTML = require('./infoTexts/mainHTML.js')
 const __categoricalViewToQueryHTML = require('./infoTexts/categoricalViewToSchemaHTML.js')
 const __examplesHTML = require('./infoTexts/examplesHTML.js')
@@ -100,12 +102,12 @@ class App extends Component {
 
 	toggleResult(event) {
 		event.preventDefault()
-		this.setState((prevState) => { return { showResult: !prevState.showResult, showCategoricalView: false }})
+		this.setState((prevState) => { return { showResult: !prevState.showResult, showCategoricalView: false } })
 	}
 
 	toggleCategoricalView(event) {
 		event.preventDefault()
-		this.setState((prevState) => { return { showResult: false, showCategoricalView: !prevState.showCategoricalView }})
+		this.setState((prevState) => { return { showResult: false, showCategoricalView: !prevState.showCategoricalView } })
 	}
 
 	handleStoreChange = () => {
@@ -133,51 +135,37 @@ class App extends Component {
 		event.preventDefault()
 		let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
 		const response = await QueryExecutingService.executeQuery(this.state.query)
-		if(response.data["error"] !== undefined) {
-			console.log(response.data["message"])
-			Notification.notify("Error in expressing the result!", "warning")
-		} else {
-			this.setState({fold: response.data["parsedQuery"]})
+		console.log(response)
+		if (response !== undefined) {
 			const result = await QueryExecutingService.getSelectiveQueryResultById(response.data["id"])
-			console.log(result.data[0]["result"])
-			
 			const model = result.data[0]["model"]
-			if(model === "algebraic graph" || model === "rdf" || model === "nimblegraph") {
-				const parsedResult = this.parseJSONStringtoD3js(result.data[0]["result"])
-				this.setState({ resultSet: { key: timeStampInMs, resultData: parsedResult, model: model}, showResult: true })
-			} else {
-				const parsedResult = JSON.parse(JSON.parse(result.data[0]["result"]))
-				console.log(parsedResult)
-				this.setState({ resultSet: { key: timeStampInMs, resultData: parsedResult["result"], model: model }, showResult: true })
+			let finalResult = null
+			switch (model) {
+				case "relational":
+					let parsedResult = JSON.parse(JSON.parse(result.data[0]["result"].replace(/(\\[0-9])/g, "")))
+					console.log(parsedResult["result"])
+					finalResult = parseTablesFromData(parsedResult["result"])
+					console.log(result)
+					break
+				case "algebraic graph":
+				case "nimblegraph":
+				case "rdf":
+					finalResult = parseJSONStringtoD3js(result.data[0]["result"])
+					console.log(result)
+					break
+				case "xml":
+				case "json":
+					parsedResult = JSON.parse(JSON.parse(result.data[0]["result"].replace(/(\\[0-9])/g, "")))
+					finalResult = parseJSONtoTree(parsedResult["result"])
+					console.log(result)
+					break
+				default:
+					Notification.notify("Error in expressing the result. The result model is not defined.", "warning")
 			}
-			
-		}
-	}
-
-	parseJSONStringtoD3js = (jsonString) => {
-		jsonString = jsonString.replace(/(\\[0-9])/g, "")
-		try {
-			let obj = JSON.parse(JSON.parse(jsonString))
-			obj["nodes"] = obj["nodes"].map(node => {
-				return JSON.parse(node)
-			})
-			// In some cases nodes are wrapped to Haskell Either datatype. This unwraps the wrapping.
-			if(obj["nodes"][0]["Left"] !== undefined || obj["nodes"][0]["Right"] !== undefined) {
-				obj["nodes"] = obj["nodes"].map(node => {
-					console.log(node)
-					if(node["Left"] !== undefined) {
-						return node["Left"]
-					} else if(node["Right"] !== undefined) {
-						return node["Right"]
-					}
-					return node
-				})
+			if (finalResult !== null) {
+				this.setState({ fold: response.data["parsedQuery"], resultSet: { key: timeStampInMs, resultData: finalResult, model: model }, showResult: true })
 			}
-			return obj
-		} catch (err) {
-			console.log("Error while parsing the JSON in Graph.")
 		}
-		
 	}
 
 	render() {
@@ -189,7 +177,7 @@ class App extends Component {
 				<Row>
 					<Col xl={3} style={style.navPanelStyle} >
 						<DataSetSidePanel dataSet={this.state.dataSet} handleExampleQuery={this.handleExampleQuery} toggleSchemaCategory={this.toggleSchemaCategory.bind(this)} togglePopup={this.togglePopup.bind(this)} />
-						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} resultSet={this.state.resultSet}/>
+						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} resultSet={this.state.resultSet} />
 					</Col>
 					<Col xl={9}>
 						<Container fluid='true'>

@@ -6,15 +6,19 @@
         },
         {
             "header": "Graph",
-            "examples": ["QUERY (\\x -> if (patentId x == 3858241 || patentId x == 3398406 || patentId x == 3557384 || patentId x == 3634889) then cons ((patentId x, patentCountry x)) else nil)\nFROM patentGraph\nTO graph",
-            "QUERY (\\x -> case gyear x of Just year -> if year < 1964 then cons ((patentId x, patentCountry x)) else nil; Nothing -> cons ((patentId x, patentCountry x)))\nFROM patentGraph\nTO graph",
-            "LET t BE\nQUERY (\\x -> if patentId x == 3858249 then cons x nil else nil)\nFROM patentGraph\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) patentGraph then cons x else nil)\nFROM patentGraph\nTO graph",
-            "QUERY (\\x -> if reachable x (patents !? 3858249) patentGraph then cons x else nil)\nFROM patentGraph\nTO graph",
-            "LET t BE\nQUERY (\\x -> if patentId x ==  3859982 then cons x else nil)\nFROM patentGraph\nTO graph\nIN\nQUERY (\\x -> findTargetNeighbors x patentGraph)\nFROM t\nTO graph"]
+            "examples": ["QUERY (\\x -> if (patentId x == 3858241 || patentId x == 3398406 || patentId x == 3557384 || patentId x == 3634889) then cons ((patentId x, patentCountry x)) else nil)\nFROM patentGraph\nTO algebraic graph",
+            "QUERY (\\x -> case gyear x of Just year -> if year < 1964 then cons ((patentId x, patentCountry x)) else nil; Nothing -> cons ((patentId x, patentCountry x)))\nFROM patentGraph\nTO algebraic graph",
+            "LET t BE\nQUERY (\\x -> if patentId x ==  3859982 then cons x else nil)\nFROM patentGraph\nTO algebraic graph\nIN\nQUERY (\\x -> findTargetNeighbors x patentGraph)\nFROM t\nAS algebraic graph\nTO algebraic graph"]
         },
         {
             "header": "Rel + Graph",
-            "examples": ["QUERY (\\x xs -> if lastnam x == \"Williams\" then Overlay (Vertex (inventorPatent x patents))  xs else xs)\nFROM inventors\nTO graph"]
+            "examples": ["QUERY (\\x xs -> if lastnam x == \"Williams\" then Overlay (Vertex (inventorPatent x patents))  xs else xs)\nFROM inventors\nTO algebraic graph"]
+        },
+        {
+            "header": "Currently not working",
+            "examples": ["QUERY (\\x -> if reachable x (patents !? 3858249) patentGraph then cons x else nil)\nFROM patentGraph\nTO algebraic graph",
+                "LET t BE\nQUERY (\\x -> if patentId x == 3858249 then cons x else nil)\nFROM patentGraph\nTO relational\nIN\nQUERY (\\x -> if reachable x (t !! 0) patentGraph then cons x else nil)\nFROM patentGraph\nTO algebraic graph"
+            ]
         }
     ]
 }
