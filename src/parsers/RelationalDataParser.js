@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import Notification from '../actions/NotificationAction'
 
 export const parseTablesFromData = (listOfJSONObjects) => {
     console.log(listOfJSONObjects)
@@ -22,10 +23,17 @@ export const parseTablesFromData = (listOfJSONObjects) => {
         return obj
     })
     if (foreignTables.length > 0) {
-        return [combineSimpleObjectsToLargeTable(table), combineSimpleObjectsToLargeTable(foreignTables)]
-    }
-    return [combineSimpleObjectsToLargeTable(table)]
+        const result = combineSimpleObjectsToLargeTable(table)
+        const foreignResult = combineSimpleObjectsToLargeTable(foreignTables)
+        if (result !== undefined && foreignResult !== undefined) {
+            return [result, foreignResult]
+        }
 
+    }
+    const result = combineSimpleObjectsToLargeTable(table)
+    if (result !== undefined) {
+        return [result]
+    }
 }
 
 const parseSimpleObjectToTable = (jsonObject) => {
@@ -36,18 +44,23 @@ const parseSimpleObjectToTable = (jsonObject) => {
 
 const combineSimpleObjectsToLargeTable = (listOfSimpleObjects) => {
     let table = []
-    const attributes = Object.keys(listOfSimpleObjects[0])
-    table.push(attributes)
     let hasError = false
-    listOfSimpleObjects.map(simpleJSONObject => {
-        const simpleTable = parseSimpleObjectToTable(simpleJSONObject)
-        if (!equals(simpleTable[0], attributes)) {
-            console.log("Json objects have different attributes!")
-            hasError = true
-        }
-        table.push(simpleTable[1])
-        return simpleJSONObject
-    })
+    try {
+        const attributes = Object.keys(listOfSimpleObjects[0])
+        table.push(attributes)
+        listOfSimpleObjects.map(simpleJSONObject => {
+            const simpleTable = parseSimpleObjectToTable(simpleJSONObject)
+            if (!equals(simpleTable[0], attributes)) {
+                console.log("Json objects have different attributes!")
+                hasError = true
+            }
+            table.push(simpleTable[1])
+            return simpleJSONObject
+        })
+    } catch {
+        Notification.notify("Result is empty", "warning")
+        return undefined
+    }
     if (hasError) {
         return undefined
     }
@@ -83,11 +96,16 @@ const createForeignKeysToJSONObject = (jsonObject) => {
 }
 
 const substituteForeignKeyToListOfJSONobjects = (listOfObjects, key) => {
-    listOfObjects.map(obj => {
-        obj["foreignKey"] = key
-        return obj
-    })
-    return listOfObjects
+    try {
+        listOfObjects.map(obj => {
+            obj["foreignKey"] = key
+            return obj
+        })
+        return listOfObjects
+    } catch {
+        return undefined
+    }
+
 }
 
 const equals = (array1, array2) => {

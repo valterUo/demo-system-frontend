@@ -36,7 +36,8 @@
         {
             "header": "Rel + XML + algebraic graph",
             "examples": ["QUERY (\\x xs -> cons (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)) xs)\nFROM orders\nTO relational",
-                "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then cons x xs else xs)\nFROM orders\nTO xml\nIN\nQUERY (\\x xs -> cons (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)) xs)\nFROM t\nAS xml\nTO relational"]
+                "LET t BE\nQUERY (\\x xs -> if ((sum $ map productPrice (orderProducts x)) > 100) then cons x xs else xs)\nFROM orders\nTO xml\nIN\nQUERY (\\x xs -> cons (orderNumber x, customerName(ordered x customers), countryName(located(ordered x customers) locations)) xs)\nFROM t\nAS xml\nTO relational",
+            "LET t BE\n QUERY (\\x xs -> if elem \"Book\" (map productName (orderProducts x)) then cons x xs else xs)\n FROM orders\n TO relational\n IN\n QUERY (\\x -> if any (\\y -> ordered y customers == x ) t then cons (customerName x, countryName(located x locations)) else nil)\n FROM customers\n TO algebraic graph"]
         }
     ]
 }
