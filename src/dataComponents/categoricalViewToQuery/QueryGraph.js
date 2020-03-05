@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import QueryNode from './Node'
-import QueryEdge from './Edge'
+import QueryNode from './QueryNode'
+import QueryEdge from './QueryEdge'
 import { select, selectAll, event } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide, forceX, forceY } from 'd3-force'
@@ -12,6 +12,7 @@ class QueryGraph extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.data.nodes)
         const scaledwidth = 0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
         const nodeName = this.props.nodeName
@@ -97,40 +98,14 @@ class QueryGraph extends Component {
         force.on('tick', () => {
             this.d3Graph.call(updateGraph)
         })
-
-        // this.d3Graph.call(zoom().extent([[0, 0], [0.67 * this.props.width, 0.6 * this.props.height]]).scaleExtent([0.5, 2.5])).on("zoom", function () {
-        //     var selection = select(this)
-        //     selection
-        //         .call(zoom)
-        //         .on("dblclick.zoom", null).on("dragstart.zoom", null).on("mousedown.zoom", null)
-        //     selection.attr("transform", event.transform)
-        //     selection.attr("transform-origin", "0 0")
-        // })
     }
-
-    // componentDidUpdate() {
-    //     this.d3Graph.call(zoom().extent([[0, 0], [0.67 * this.props.width, 0.6 * this.props.height]]).scaleExtent([0.5, 2.5]).on("zoom", function () {
-    //         var selection = select(this)
-    //         selection
-    //             .call(zoom)
-    //             .on("dblclick.zoom", null).on("dragstart.zoom", null).on("mousedown.zoom", null)
-    //         selection.attr("transform", event.transform)
-    //         selection.attr("transform-origin", "0 0")
-    //     }))
-    // }
-
-    // handleStoreChange = () => {
-    //     if (store.getState().edgeDrawing.acceptEdgeDrawing !== this.state.acceptEdgeDrawing) {
-    //         this.setState({ acceptEdgeDrawing: store.getState().edgeDrawing.acceptEdgeDrawing })
-    //     }
-    // }
 
     render() {
         const scaledwidth = 0.67 * this.props.width
         const scaledheigth = 0.6 * this.props.height
         const nodes = this.props.data.nodes.map((node, i) => {
             return (
-                <QueryNode data={node} name={node.name} key={node.id === undefined ? i : node.id} nodeName={this.props.nodeName} />)
+                <QueryNode data={node} name={node.name} key={node.id === undefined ? i : node.id} nodeName={this.props.nodeName} handleDataChange = {this.props.handleDataChange.bind(this)} />)
         })
         const links = this.props.data.links.map((link, i) => {
             return (

@@ -8,7 +8,8 @@ import StatBox from './components/StatBox'
 import FreeTextInputQueryComponent from './components/queryComponents/FreeTextInputQueryComponent'
 import NavigationBarComponent from './components/NavigationBarComponent'
 import NotificationComponent from './components/NotificationComponent'
-import ResultComponent from './components/ResultComponent'
+import Notification from './actions/NotificationAction'
+import MainDataVisualizationComponent from './components/MainDataVisualizationComponent'
 import PopUpComponent from './components/PopUpComponent'
 import simpleExamples from './queryExamples/simpleDemoDataExamples.json'
 import SchemaComponent from './components/SchemaComponent'
@@ -23,6 +24,7 @@ import QueryExecutingService from './services/QueryExecutingService'
 import { parseJSONStringtoD3js } from './parsers/GraphDataParser'
 import { parseJSONtoTree } from './parsers/TreeDataParser'
 import { parseTablesFromData } from './parsers/RelationalDataParser'
+import CategoricalViewService from './services/CategoricalViewToQueryService'
 const __mainHTML = require('./infoTexts/mainHTML.js')
 const __categoricalViewToQueryHTML = require('./infoTexts/categoricalViewToSchemaHTML.js')
 const __examplesHTML = require('./infoTexts/examplesHTML.js')
@@ -41,13 +43,13 @@ class App extends Component {
 		super(props)
 		this.state = {
 			query: "", showedStat: { data: [{ "header": undefined, "key": undefined, "value": undefined }] },
-			width: window.innerWidth, height: window.innerHeight, notification: "", showPopup: false, popContent: templateMain, fold: undefined,
+			width: window.innerWidth, height: window.innerHeight, showPopup: false, popContent: templateMain, fold: undefined,
 			resultSet: { key: undefined, resultData: undefined, model: undefined },
 			dataSet: {
 				header: "Customer-Orders-Locations", examples: simpleExamples,
 				schemaData: initialSchemaData, schemaKey: "initialKey", metaData: uploadInfo["simpleDemoData"]
 			},
-			showSchemaCategory: false, showCategoricalView: false, showResult: false, nameForCategoricalQueryView: "simpleDemo"
+			showSchemaCategory: false, showCategoricalView: false, showResult: false, nameForCategoricalQueryView: "simpleDemo", queryId: undefined
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -105,9 +107,22 @@ class App extends Component {
 		this.setState((prevState) => { return { showResult: !prevState.showResult, showCategoricalView: false } })
 	}
 
-	toggleCategoricalView(event) {
+	toggleCategoricalView = async (event) => {
 		event.preventDefault()
-		this.setState((prevState) => { return { showResult: false, showCategoricalView: !prevState.showCategoricalView } })
+		if(this.state.showCategoricalView) {
+			this.setState({showCategoricalView: false})
+		} else {
+		if(this.state.queryId !== undefined) {
+			let timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
+			const result = await CategoricalViewService.getCategoricalViewToQuery(this.state.queryId)
+			console.log(result)
+			this.setState((prevState) => { 
+				return { showResult: false, showCategoricalView: true, resultSet: { key: timeStampInMs, resultData: result, model: "graph" }
+			}})
+		} else {
+			Notification.notify("Execute query first!", "warning")
+		}
+	}
 	}
 
 	handleStoreChange = () => {
@@ -137,7 +152,8 @@ class App extends Component {
 		const response = await QueryExecutingService.executeQuery(this.state.query)
 		console.log(response)
 		if (response !== undefined) {
-			const result = await QueryExecutingService.getSelectiveQueryResultById(response.data["id"])
+			const id = response.data["id"]
+			const result = await QueryExecutingService.getSelectiveQueryResultById(id)
 			const model = result.data[0]["model"]
 			let finalResult = null
 			switch (model) {
@@ -163,7 +179,7 @@ class App extends Component {
 					Notification.notify("Error in expressing the result. The result model is not defined.", "warning")
 			}
 			if (finalResult !== null) {
-				this.setState({ fold: response.data["parsedQuery"], resultSet: { key: timeStampInMs, resultData: finalResult, model: model }, showResult: true })
+				this.setState({ fold: response.data["parsedQuery"], resultSet: { key: timeStampInMs, resultData: finalResult, model: model }, showResult: true, queryId: id })
 			}
 		}
 	}
@@ -184,7 +200,7 @@ class App extends Component {
 							<FreeTextInputQueryComponent togglePopup={this.togglePopup.bind(this)} handleQueryChange={this.handleQueryChange} handleQuery={this.executeQuery} query={this.state.query} handleDataSetChange={this.handleDataSetChange} />
 							<NotificationComponent />
 							<SchemaComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} showSchemaCategory={this.state.showSchemaCategory} />
-							<ResultComponent dataSet={this.state.dataSet} resultSet={this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query}
+							<MainDataVisualizationComponent dataSet={this.state.dataSet} resultSet={this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query}
 								initializeResult={this.initializeQueryResult.bind(this)} showCategoricalView={this.state.showCategoricalView} showResult={this.state.showResult} />
 							<Row>
 								<Col>

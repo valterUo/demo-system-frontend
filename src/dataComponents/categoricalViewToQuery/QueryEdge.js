@@ -4,13 +4,13 @@ import { select } from 'd3-selection'
 const enterLink = (selection) => {
 
     selection.select('path')
-        .attr('stroke-width', 4)
+        .attr('stroke-width', 2)
         .style('stroke', 'black')
         .attr("fill", "none")
         .attr("marker-end", "url(#triangle)")
 
     selection.select('text')
-        .attr('dy', '.35em')
+        .attr('dy', '.5em')
         .style('transform', 'translateX(-50%,-50%')
         .attr("text-anchor", "middle")
 }

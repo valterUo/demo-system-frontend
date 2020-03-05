@@ -4,30 +4,7 @@ import { scaleOrdinal } from 'd3-scale'
 import { transition } from 'd3-transition' // eslint-disable-line
 import { schemeCategory10 } from 'd3-scale-chromatic'
 import store from '../../store'
-
 const color = scaleOrdinal(schemeCategory10)
-
-const updateNode = (selection) => {
-    selection.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
-}
-
-const enterNode = (selection) => {
-
-    selection.select('circle')
-        .attr('r', 10)
-        .style('fill', function (d) {
-            let firstAttribute = Object.keys(d)[0]
-            return color(d[firstAttribute])
-        })
-        .style('stroke', 'black')
-        .style('stroke-width', '1')
-
-    selection.select('text')
-        .attr('dy', '.4em')
-        .attr('dx', '.8em')
-        .style('transform', 'translateX(-50%,-50%')
-
-}
 
 class QueryNode extends Component {
     constructor(props) {
@@ -38,13 +15,38 @@ class QueryNode extends Component {
     componentDidMount() {
         this.d3Node = select(this.nodeRef.current)
             .datum(this.props.data)
-            .call(enterNode)
+            .call(this.enterNode)
     }
 
     componentDidUpdate() {
         this.d3Node
             .datum(this.props.data)
-            .call(updateNode)
+            .call(this.updateNode)
+    }
+
+    updateNode(selection) {
+        selection.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
+    }
+
+    enterNode(selection) {
+        let r = 10
+        if(selection.select('text').text().includes("fold")) {
+            r = 13
+        }
+        selection.select('circle')
+            .attr('r', r)
+            .style('fill', function (d) {
+                let firstAttribute = Object.keys(d)[0]
+                return color(d[firstAttribute])
+            })
+            .style('stroke', 'black')
+            .style('stroke-width', '1')
+    
+        selection.select('text')
+            .attr('dy', '.4em')
+            .attr('dx', '.8em')
+            .style('transform', 'translateX(-50%,-50%')
+    
     }
 
     handleOnMouseEnter(e) {
@@ -73,8 +75,8 @@ class QueryNode extends Component {
     }
 
     expandLambdaFunction(e) {
-        console.log("Node clicked.")
-        console.log(e)
+        console.log(this.props.data.id)
+        this.props.handleDataChange(this.props.data.id)
     }
 
     render() {
