@@ -1,0 +1,15 @@
+{
+    "nodes": [
+        {"name": "Relational University", "attributes":"customerId, customerName, creditLimit, location", "model": "relational", "id": 0},
+        {"name": "University", "attributes": "unitid,opeid,opeid6,instnm,uniCity,stabbr,uniZip,accredAgency,insturl,npcurl,sch_deg,hcm2,main,numbranch,preddeg,highdeg,control,st_fips,region,locale,locale2,latitude, longitude", "model": "relational", "id": 1},
+        {"name": "String", "attributes":"productId, productName, productPrice", "model": "primitive", "id": 2},
+        {"name": "RDF FamousLocations", "attributes": "-", "model": "rdf", "id": 3},
+        {"name": "Int", "attributes": "-", "model": "primitive", "id": 4}
+    ], 
+    "links": [
+        {"source": 1, "target": 2, "name": "opeid,opeid6,instnm,uniCity,stabbr,uniZip,accredAgency,insturl,npcurl,sch_deg,hcm2,main,numbranch,preddeg,highdeg,control,st_fips,region,locale,locale2,latitude, longitude", "count": 1},
+        {"source": 1, "target": 4, "name": "unitid", "count": 1},
+        {"source": 3, "target": 2, "name": "any function", "count": 1},
+        {"source": 1, "target": 0, "name": "relational collection construction functor", "count": 1}
+    ]
+}

@@ -123,14 +123,20 @@ const progressBar = {
 	height: "16px",
 	backgroundColor: "#f1f1f1",
 	borderRadius: "5px"
-  }
-  
+}
+
 const progress = {
 	backgroundColor: "#616161",
 	height: "100%",
 	margin: "0",
 	borderRadius: "5px"
-  }
+}
+
+const commonCol = {
+	marginBottom: "5px",
+	marginLeft: "5px",
+	marginRigth: "5px"
+}
 
 export default {
 	backgroundColorStyle,
@@ -147,5 +153,6 @@ export default {
 	infoTextStyle,
 	navPanelStyle,
 	progressBar,
-	progress
+	progress,
+	commonCol
 }

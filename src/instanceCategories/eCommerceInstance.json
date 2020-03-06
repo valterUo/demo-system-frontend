@@ -1,0 +1,112 @@
+{
+    "nodes": [{
+            "name": "Graph Customers",
+            "attributes": "customerId, customerName, creditLimit, location, knows",
+            "model": "graph",
+            "id": 0
+        },
+        {
+            "name": "Set of Integers",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 1
+        },
+        {
+            "name": "Set of Products",
+            "attributes": "productId, productName, productPrice",
+            "model": "xml",
+            "id": 2
+        },
+        {
+            "name": "XML of Orders",
+            "attributes": "-",
+            "model": "xml",
+            "id": 3
+        },
+        {
+            "name": "Set of Strings",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 4
+        },
+        {
+            "name": "{ true, false }",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 5
+        },
+        {
+            "name": "Relational Location",
+            "attributes": "locationId, address, cityName, zipCode, countryName",
+            "model": "relational",
+            "id": 6
+        }
+    ],
+    "links": [{
+            "source": 0,
+            "target": 5,
+            "name": "knows",
+            "count": 1
+        },
+        {
+            "source": 0,
+            "target": 1,
+            "name": "customerId, creditLimit",
+            "count": 1
+        },
+        {
+            "source": 0,
+            "target": 4,
+            "name": "customerName",
+            "count": 1
+        },
+        {
+            "source": 2,
+            "target": 1,
+            "name": "productPrice",
+            "count": 1
+        },
+        {
+            "source": 2,
+            "target": 4,
+            "name": "productId, productName",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 4,
+            "name": "orderNumber",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 0,
+            "name": "ordered",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 5,
+            "name": "contains(set of products)",
+            "count": 1
+        },
+        {
+            "source": 6,
+            "target": 4,
+            "name": "address, cityName, countryName",
+            "count": 1
+        },
+        {
+            "source": 6,
+            "target": 1,
+            "name": "locationId, zipCode",
+            "count": 1
+        },
+        {
+            "source": 0,
+            "target": 6,
+            "name": "located",
+            "count": 1
+        }
+    ]
+}
