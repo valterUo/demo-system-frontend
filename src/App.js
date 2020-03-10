@@ -65,7 +65,10 @@ class App extends Component {
 			showCategoricalView: false,
 			showResult: false,
 			nameForCategoricalQueryView: "E-commerce",
-			queryId: undefined
+			queryId: undefined,
+			showFoldFunction: false,
+			showContents: false
+
 		}
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
 	}
@@ -110,6 +113,12 @@ class App extends Component {
 			case "instanceCategory":
 				this.setState({ showPopup: true, popContent: templateInstanceCategory })
 				break;
+			case "nodeEdgeContents":
+				this.setState({ showPopup: true, popContent: templateInstanceCategory })
+				break;
+			case "foldFunction":
+				this.setState({ showPopup: true, popContent: templateInstanceCategory })
+				break;
 			default:
 				this.setState((prevState) => { return { showPopup: !prevState.showPopup } })
 		}
@@ -128,6 +137,16 @@ class App extends Component {
 	toggleResult(event) {
 		event.preventDefault()
 		this.setState((prevState) => { return { showResult: !prevState.showResult, showCategoricalView: false } })
+	}
+
+	toggleContents(event) {
+		event.preventDefault()
+		this.setState((prevState) => { return { showResult: !prevState.showContents} })
+	}
+
+	toggleFoldFunction(event) {
+		event.preventDefault()
+		this.setState((prevState) => { return { showResult: !prevState.showFoldFunction } })
 	}
 
 	toggleCategoricalView = async (event) => {
@@ -231,7 +250,8 @@ class App extends Component {
 					<Col xl={3} style={style.navPanelStyle} >
 						<DataSetSidePanel dataSet={this.state.dataSet} handleExampleQuery={this.handleExampleQuery} toggleSchemaCategory={this.toggleSchemaCategory.bind(this)} 
 							toggleInstanceCategory={this.toggleInstanceCategory.bind(this)} togglePopup={this.togglePopup.bind(this)} />
-						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} resultSet={this.state.resultSet} />
+						<ResultNavigationSidePanel toggleResult={this.toggleResult.bind(this)} toggleCategoricalView={this.toggleCategoricalView.bind(this)} togglePopup={this.togglePopup.bind(this)} resultSet={this.state.resultSet}
+						showedStat= {this.state.showedStat} fold = {this.state.fold} />
 					</Col>
 					<Col xl={9}>
 						<Container fluid='true'>
@@ -240,10 +260,6 @@ class App extends Component {
 							<SchemaInstanceComponent dataSet={this.state.dataSet} width={this.state.width} height={this.state.height} showSchemaCategory={this.state.showSchemaCategory} showInstanceCategory={this.state.showInstanceCategory} />
 							<MainDataVisualizationComponent dataSet={this.state.dataSet} resultSet={this.state.resultSet} width={this.state.width} height={this.state.height} query={this.state.query}
 								initializeResult={this.initializeQueryResult.bind(this)} showCategoricalView={this.state.showCategoricalView} showResult={this.state.showResult} />
-							<Row>
-								<StatBox data={this.state.showedStat} />
-								<FoldViewBox fold={this.state.fold} />
-							</Row>
 						</Container>
 					</Col>
 				</Row>

@@ -1,53 +1,190 @@
 {
-    "nodes": [
-        {"name": "Assignee", "attributes":"assigneeId, assname, pname, sname, own, cusip, assigneeCname", "model": "relational", "id": 0},
-        {"name": "Category", "attributes":"catId, subcat, subcatcname, catnameshort, catnamelong", "model": "relational", "id": 1},
-        {"name": "Class", "attributes":"classId, cname, classCat, classSubcat", "model": "relational", "id": 2},
-        {"name": "Patent", "attributes": "patentId, gyear, gdate, appyear, patentCountry, patentPostate, patentAssignee, asscode, claims, patentNclass, patentCat, patentSubcat, cmade, creceive, ratiocit, general, original, fwdaplag, bckgtlag, selfctub, selfctlb , secdupbd, secdlwbd", "model": "graph", "id": 3},
-        {"name": "Inventor", "attributes": "inventorPatent, lastnam, firstnam, midnam, modifnam, street, city, inventorPostate, inventorCountry, zip, invseq", "model": "relational", "id": 4},
-        {"name": "String", "attributes": "-", "model": "primitive", "id": 5},
-        {"name": "Int", "attributes": "-", "model": "primitive", "id": 6},
-        {"name": "Graph Patents", "attributes": "-", "model": "graph", "id": 7},
-        {"name": "Relational Assignees", "attributes": "-", "model": "relational", "id": 8},
-        {"name": "Relational Categories", "attributes": "-", "model": "relational", "id": 9},
-        {"name": "Relational Classes", "attributes": "-", "model": "relational", "id": 10},
-        {"name": "Relational Inventors", "attributes": "-", "model": "relational", "id": 11},
-        {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 12}
-    ], 
-    "links": [
-        {"source": 0, "target": 5, "name": "assname, pname, sname, cusip, assigneeCname", "count": 1},
-        {"source": 0, "target": 6, "name": "assigneeId, own", "count": 1},
+    "nodes": [{
+            "name": "Assignee",
+            "attributes": "assigneeId, assname, pname, sname, own, cusip, assigneeCname",
+            "model": "relational",
+            "id": 0
+        },
+        {
+            "name": "Category",
+            "attributes": "catId, subcat, subcatcname, catnameshort, catnamelong",
+            "model": "relational",
+            "id": 1
+        },
+        {
+            "name": "Class",
+            "attributes": "classId, cname, classCat, classSubcat",
+            "model": "relational",
+            "id": 2
+        },
+        {
+            "name": "Patent",
+            "attributes": "patentId, gyear, gdate, appyear, patentCountry, patentPostate, patentAssignee, asscode, claims, patentNclass, patentCat, patentSubcat, cmade, creceive, ratiocit, general, original, fwdaplag, bckgtlag, selfctub, selfctlb , secdupbd, secdlwbd",
+            "model": "graph",
+            "id": 3
+        },
+        {
+            "name": "Inventor",
+            "attributes": "inventorPatent, lastnam, firstnam, midnam, modifnam, street, city, inventorPostate, inventorCountry, zip, invseq",
+            "model": "relational",
+            "id": 4
+        },
+        {
+            "name": "String",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 5
+        },
+        {
+            "name": "Int",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 6
+        },
+        {
+            "name": "Boolean",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 7
+        }
+    ],
+    "links": [{
+            "source": 0,
+            "target": 5,
+            "name": "assname, pname, sname, cusip, assigneeCname",
+            "count": 1
+        },
+        {
+            "source": 0,
+            "target": 6,
+            "name": "assigneeId, own",
+            "count": 1
+        },
 
-        {"source": 1, "target": 5, "name": "catId, subcat", "count": 1},
-        {"source": 1, "target": 6, "name": "subcatcname, catnameshort, catnamelong", "count": 1},
+        {
+            "source": 1,
+            "target": 5,
+            "name": "catId, subcat",
+            "count": 1
+        },
+        {
+            "source": 1,
+            "target": 6,
+            "name": "subcatcname, catnameshort, catnamelong",
+            "count": 1
+        },
 
-        {"source": 2, "target": 5, "name": "classId", "count": 1},
-        {"source": 2, "target": 6, "name": "cname", "count": 1},
-        {"source": 2, "target": 1, "name": "classCat, classSubcat", "count": 1},
+        {
+            "source": 2,
+            "target": 5,
+            "name": "classId",
+            "count": 1
+        },
+        {
+            "source": 2,
+            "target": 6,
+            "name": "cname",
+            "count": 1
+        },
+        {
+            "source": 2,
+            "target": 1,
+            "name": "classCat, classSubcat",
+            "count": 1
+        },
 
-        {"source": 3, "target": 5, "name": "patentId, gyear, gdate, appyear, asscode, claims, cmade, creceive, ratiocit, general, original, fwdaplag, bckgtlag, selfctub, selfctlb , secdupbd, secdlwbd", "count": 1},
-        {"source": 3, "target": 6, "name": "patentCountry, patentPostate", "count": 1},
-        {"source": 3, "target": 0, "name": "patentAssignee", "count": 1},
-        {"source": 3, "target": 2, "name": "patentNclass", "count": 1},
-        {"source": 3, "target": 1, "name": "patentCat, patentSubcat", "count": 1},
+        {
+            "source": 3,
+            "target": 5,
+            "name": "patentId, gyear, gdate, appyear, asscode, claims, cmade, creceive, ratiocit, general, original, fwdaplag, bckgtlag, selfctub, selfctlb , secdupbd, secdlwbd",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 6,
+            "name": "patentCountry, patentPostate",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 0,
+            "name": "patentAssignee",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 2,
+            "name": "patentNclass",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 1,
+            "name": "patentCat, patentSubcat",
+            "count": 1
+        },
 
-        {"source": 4, "target": 5, "name": "invseq", "count": 1},
-        {"source": 4, "target": 6, "name": "lastnam, firstnam, midnam, modifnam, street, city, inventorPostate, inventorCountry, zip", "count": 1},
-        {"source": 4, "target": 3, "name": "inventorPatent", "count": 1},
+        {
+            "source": 4,
+            "target": 5,
+            "name": "invseq",
+            "count": 1
+        },
+        {
+            "source": 4,
+            "target": 6,
+            "name": "lastnam, firstnam, midnam, modifnam, street, city, inventorPostate, inventorCountry, zip",
+            "count": 1
+        },
+        {
+            "source": 4,
+            "target": 3,
+            "name": "inventorPatent",
+            "count": 1
+        },
 
-        {"source": 0, "target": 8, "name": "collection type cons. functor Assignee", "count": 1},
-        {"source": 1, "target": 9, "name": "collection type cons. functor Category", "count": 1},
-        {"source": 2, "target": 10, "name": "collection type cons. functor Class", "count": 1},
-        {"source": 4, "target": 11, "name": "collection type cons. functor Inventor", "count": 1},
-        {"source": 3, "target": 7, "name": "collection type cons. functor Patent graph", "count": 1},
+        {
+            "source": 3,
+            "target": 3,
+            "name": "cited",
+            "count": 1
+        },
+        {
+            "source": 2,
+            "target": 2,
+            "name": "classCat', classSubcat'",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 0,
+            "name": "patentAssignee'",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 2,
+            "name": "patentNclass'",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 1,
+            "name": "patentCat', patentSubcat'",
+            "count": 1
+        },
+        {
+            "source": 3,
+            "target": 4,
+            "name": "inventorPatent'",
+            "count": 1
+        },
 
-        {"source": 7, "target": 7, "name": "cited", "count": 1},
-        {"source": 10, "target": 9, "name": "classCat', classSubcat'", "count": 1},
-        {"source": 7, "target": 8, "name": "patentAssignee'", "count": 1},
-        {"source": 7, "target": 9, "name": "patentNclass'", "count": 1},
-        {"source": 7, "target": 10, "name": "patentCat', patentSubcat'", "count": 1},
-        {"source": 11, "target": 7, "name": "inventorPatent'", "count": 1},
-
-        {"source": 7, "target": 12, "name": "cited(-,-)", "count": 1}
-        
-        ]}
+        {
+            "source": 3,
+            "target": 7,
+            "name": "cited(patent,-)",
+            "count": 1
+        }
+    ]
+}

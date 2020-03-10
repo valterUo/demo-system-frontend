@@ -45,10 +45,23 @@ class Graph extends Component {
                     return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
                 })
 
-            selection.select("text").attr("dy", -5)
-            selection.select("textPath")
-                .style("text-anchor", "middle")
-                .attr("startOffset", "50%")
+                selection.select('text')
+                .attr("x", function (d) {
+                    return ((d.source.x + d.target.x) / 2)
+                })
+                .attr("y", function (d) {
+                    return ((d.source.y + d.target.y) / 2)
+                })
+
+            // selection.select('text')
+            // .attr('dy', '.35em')
+            // .style('transform', 'translateX(-50%,-50%')
+            // .attr("text-anchor", "middle")
+
+            // selection.select("text").attr("dy", -5)
+            // selection.select("textPath")
+            //     .style("text-anchor", "middle")
+            //     .attr("startOffset", "50%")
         }
 
         const updateMultiGraph = (selection) => {

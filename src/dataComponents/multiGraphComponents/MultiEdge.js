@@ -8,6 +8,14 @@ class MultiEdge extends Component {
         this.edgeRef = React.createRef()
     }
 
+    updateLink = (selection) => {
+        selection
+            .attr('x1', (d) => d.source.x)
+            .attr('y1', (d) => d.source.y)
+            .attr('x2', (d) => d.target.x)
+            .attr('y2', (d) => d.target.y)
+    }
+
     componentDidMount() {
         this.d3Link = select(this.edgeRef.current)
             .datum(this.props.data)
@@ -16,6 +24,7 @@ class MultiEdge extends Component {
 
     componentDidUpdate() {
         this.d3Link.datum(this.props.data)
+            .call(this.updateLink)
     }
 
     enterLink = (selection) => {
@@ -25,43 +34,19 @@ class MultiEdge extends Component {
             .attr("fill", "none")
             .attr("marker-end", "url(#multitriangle" + this.props.linkName + ")")
 
-        selection.select('text')
+            selection.select('text')
+            .attr('dy', '.35em')
             .style('transform', 'translateX(-50%,-50%')
-            .attr("text-anchor", "start")
-    }
-
-    wrapText = (text, width) => {
-        let line = [], lineNumber = 0,
-            lineHeight = -5, // pxs
-            y = this.d3Link.select("textPath").attr("y"),
-            dy = parseFloat(this.d3Link.select("text").attr("dy")),
-            tspan = this.d3Link.select("textPath").text(null).append("tspan").attr("x", 20).attr("y", y).attr("dy", dy + "px")
-        let words = text.split(" ").filter(word => {
-            if(word !== "" || word !== "\n" || word !== " ") {
-                return word.trim()
-            }
-            return word
-        })
-        while (words.length > 0) {
-            let word = words.pop()
-            line.push(word)
-            const printableLine = line.slice().reverse()
-            tspan.text(printableLine.join(" "))
-            if (tspan.node().getComputedTextLength() > width) {
-                line.pop()
-                const printableLine = line.slice().reverse()
-                tspan.text(printableLine.join(" "))
-                line = [word]
-                tspan = this.d3Link.select("textPath").append("tspan").attr("x", 50).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "px")
-            }
-        }
+            .attr("text-anchor", "middle")
     }
 
     handleMouseEntering = () => {
         if(this.props.showEdgeLabels) {
-        this.d3Link.select("text")
-            .attr("visibility", "visible")
-        this.wrapText(this.props.data.name, 170)
+        this.d3Link.select('text')
+        .attr("visibility", "visible")
+        .attr('dy', '.35em')
+        .style('transform', 'translateX(-50%,-50%')
+        .attr("text-anchor", "middle")
     }
         this.d3Link.select('path')
             .attr('stroke-width', 5)
@@ -94,7 +79,7 @@ class MultiEdge extends Component {
             return (
                 <g ref={this.edgeRef} className={this.props.linkName} onMouseEnter={this.handleMouseEntering.bind(this)} onMouseLeave={this.handleMouseExiting.bind(this)}>
                     <path id={pathId} onClick={this.handle.bind(this)} />
-                    <text visibility="hidden"><textPath href={"#" + pathId} style={{ textAnchor: "start" }} ></textPath></text>
+                    <text visibility="hidden">{this.props.data.name}</text>
                 </g>
             )
         }

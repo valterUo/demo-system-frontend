@@ -31,7 +31,7 @@ class QueryNode extends Component {
     enterNode(selection) {
         let r = 10
         if(selection.select('text').text().includes("fold")) {
-            r = 13
+            r = 15
         }
         selection.select('circle')
             .attr('r', r)

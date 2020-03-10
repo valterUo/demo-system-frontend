@@ -1,81 +1,269 @@
 {
-    "nodes": [
-        {"name": "Person", "attributes":"personsId, firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed, place", "model": "graph, relational", "id": 0},
-        {"name": "Int", "attributes":"-", "model": "primitive", "id": 1},
-        {"name": "UnibenchProduct", "attributes":"unibenchProductAsin, unibenchProductTitle, unibenchProductPrice, unibenchProductimgUrl, unibenchProductId, unibenchProductBrand", "model": "json", "id": 2},
-        {"name": "UnibenchOrder", "attributes": "orderid, personid, orderdate, totalprice, orderline", "model": "json", "id": 3},
-        {"name": "String", "attributes": "-", "model": "primitive", "id": 4},
-        {"name": "Boolean", "attributes": "-", "model": "primitive", "id": 5},
-        {"name": "Feedback", "attributes": "asin, personId, feedback", "model": "key-value", "id": 6},
-        {"name": "Graph Person-Knows->Person", "attributes": "knows", "model": "graph", "id": 7},
-        {"name": "JSON UnibenchOrder", "attributes": "-", "model": "json", "id": 8},
-        {"name": "Relational Person", "attributes": "-", "model": "relational", "id": 9},
+    "nodes": [{
+            "name": "Relational UnibenchOrderline",
+            "attributes": "productId, asin, title, price, brand",
+            "model": "xml",
+            "id": 0,
+            "color": 11
+        },
+        {
+            "name": "Set of Integers",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 1,
+            "color": 1
+        },
+        {
+            "name": "Set of Strings",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 2,
+            "color": 4
+        },
+        {
+            "name": "{ true, false }",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 3,
+            "color": 5
+        },
+        {
+            "name": "Graph Person - knows -> Person",
+            "attributes": "knows",
+            "model": "graph",
+            "id": 4,
+            "color": 0
+        },
+        {
+            "name": "JSON UnibenchOrder",
+            "attributes": "orderid, personid, orderdate, totalprice, orderline",
+            "model": "json",
+            "id": 5,
+            "color": 3
+        },
+        {
+            "name": "Relational Person",
+            "attributes": "personsId, firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed, place",
+            "model": "relational",
+            "id": 6,
+            "color": 0
+        },
+        {
+            "name": "Graph Post - has -> Product",
+            "attributes": "has",
+            "model": "graph",
+            "id": 7,
+            "color": 7
+        },
+        {
+            "name": "Graph Person - hasInterest -> Product",
+            "attributes": "hasInterest",
+            "model": "graph",
+            "id": 8,
+            "color": 0
+        },
+        {
+            "name": "Graph Person - created -> Post",
+            "attributes": "created",
+            "model": "graph",
+            "id": 9,
+            "color": 0
+        },
+        {
+            "name": "Relational Vendor",
+            "attributes": "vendor, vendorCountry, vendorIndustry",
+            "model": "relational",
+            "id": 10,
+            "color": 8
+        },
+        {
+            "name": "XML Invoice",
+            "attributes": "UnibenchOrder",
+            "model": "xml",
+            "id": 11,
+            "color": 9
+        },
+        {
+            "name": "JSON UnibenchProduct",
+            "attributes": "unibenchProductAsin, unibenchProductTitle, unibenchProductPrice, unibenchProductimgUrl, unibenchProductId, unibenchProductBrand",
+            "model": "json",
+            "id": 12,
+            "color": 2
+        },
+        {
+            "name": "Set of Doubles",
+            "attributes": "-",
+            "model": "primitive",
+            "id": 13,
+            "color": 10
+        },
+        {
+            "name": "Relational Post",
+            "attributes": "postId, postCreationDate, postLocationIP, postBrowserUsed, language, content, postLength",
+            "model": "relational",
+            "id": 14,
+            "color": 7
+        },
+        {
+            "name": "Relational Feedback",
+            "attributes": "asin, personId, feedback",
+            "model": "relational",
+            "id": 15,
+            "color": 6
+        }
+    ],
+    "links": [{
+            "source": 4,
+            "target": 6,
+            "name": "person knows -",
+            "count": 1
+        },
+        {
+            "source": 6,
+            "target": 2,
+            "name": "firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed",
+            "count": 1
+        },
+        {
+            "source": 6,
+            "target": 1,
+            "name": "personsId, place",
+            "count": 1
+        },
 
-        {"name": "Graph Post-has->Product", "attributes": "-", "model": "graph", "id": 10},
-        {"name": "Graph Person-hasInterest->Product", "attributes": "graph", "model": "", "id": 11},
-        {"name": "Graph Person-created->Post", "attributes": "-", "model": "graph", "id": 12},
+        {
+            "source": 12,
+            "target": 1,
+            "name": "unibenchProductId, unibenchProductBrand",
+            "count": 1
+        },
+        {
+            "source": 12,
+            "target": 2,
+            "name": "unibenchProductAsin, unibenchProductTitle, unibenchProductimgUrl",
+            "count": 1
+        },
+        {
+            "source": 12,
+            "target": 13,
+            "name": "unibenchProductPrice",
+            "count": 1
+        },
 
-        {"name": "Post", "attributes": "postId, postCreationDate, postLocationIP, postBrowserUsed, language, content, postLength", "model": "graph, relational", "id": 13},
-        
-        {"name": "Vendor", "attributes": "vendor, vendorCountry, vendorIndustry", "model": "relational", "id": 14},
-        {"name": "Relational Vendor", "attributes": "-", "model": "relational", "id": 15},
+        {
+            "source": 5,
+            "target": 3,
+            "name": "contains(product, -)",
+            "count": 1
+        },
 
-        {"name": "Invoice", "attributes": "UnibenchOrder", "model": "xml", "id": 16},
-        {"name": "XML Invoice", "attributes": "-", "model": "xml", "id": 17},
+        {
+            "source": 5,
+            "target": 2,
+            "name": "orderid, personid, orderdate",
+            "count": 1
+        },
+        {
+            "source": 5,
+            "target": 13,
+            "name": "totalprice",
+            "count": 1
+        },
+        {
+            "source": 5,
+            "target": 12,
+            "name": "orderline",
+            "count": 1
+        },
 
-        {"name": "JSON UnibenchProduct", "attributes": "-", "model": "json", "id": 18},
-        {"name": "Double", "attributes":"-", "model": "primitive", "id": 19},
-        {"name": "UnibenchOrderline", "attributes":"productId, asin, title, price,brand", "model": "xml", "id": 20},
+        {
+            "source": 15,
+            "target": 4,
+            "name": "asin, feedback",
+            "count": 1
+        },
+        {
+            "source": 15,
+            "target": 1,
+            "name": "personId",
+            "count": 1
+        },
 
-        {"name": "Relational Post", "attributes": "-", "model": "relational", "id": 21},
-        {"name": "Relational Feedback", "attributes": "-", "model": "relational", "id": 22},
-        {"name": "Relational UnibenchOrderline", "attributes":"productId, asin, title, price,brand", "model": "xml", "id": 23}
-    ], 
-    "links": [
-        {"source": 7, "target": 5, "name": "knows(-,-)", "count": 1},
-        {"source": 0, "target": 4, "name": "firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed", "count": 1},
-        {"source": 0, "target": 1, "name": "personsId, place", "count": 1},
+        {
+            "source": 14,
+            "target": 2,
+            "name": "postCreationDate, postLocationIP, postBrowserUsed, language, content",
+            "count": 1
+        },
+        {
+            "source": 14,
+            "target": 1,
+            "name": "postId, postLength",
+            "count": 1
+        },
 
-        {"source": 2, "target": 1, "name": "unibenchProductId, productBrand", "count": 1},
-        {"source": 2, "target": 4, "name": "productAsin, productTitle, imgUrl", "count": 1},
-        {"source": 2, "target": 19, "name": "productPrice", "count": 1},
+        {
+            "source": 10,
+            "target": 2,
+            "name": "vendor, vendorCountry, vendorIndustry",
+            "count": 1
+        },
 
-        {"source": 2, "target": 3, "name": "contains product", "count": 1},
+        {
+            "source": 11,
+            "target": 5,
+            "name": "unibenchOrder",
+            "count": 1
+        },
 
-        {"source": 3, "target": 4, "name": "orderid, personid, orderdate", "count": 1},
-        {"source": 3, "target": 19, "name": "totalprice", "count": 1},
-        {"source": 3, "target": 23, "name": "contains", "count": 1},
-        {"source": 20, "target": 23, "name": "collection construction functor", "count": 1},
+        {
+            "source": 7,
+            "target": 12,
+            "name": "post has -",
+            "count": 1
+        },
+        {
+            "source": 8,
+            "target": 12,
+            "name": "person hasInterest -",
+            "count": 1
+        },
+        {
+            "source": 7,
+            "target": 14,
+            "name": "- has product",
+            "count": 1
+        },
+        {
+            "source": 8,
+            "target": 6,
+            "name": "- hasInterest product",
+            "count": 1
+        },
+        {
+            "source": 9,
+            "target": 14,
+            "name": "person created -",
+            "count": 1
+        },
+        {
+            "source": 9,
+            "target": 6,
+            "name": "- created post",
+            "count": 1
+        },
 
-        {"source": 6, "target": 4, "name": "asin, feedback", "count": 1},
-        {"source": 6, "target": 1, "name": "personId", "count": 1},
-
-        {"source": 13, "target": 4, "name": "postCreationDate, postLocationIP, postBrowserUsed, language, content", "count": 1},
-        {"source": 13, "target": 1, "name": "postId, postLength", "count": 1},
-
-        {"source": 14, "target": 4, "name": "vendor, vendorCountry, vendorIndustry", "count": 1},
-
-        {"source": 16, "target": 3, "name": "unibenchOrder", "count": 1},
-
-        {"source": 10, "target": 5, "name": "has(-,-)", "count": 1},
-        {"source": 11, "target": 5, "name": "hasInterest(-,-)", "count": 1},
-        {"source": 12, "target": 5, "name": "created(-,-)", "count": 1},
-
-        {"source": 14, "target": 15, "name": "relational collection contructor functor 2", "count": 1},
-
-        {"source": 16, "target": 17, "name": "XML collection contructor functor 3", "count": 1},
-
-        {"source": 3, "target": 8, "name": "JSON collection constructor functor 1", "count": 1},
-        {"source": 0, "target": 7, "name": "graph collection constructor functor 1", "count": 1},
-        {"source": 2, "target": 18, "name": "JSON collection constructor functor 2", "count": 1},
-        {"source": 0, "target": 9, "name": "relational collection constructor functor 1", "count": 1},
-        {"source": 6, "target": 22, "name": "relational collection constructor functor 3", "count": 1},
-        {"source": 13, "target": 21, "name": "relational collection constructor functor 4", "count": 1},
-        {"source": 13, "target": 10, "name": "graph collection constructor functor 2", "count": 1},
-        {"source": 2, "target": 10, "name": "graph collection constructor functor 3", "count": 1},
-        {"source": 2, "target": 11, "name": "graph collection constructor functor 4", "count": 1},
-        {"source": 0, "target": 11, "name": "graph collection constructor functor 5", "count": 1},
-        {"source": 0, "target": 12, "name": "graph collection constructor functor 6", "count": 1},
-        {"source": 13, "target": 12, "name": "graph collection constructor functor 7", "count": 1}
-        ]
+        {
+            "source": 0,
+            "target": 1,
+            "name": "productId, asin, title, brand",
+            "count": 1
+        },
+        {
+            "source": 0,
+            "target": 13,
+            "name": "price",
+            "count": 1
+        }
+    ]
 }

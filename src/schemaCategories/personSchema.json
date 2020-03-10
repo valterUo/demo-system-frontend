@@ -1,6 +1,6 @@
 {
     "nodes": [
-        {"name": "RDF Person", "attributes":"-", "model": "graph", "id": 0},
+        {"name": "Person", "attributes":"-", "model": "graph", "id": 0},
         {"name": "String", "attributes":"-", "model": "primitive", "id": 1}
     ], 
     "links": [

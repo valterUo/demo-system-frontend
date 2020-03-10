@@ -9,6 +9,8 @@ import Col from 'react-bootstrap/Col'
 import Accordion from 'react-bootstrap/Accordion'
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle'
 import style from '../styles'
+import StatBox from '../components/StatBox'
+import FoldViewBox from '../components/FoldViewBox'
 
 function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionToggle(eventKey)
@@ -41,7 +43,7 @@ class ResultNavigationSidePanel extends Component {
                     <Card >
                         <Card.Header style={{ backgroundColor: "#BDF2FF" }}>
                             <Row style={{ margin: "5px" }}>
-                                <h4>Result</h4>
+                                <h4>Results</h4>
                             </Row>
                         </Card.Header>
                     </Card>
@@ -61,6 +63,32 @@ class ResultNavigationSidePanel extends Component {
                             </Card.Header>
                         </Card>
                     </Nav.Item>
+                    <Accordion>
+                        <Card >
+                        <Card.Header>
+                                <CustomToggle eventKey="f1">Contents of a node</CustomToggle>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("nodeEdgeContents")}></i>
+                            </Card.Header>
+                        </Card>
+                        <Accordion.Collapse eventKey="f1">
+                            <Row >
+                            <StatBox data={this.props.showedStat} />
+                            </Row>
+                        </Accordion.Collapse>
+                        </Accordion>
+                        <Accordion>
+                        <Card >
+                            <Card.Header>
+                            <CustomToggle eventKey="f2">Fold-function</CustomToggle>
+                                <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("foldFunction")}></i>
+                            </Card.Header>
+                        </Card>
+                        <Accordion.Collapse eventKey="f2">
+                            <Row>
+								<FoldViewBox fold={this.props.fold} />
+                            </Row>
+                        </Accordion.Collapse>
+                        </Accordion>
                     <Nav.Item hidden={!(this.props.resultSet.model === "algebraic graph")} >
                         <Accordion>
                             <Card >

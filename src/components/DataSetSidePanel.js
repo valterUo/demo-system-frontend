@@ -67,7 +67,7 @@ class DataSetSidePanel extends Component {
                         </Card>
                     </Nav.Item>
                     <Nav.Item>
-                        <Card >
+                        <Card>
                             <Card.Header>
                                 <Button type="button" variant="dark" onClick={this.props.toggleInstanceCategory}>Instance category</Button>
                                 <i className="fa fa-info-circle" style={{ fontSize: "20px", float: "right" }} aria-hidden="true" onClick={() => this.props.togglePopup("instanceCategory")}></i>

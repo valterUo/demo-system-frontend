@@ -3,16 +3,19 @@ import { select } from 'd3-selection'
 
 const enterLink = (selection) => {
 
-    selection.select('path')
-        .attr('stroke-width', 2)
-        .style('stroke', 'black')
-        .attr("fill", "none")
-        .attr("marker-end", "url(#triangle)")
+
 
     selection.select('text')
         .attr('dy', '.5em')
         .style('transform', 'translateX(-50%,-50%')
         .attr("text-anchor", "middle")
+        //.attr('font-weight', 'bold')
+
+    selection.select('path')
+        .attr('stroke-width', 2)
+        .style('stroke', 'gray')
+        .attr("fill", "none")
+        .attr("marker-end", "url(#triangle)")
 }
 
 const updateLink = (selection) => {
@@ -49,7 +52,7 @@ class QueryEdge extends Component {
             return (
                 <g ref={this.edgeRef} className={this.props.linkName}>
                     <path onClick={this.handle.bind(this)} />
-                    <text>{this.props.data.name}</text>
+                    <text><tspan style = {{"font-weight":"bold"}}>{this.props.data.name}</tspan></text>
                 </g>
             )
         }

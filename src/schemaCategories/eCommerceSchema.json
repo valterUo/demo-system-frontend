@@ -6,7 +6,7 @@
             "id": 0
         },
         {
-            "name": "Int",
+            "name": "Integer",
             "attributes": "-",
             "model": "primitive",
             "id": 1

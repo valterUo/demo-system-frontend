@@ -21,7 +21,9 @@ class SchemaCategory extends Component {
                         <h4>Schema category of {this.props.dataSet.header}</h4>
                     </Row>
                     <Row ref={this.mainContainer} style={{ "margin": "10px" }}>
-                        <MultiGraph key={this.props.dataSet.schemaKey} data={this.props.dataSet.schemaData} width={this.props.width} height={this.props.height} nodeName={"SchemaCategoryNodes"} linkName={"SchemaCategoryEdges"} nameClass={"SchemaCategoryClass"} editableGraph={false} showEdgeLabels={true} />
+                        <MultiGraph key={this.props.dataSet.schemaKey} data={this.props.dataSet.schemaData} width={this.props.width} 
+                            height={this.props.height} nodeName={"SchemaCategoryNodes"} linkName={"SchemaCategoryEdges"} nameClass={"SchemaCategoryClass"} 
+                            editableGraph={false} showEdgeLabels={true} />
                     </Row>
                 </Col>
             </Container>

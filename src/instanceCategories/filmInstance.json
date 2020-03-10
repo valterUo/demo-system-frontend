@@ -1,57 +1,33 @@
 {
     "nodes": [{
-            "name": "Film",
-            "attributes": "title, year, rated, released, runtime, genre, director, writer, actors, plot, language, country, awards, poster, metascore, imdbRating, imdbVotes, imdbID, type, response",
+            "name": "JSON Film",
+            "attributes": "-",
             "model": "json",
             "id": 0
         },
         {
-            "name": "Graph Film (String)",
+            "name": "Graph Film",
             "attributes": "notableWork, budget, cinematography, country, director, editing, gross, musicComposer, producer, ...",
             "model": "RDF graph",
             "id": 1
         },
         {
-            "name": "String",
+            "name": "Set of Strings",
             "attributes": "-",
             "model": "primitive",
             "id": 2
         },
         {
-            "name": "Boolean",
+            "name": "{ true, false }",
             "attributes": "-",
             "model": "primitive",
             "id": 3
-        },
-        {
-            "name": "JSON Film",
-            "attributes": "-",
-            "model": "json",
-            "id": 4
         }
     ],
     "links": [{
             "source": 0,
             "target": 2,
             "name": "title, year, rated, released, runtime, genre, director, writer, actors, plot, language, country, awards, poster, metascore, imdbRating, imdbVotes, imdbID, type, response",
-            "count": 1
-        },
-        {
-            "source": 0,
-            "target": 1,
-            "name": "collection type constructor Graph Film",
-            "count": 1
-        },
-        {
-            "source": 1,
-            "target": 3,
-            "name": "String -> String -> Boolean",
-            "count": 1
-        },
-        {
-            "source": 0,
-            "target": 4,
-            "name": "collection type constructor JSON Film",
             "count": 1
         }
     ]

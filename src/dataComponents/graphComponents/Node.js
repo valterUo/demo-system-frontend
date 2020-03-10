@@ -19,6 +19,11 @@ const enterNode = (selection) => {
     selection.select('circle')
         .attr('r', 10)
         .style('fill', function (d) {
+            if(Object.keys(d).includes("color")) {
+                return color(d["color"])
+            } else if(Object.keys(d).includes("id")) {
+                return color(d["id"])
+            }
             let firstAttribute = Object.keys(d)[0]
             return color(d[firstAttribute]) 
         })
@@ -130,6 +135,11 @@ class Node extends Component {
 
     handleColorChangeBack(e) {
         this.d3Node.select('circle').style('fill', function (d) {
+            if(Object.keys(d).includes("color")) {
+                return color(d["color"])
+            } else if(Object.keys(d).includes("id")) {
+                return color(d["id"])
+            }
             let firstAttribute = Object.keys(d)[0]
             return color(d[firstAttribute]) 
         })

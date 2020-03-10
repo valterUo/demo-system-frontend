@@ -13,6 +13,14 @@ import universitySchema from '../schemaCategories/universitySchema.json'
 import personSchema from '../schemaCategories/personSchema.json'
 import unibenchSchema from '../schemaCategories/unibenchSchema.json'
 
+// Instances for drawing D3 graphs:
+import eCommerceInstance from '../instanceCategories/eCommerceInstance.json'
+import patentInstance from '../instanceCategories/patentInstance.json'
+import filmInstance from '../instanceCategories/filmInstance.json'
+import universityInstance from '../instanceCategories/universityInstance.json'
+import personInstance from '../instanceCategories/personInstance.json'
+import unibenchInstance from '../instanceCategories/unibenchInstance.json'
+
 //Query examples:
 import eCommerceExamples from '../queryExamples/eCommerceDataExamples.json'
 import patentDataExamples from '../queryExamples/patentDataExamples.json'
@@ -34,33 +42,81 @@ class SelectDataSetComponent extends Component {
                 <Col xl={6}>
                     <Dropdown style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 10000, right: "0px" }}>
                         <DropdownButton
-                                drop={"left"}
-                                variant="dark"
-                                title={"Datasets"}
-                                id={'dropdown-button-drop-left'}
-                                key={"left"}>
+                            drop={"left"}
+                            variant="dark"
+                            title={"Datasets"}
+                            id={'dropdown-button-drop-left'}
+                            key={"left"}>
                             <Dropdown.Item href="#/simple"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "E-commerce data set", examples: eCommerceExamples, schemaData: eCommerceSchema, metaData: uploadInfo["simpleDemoData"], nameForCategoricalQueryView: "simpleDemo" })}>
+                                onClick={this.props.handleDataSetChange.bind(this, {
+                                    header: "E-commerce data set",
+                                    examples: eCommerceExamples,
+                                    schemaData: eCommerceSchema,
+                                    instanceData: eCommerceInstance,
+                                    metaData: uploadInfo["simpleDemoData"],
+                                    nameForCategoricalQueryView: "simpleDemo"
+                                })
+                                }>
                                 E-commerce data set
                             </Dropdown.Item>
                             <Dropdown.Item href="#/unibench"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Unibench data set", examples: unibenchExamples, schemaData: unibenchSchema, metaData: uploadInfo["unibench"], nameForCategoricalQueryView: "unibench" })}>
+                                onClick={this.props.handleDataSetChange.bind(this, {
+                                    header: "Unibench data set",
+                                    examples: unibenchExamples,
+                                    schemaData: unibenchSchema,
+                                    instanceData: unibenchInstance,
+                                    metaData: uploadInfo["unibench"],
+                                    nameForCategoricalQueryView: "unibench"
+                                })
+                                }>
                                 Unibench data set
                             </Dropdown.Item>
                             <Dropdown.Item href="#/patent"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Patent data set", examples: patentDataExamples, schemaData: patentSchema, metaData: uploadInfo["patent"], nameForCategoricalQueryView: "patent" })}>
+                                onClick={this.props.handleDataSetChange.bind(this, {
+                                    header: "Helsinki Multi-Model Repository: Patent data set",
+                                    examples: patentDataExamples,
+                                    schemaData: patentSchema,
+                                    instanceData: patentInstance,
+                                    metaData: uploadInfo["patent"],
+                                    nameForCategoricalQueryView: "patent"
+                                })
+                                }>
                                 Patent data set
                             </Dropdown.Item>
                             <Dropdown.Item href="#/film"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Film data set", examples: filmExamples, schemaData: filmSchema, metaData: uploadInfo["film"], nameForCategoricalQueryView: "film" })}>
+                                onClick={this.props.handleDataSetChange.bind(this, {
+                                    header: "Helsinki Multi-Model Repository: Film data set",
+                                    examples: filmExamples,
+                                    schemaData: filmSchema,
+                                    instanceData: filmInstance,
+                                    metaData: uploadInfo["film"],
+                                    nameForCategoricalQueryView: "film"
+                                })
+                                }>
                                 Film data set
                             </Dropdown.Item>
                             <Dropdown.Item href="#/university"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Universities data set", examples: universityExamples, schemaData: universitySchema, metaData: uploadInfo["university"], nameForCategoricalQueryView: "university" })}>
+                                onClick={this.props.handleDataSetChange.bind(this, {
+                                    header: "Helsinki Multi-Model Repository: Universities data set",
+                                    examples: universityExamples,
+                                    schemaData: universitySchema,
+                                    instanceData: universityInstance,
+                                    metaData: uploadInfo["university"],
+                                    nameForCategoricalQueryView: "university"
+                                })
+                                }>
                                 University data set
                             </Dropdown.Item>
                             <Dropdown.Item href="#/person"
-                                onClick={this.props.handleDataSetChange.bind(this, { header: "Helsinki Multi-Model Repository: Persons data set", examples: personExamples, schemaData: personSchema, metaData: uploadInfo["person"], nameForCategoricalQueryView: "person" })}>
+                                onClick={this.props.handleDataSetChange.bind(this, {
+                                    header: "Helsinki Multi-Model Repository: Persons data set",
+                                    examples: personExamples,
+                                    schemaData: personSchema,
+                                    instanceData: personInstance,
+                                    metaData: uploadInfo["person"],
+                                    nameForCategoricalQueryView: "person"
+                                })
+                                }>
                                 Person data set
                             </Dropdown.Item>
                         </DropdownButton>
