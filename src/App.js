@@ -30,6 +30,8 @@ const __resultHTML = require('./infoTexts/resultHTML.js')
 const __schemaCategoryHTML = require('./infoTexts/schemaCategoryHTML.js')
 const __uploadDataHTML = require('./infoTexts/uploadDataHTML.js')
 const __instanceCategory = require('./infoTexts/instanceCategory.js')
+const __nodeContents = require('./infoTexts/nodeContents.js')
+const __fold = require('./infoTexts/fold.js')
 const templateMain = { __html: __mainHTML }
 const templateCategoricalViewToQuery = { __html: __categoricalViewToQueryHTML }
 const templateExamples = { __html: __examplesHTML }
@@ -37,6 +39,8 @@ const templateResult = { __html: __resultHTML }
 const templateSchemaCategory = { __html: __schemaCategoryHTML }
 const templateUploadData = { __html: __uploadDataHTML }
 const templateInstanceCategory = { __html: __instanceCategory }
+const templateNodeContents = { __html: __nodeContents }
+const templateFold = { __html: __fold }
 
 class App extends Component {
 	constructor(props) {
@@ -112,10 +116,10 @@ class App extends Component {
 				this.setState({ showPopup: true, popContent: templateInstanceCategory })
 				break;
 			case "nodeEdgeContents":
-				this.setState({ showPopup: true, popContent: templateInstanceCategory })
+				this.setState({ showPopup: true, popContent: templateNodeContents })
 				break;
 			case "foldFunction":
-				this.setState({ showPopup: true, popContent: templateInstanceCategory })
+				this.setState({ showPopup: true, popContent: templateFold })
 				break;
 			default:
 				this.setState((prevState) => { return { showPopup: !prevState.showPopup } })

@@ -1,6 +1,6 @@
 {
     "nodes": [{
-            "name": "Person (Relational)",
+            "name": "Person",
             "attributes": "personsId, firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed, place",
             "model": "graph, relational",
             "id": 0,
@@ -49,7 +49,7 @@
             "color": 6
         },
         {
-            "name": "Post (Relational)",
+            "name": "Post",
             "attributes": "postId, postCreationDate, postLocationIP, postBrowserUsed, language, content, postLength",
             "model": "graph, relational",
             "id": 7,
@@ -82,36 +82,16 @@
             "model": "xml",
             "id": 11,
             "color": 11
-        },
-        {
-            "name": "Post (Graph)",
-            "attributes": "postId, postCreationDate, postLocationIP, postBrowserUsed, language, content, postLength",
-            "model": "graph, relational",
-            "id": 12,
-            "color": 12
-        },
-        {
-            "name": "Person (Graph)",
-            "attributes": "personsId, firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed, place",
-            "model": "graph, relational",
-            "id": 13,
-            "color": 13
         }
     ],
     "links": [{
-            "source": 13,
-            "target": 13,
+            "source": 0,
+            "target": 0,
             "name": "knows",
             "count": 1
         },
         {
             "source": 0,
-            "target": 13,
-            "name": "identity",
-            "count": 1
-        },
-        {
-            "source": 0,
             "target": 4,
             "name": "firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed",
             "count": 1
@@ -120,24 +100,6 @@
             "source": 0,
             "target": 1,
             "name": "personsId, place",
-            "count": 1
-        },
-        {
-            "source": 13,
-            "target": 4,
-            "name": "firstName, lastName, gender, birthday, personCreationDate, personLocationIP, personBrowserUsed",
-            "count": 1
-        },
-        {
-            "source": 13,
-            "target": 1,
-            "name": "personsId, place",
-            "count": 1
-        },
-        {
-            "source": 7,
-            "target": 12,
-            "name": "identity",
             "count": 1
         },
         {
